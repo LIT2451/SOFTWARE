@@ -37,25 +37,33 @@ Mô hình lập trình tuyệt đối không được tự ý giả lập hoặc
 
 ---
 
-## 3. QUY TRÌNH XÁC THỰC THỰC TẾ (REAL-WORLD VALIDATION)
+## 3. QUY TRÌNH KIỂM THỬ VÀ XÁC THỰC THỰC TẾ (TESTING & VALIDATION)
 
-Mọi thay đổi mã nguồn chỉ được coi là hoàn thành khi đã qua kiểm thử thực tế. Nghiêm cấm việc báo cáo hoàn thành chỉ dựa trên suy luận lý thuyết.
+Mọi thay đổi mã nguồn phải đi kèm với quy trình kiểm thử tương ứng. Nguyên tắc cốt lõi: **Lập trình đến đâu, kiểm thử đến đó (Continuous Unit Testing & Verification).**
 
-### 3.1 Xác thực cú pháp và biên dịch
+### 3.1 Quy trình phát triển hướng kiểm thử (TDD / Test-First Mentality)
+- **Tác vụ tạo mới tính năng**: Phải xác định trước các kịch bản kiểm thử (Test Cases). Trước khi viết code logic xử lý, phải viết các hàm kiểm thử tương ứng (Unit Test) cho tính năng đó.
+- **Tác vụ sửa lỗi (Bug Fix)**: Phải tạo ra một ca kiểm thử tái hiện lại lỗi trước khi viết code sửa lỗi. Đoạn code sửa lỗi chỉ được chấp nhận khi ca kiểm thử này chuyển sang trạng thái thành công (Pass).
+
+### 3.2 Quy trình chạy thử nghiệm cục bộ ngay lập tức (Immediate Execution Loop)
+- **Lập trình hàm nào, chạy thử hàm đó**: Sau khi viết xong một hàm hoặc module logic, cấm viết tiếp các phần khác nếu chưa thực hiện chạy thử độc lập hàm đó bằng một script nhỏ hoặc thông qua framework test của dự án.
+- **Xác thực kết quả tức thì**: Kiểm tra kiểu dữ liệu đầu ra và tính chính xác của thuật toán bằng các giá trị đầu vào biên (Edge Cases), giá trị rỗng (Nil/Null/Empty) và dữ liệu không hợp lệ để đảm bảo hệ thống không bị lỗi crash.
+
+### 3.3 Xác thực cú pháp và biên dịch
 Ngay sau khi chỉnh sửa tệp tin, bắt buộc phải chạy các lệnh kiểm tra lỗi tương ứng với công nghệ của dự án con:
 - **Frontend (Next.js/React)**: Chạy `npm run build` để kiểm tra lỗi biên dịch TypeScript/CSS.
-- **Backend (Golang)**: Chạy `go build` hoặc `go vet` để kiểm tra lỗi cú pháp và kiểu dữ liệu.
-- **Python**: Chạy `python3 -m py_compile <tên_file>`.
+- **Backend (Golang)**: Chạy `go test ./...` để chạy toàn bộ các ca kiểm thử, kèm theo lệnh `go build` hoặc `go vet` để kiểm tra lỗi cú pháp và kiểu dữ liệu.
+- **Python**: Chạy bộ kiểm thử tự động của dự án (ví dụ: `pytest` hoặc `unittest`), kèm theo lệnh `python3 -m py_compile <tên_file>`.
 
-### 3.2 Xác thực hiển thị giao diện (Frontend)
+### 3.4 Xác thực hiển thị giao diện (Frontend)
 - Không được suy đoán giao diện hiển thị đúng dựa trên mã CSS.
 - Bắt buộc phải sử dụng `browser_navigate` để truy cập trang web thực tế trên môi trường chạy thử.
 - Sử dụng `browser_vision` để chụp ảnh màn hình và phân tích trực quan: màu nền, bo góc, khoảng cách, font chữ, độ tương phản của chữ so với nền.
 
-### 3.3 Xác thực dịch vụ (Backend/API)
+### 3.5 Xác thực dịch vụ (Backend/API)
 - Sau khi chỉnh sửa logic API hoặc dịch vụ chạy ngầm, bắt buộc phải khởi động lại dịch vụ (ví dụ: qua PM2 hoặc Docker).
 - Kiểm tra log chạy thực tế để đảm bảo dịch vụ không bị tắt đột ngột (crash).
-- Gọi thử API bằng công cụ dòng lệnh thực tế để kiểm tra mã trạng thái phản hồi (HTTP Status Code) và cấu trúc JSON trả về.
+- Gọi thử API bằng công cụ dòng lệnh thực tế để kiểm tra mã trạng thái phản hồi (HTTP Status Code) và cấu trúc JSON trả về. Có thể viết kịch bản gọi thử tự động bằng Python thông qua `execute_code` để gửi hàng loạt yêu cầu kiểm tra hiệu năng hoặc tải lớn.
 
 ---
 
