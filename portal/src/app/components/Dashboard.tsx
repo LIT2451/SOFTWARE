@@ -431,7 +431,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               {/* Device Header Info Card */}
               <div 
                 style={{
-                  background: "#1c1c1c",
+                  background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                   border: "1.5px solid #262626",
                   borderRadius: "14px",
                   padding: "24px",
@@ -455,7 +455,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 <div 
                   style={{
                     display: "flex",
-                    background: "#121212",
+                    background: "#262626",
                     padding: "4px",
                     borderRadius: "10px",
                     border: "1px solid #262626"
@@ -500,7 +500,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
                     {/* Specs block 1 */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -531,7 +531,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Specs block 2 */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -558,7 +558,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Specs block 3 */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -595,7 +595,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px" }}>
                             {/* CPU Widget */}
                             <div style={{
-                              background: "#1c1c1c",
+                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -607,7 +607,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <span style={{ color: "#9ca3af" }}>Mức sử dụng CPU:</span>
                                 <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.cpu_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "#121212", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#262626", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.cpu_usage}%`,
                                   height: "100%",
@@ -620,7 +620,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* RAM Widget */}
                             <div style={{
-                              background: "#1c1c1c",
+                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -632,7 +632,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <span style={{ color: "#9ca3af" }}>Mức sử dụng RAM:</span>
                                 <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.ram_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "#121212", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#262626", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.ram_usage}%`,
                                   height: "100%",
@@ -645,7 +645,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Disk Widget */}
                             <div style={{
-                              background: "#1c1c1c",
+                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -657,7 +657,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <span style={{ color: "#9ca3af" }}>Mức sử dụng Dung lượng:</span>
                                 <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.disk_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "#121212", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#262626", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.disk_usage}%`,
                                   height: "100%",
@@ -670,7 +670,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Network Widget */}
                             <div style={{
-                              background: "#1c1c1c",
+                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -707,7 +707,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
                     {/* Docker controller */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -727,7 +727,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             width: "100%",
                             boxSizing: "border-box",
                             padding: "10px",
-                            backgroundColor: "#121212",
+                            backgroundColor: "#262626",
                             border: "1px solid #262626",
                             borderRadius: "10px",
                             color: "#ededed",
@@ -745,7 +745,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           style={{
                             width: "100%",
                             padding: "10px",
-                            backgroundColor: "#121212",
+                            backgroundColor: "#262626",
                             border: "1px solid #262626",
                             borderRadius: "10px",
                             color: "#ededed",
@@ -771,7 +771,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         style={{
                           width: "100%",
                           padding: "12px",
-                          backgroundColor: "#121212",
+                          backgroundColor: "#262626",
                           border: `1.5px solid rgba(${accent.rgb}, 0.5)`,
                           borderRadius: "10px",
                           color: accent.value,
@@ -788,7 +788,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Database controller */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -806,7 +806,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             style={{
                               width: "100%",
                               padding: "10px",
-                              backgroundColor: "#121212",
+                              backgroundColor: "#262626",
                               border: "1px solid #262626",
                               borderRadius: "10px",
                               color: "#ededed",
@@ -827,7 +827,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               width: "100%",
                               boxSizing: "border-box",
                               padding: "10px",
-                              backgroundColor: "#121212",
+                              backgroundColor: "#262626",
                               border: "1px solid #262626",
                               borderRadius: "10px",
                               color: "#ededed",
@@ -848,7 +848,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             width: "100%",
                             boxSizing: "border-box",
                             padding: "10px",
-                            backgroundColor: "#121212",
+                            backgroundColor: "#262626",
                             border: "1px solid #262626",
                             borderRadius: "10px",
                             color: "#ededed",
@@ -872,7 +872,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         style={{
                           width: "100%",
                           padding: "12px",
-                          backgroundColor: "#121212",
+                          backgroundColor: "#262626",
                           border: `1.5px solid rgba(${accent.rgb}, 0.5)`,
                           borderRadius: "10px",
                           color: accent.value,
@@ -889,7 +889,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* System controller */}
                     <div style={{
-                      background: "#1c1c1c",
+                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -953,7 +953,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                 {activeTab === "tasks" && (
                   <div style={{ 
-                    background: "#1c1c1c", 
+                    background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */ 
                     border: "1.5px solid #262626", 
                     borderRadius: "14px",
                     padding: "20px",
@@ -985,7 +985,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <td style={{ padding: "10px" }}>
                                   <span style={{
                                     padding: "4px 8px",
-                                    backgroundColor: "#121212",
+                                    backgroundColor: "#262626",
                                     border: "1px solid #262626",
                                     borderRadius: "6px",
                                     fontSize: "10px"
