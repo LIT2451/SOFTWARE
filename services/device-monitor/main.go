@@ -43,6 +43,14 @@ func main() {
 			auth.POST("/register", handlers.Register)
 			auth.POST("/login", handlers.Login)
 		}
+
+		// API endpoint nhan thong tin tu Agent
+		agent := v1.Group("/agent")
+		{
+			agent.POST("/enroll", handlers.EnrollDevice)
+			agent.POST("/report", handlers.ReportMetrics)
+			agent.POST("/status", handlers.UpdateStatus)
+		}
 		
 		// Endpoint kiem tra trang thai he thong
 		v1.GET("/health", func(c *gin.Context) {
