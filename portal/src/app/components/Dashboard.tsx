@@ -288,7 +288,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       <aside 
         ref={sidebarRef}
         style={{
-          width: "320px",
+          width: "288px",
           backgroundColor: "rgba(38, 38, 38, 0.72)", /* 9Router Original Sidebar bg */
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",

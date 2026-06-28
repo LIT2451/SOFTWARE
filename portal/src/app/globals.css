@@ -97,7 +97,7 @@ html.light .input-field:focus {
 
 /* 9Router Desktop Sidebar */
 .sidebar-container {
-  width: 320px;
+  width: 288px;
   background-color: rgba(38, 38, 38, 0.72);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
