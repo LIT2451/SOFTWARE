@@ -18,7 +18,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password || (isRegister && !email)) {
-      showToast("Vui lòng nhập đầy đủ thông tin", "error");
+      showToast("Vui lòng điền đầy đủ các thông tin yêu cầu", "error");
       return;
     }
 
@@ -37,21 +37,21 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
       const data = await res.json();
       if (!res.ok) {
-        showToast(data.error?.message || "Đã xảy ra lỗi hệ thống", "error");
+        showToast(data.error?.message || "Đăng nhập thất bại. Kiểm tra lại thông tin", "error");
         setLoading(false);
         return;
       }
 
       if (isRegister) {
-        showToast("Đăng ký tài khoản thành công! Hãy đăng nhập", "success");
+        showToast("Đăng ký thành công. Mời bạn tiến hành đăng nhập", "success");
         setIsRegister(false);
         setPassword("");
       } else {
-        showToast("Đăng nhập thành công!", "success");
+        showToast("Xác thực thành công", "success");
         onLoginSuccess(data.token, data.user.username, data.user.role);
       }
     } catch (err) {
-      showToast("Không thể kết nối đến máy chủ", "error");
+      showToast("Lỗi kết nối đến dịch vụ xác thực", "error");
     } finally {
       setLoading(false);
     }
@@ -63,52 +63,83 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       alignItems: "center",
       justifyContent: "center",
       minHeight: "100vh",
-      padding: "20px"
+      padding: "20px",
+      position: "relative",
+      overflow: "hidden"
     }}>
+      {/* Decorative Blur Orbs */}
+      <div style={{
+        position: "absolute",
+        width: "300px",
+        height: "300px",
+        borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
+        top: "20%",
+        left: "15%",
+        filter: "blur(40px)",
+        zIndex: 0
+      }} />
+      <div style={{
+        position: "absolute",
+        width: "400px",
+        height: "400px",
+        borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(229, 106, 74, 0.12) 0%, transparent 70%)",
+        bottom: "15%",
+        right: "10%",
+        filter: "blur(50px)",
+        zIndex: 0
+      }} />
+
+      {/* Glassmorphic Login Card */}
       <div style={{
         width: "100%",
-        maxWidth: "400px",
-        backgroundColor: "#111119",
-        border: "1px solid #222235",
-        padding: "40px 30px",
+        maxWidth: "420px",
+        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
+        backdropFilter: "blur(24px) saturate(180%) contrast(1.05)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        borderRadius: "16px",
+        padding: "50px 35px",
         position: "relative",
-        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.7)"
+        boxShadow: "0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+        zIndex: 1
       }}>
-        {/* Border line accent top */}
+        {/* Glow indicator line at top of card */}
         <div style={{
           position: "absolute",
           top: 0,
-          left: 0,
-          right: 0,
-          height: "2px",
-          backgroundImage: "linear-gradient(90deg, #7c3aed, #e56a4a, #0d9488)"
+          left: "30px",
+          right: "30px",
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), rgba(229, 106, 74, 0.4), transparent)"
         }} />
 
         <h1 style={{
-          fontSize: "24px",
+          fontSize: "26px",
           textAlign: "center",
           marginBottom: "10px",
-          color: "#ffffff"
+          color: "#ffffff",
+          textShadow: "0 2px 10px rgba(0,0,0,0.5)"
         }}>
           LIT SOFTWARE
         </h1>
         <p style={{
-          fontSize: "12px",
+          fontSize: "11px",
           textAlign: "center",
-          color: "#6b7280",
-          marginBottom: "30px",
+          color: "#94a3b8",
+          marginBottom: "35px",
           textTransform: "uppercase",
-          letterSpacing: "0.1em"
+          letterSpacing: "0.15em"
         }}>
-          {isRegister ? "ĐĂNG KÝ TÀI KHOẢN MỚI" : "HỆ THỐNG XÁC THỰC TRUY CẬP"}
+          {isRegister ? "Đăng ký tài khoản" : "Cổng xác thực dịch vụ"}
         </p>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           <div>
             <label style={{
               display: "block",
               fontSize: "11px",
-              color: "#9ca3af",
+              color: "#94a3b8",
               marginBottom: "8px",
               textTransform: "uppercase",
               letterSpacing: "0.05em"
@@ -119,14 +150,15 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               onChange={(e) => setUsername(e.target.value)}
               style={{
                 width: "100%",
-                padding: "10px 14px",
-                backgroundColor: "#08080c",
-                border: "1px solid #222235",
-                borderRadius: "0",
+                padding: "12px 16px",
+                backgroundColor: "rgba(0, 0, 0, 0.4)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "14px",
                 fontFamily: "JetBrains Mono, monospace",
-                outline: "none"
+                outline: "none",
+                transition: "border-color 0.2s, box-shadow 0.2s"
               }}
               required
             />
@@ -137,7 +169,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               <label style={{
                 display: "block",
                 fontSize: "11px",
-                color: "#9ca3af",
+                color: "#94a3b8",
                 marginBottom: "8px",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em"
@@ -148,10 +180,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
-                  backgroundColor: "#08080c",
-                  border: "1px solid #222235",
-                  borderRadius: "0",
+                  padding: "12px 16px",
+                  backgroundColor: "rgba(0, 0, 0, 0.4)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "8px",
                   color: "#ffffff",
                   fontSize: "14px",
                   fontFamily: "JetBrains Mono, monospace",
@@ -166,7 +198,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             <label style={{
               display: "block",
               fontSize: "11px",
-              color: "#9ca3af",
+              color: "#94a3b8",
               marginBottom: "8px",
               textTransform: "uppercase",
               letterSpacing: "0.05em"
@@ -177,10 +209,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               onChange={(e) => setPassword(e.target.value)}
               style={{
                 width: "100%",
-                padding: "10px 14px",
-                backgroundColor: "#08080c",
-                border: "1px solid #222235",
-                borderRadius: "0",
+                padding: "12px 16px",
+                backgroundColor: "rgba(0, 0, 0, 0.4)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "8px",
                 color: "#ffffff",
                 fontSize: "14px",
                 fontFamily: "JetBrains Mono, monospace",
@@ -195,38 +227,40 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             disabled={loading}
             style={{
               width: "100%",
-              padding: "12px",
-              backgroundColor: "#e56a4a",
+              padding: "14px",
+              background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
               color: "#ffffff",
               border: "none",
-              fontSize: "13px",
+              borderRadius: "8px",
+              fontSize: "14px",
               fontFamily: "Oswald, sans-serif",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               cursor: "pointer",
-              transition: "opacity 0.2s"
+              boxShadow: "0 4px 15px rgba(124, 58, 237, 0.3)",
+              transition: "transform 0.1s ease-in-out, opacity 0.2s"
             }}
           >
-            {loading ? "ĐANG XỬ LÝ..." : isRegister ? "ĐĂNG KÝ NGAY" : "ĐĂNG NHẬP"}
+            {loading ? "Đang xử lý..." : isRegister ? "Đăng ký" : "Đăng nhập"}
           </button>
         </form>
 
         <div style={{
-          marginTop: "25px",
+          marginTop: "30px",
           textAlign: "center",
           fontSize: "12px",
-          color: "#9ca3af"
+          color: "#94a3b8"
         }}>
-          {isRegister ? "Đã có tài khoản?" : "Chưa có tài khoản đăng ký?"}{" "}
+          {isRegister ? "Đã có tài khoản hệ thống?" : "Chưa có tài khoản truy cập?"}{" "}
           <span
             onClick={() => setIsRegister(!isRegister)}
             style={{
-              color: "#7c3aed",
+              color: "#a855f7",
               cursor: "pointer",
               textDecoration: "underline"
             }}
           >
-            {isRegister ? "Đăng nhập tại đây" : "Đăng ký tại đây"}
+            {isRegister ? "Đăng nhập" : "Đăng ký ngay"}
           </span>
         </div>
       </div>

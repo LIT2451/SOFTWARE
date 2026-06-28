@@ -34,7 +34,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         right: "24px",
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
+        gap: "12px",
         zIndex: 9999,
         maxWidth: "350px"
       }}>
@@ -42,18 +42,28 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           <div
             key={t.id}
             style={{
-              padding: "12px 18px",
-              borderRadius: "4px",
-              backgroundColor: t.type === "success" ? "#0f2f22" : t.type === "error" ? "#3b1e1e" : "#1a1f3c",
-              border: `1px solid ${t.type === "success" ? "#10b981" : t.type === "error" ? "#ef4444" : "#3b82f6"}`,
+              padding: "14px 20px",
+              borderRadius: "14px",
+              backgroundColor: t.type === "success" ? "rgba(16, 185, 129, 0.08)" : t.type === "error" ? "rgba(239, 68, 68, 0.08)" : "rgba(124, 58, 237, 0.08)",
+              backdropFilter: "blur(16px) saturate(180%)",
+              border: `1px solid ${t.type === "success" ? "rgba(16, 185, 129, 0.25)" : t.type === "error" ? "rgba(239, 68, 68, 0.25)" : "rgba(124, 58, 237, 0.25)"}`,
               color: "#f8fafc",
-              fontSize: "14px",
+              fontSize: "13px",
               fontFamily: "JetBrains Mono, monospace",
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5)",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
               animation: "slideIn 0.2s ease-out"
             }}
           >
-            {t.message}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div style={{
+                width: "6px",
+                height: "6px",
+                borderRadius: "50%",
+                backgroundColor: t.type === "success" ? "#10b981" : t.type === "error" ? "#ef4444" : "#a855f7",
+                boxShadow: `0 0 8px ${t.type === "success" ? "#10b981" : t.type === "error" ? "#ef4444" : "#a855f7"}`
+              }} />
+              {t.message}
+            </div>
           </div>
         ))}
       </div>

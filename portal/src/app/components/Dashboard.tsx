@@ -46,6 +46,14 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
+// Map color choices for dynamic styling
+const accentColors = [
+  { name: "Tím Neon", value: "#a855f7", rgb: "168, 85, 247" },
+  { name: "Cam Đất", value: "#e56a4a", rgb: "229, 106, 74" },
+  { name: "Xanh Ngọc", value: "#10b981", rgb: "16, 185, 129" },
+  { name: "Xanh Dương", value: "#3b82f6", rgb: "59, 130, 246" }
+];
+
 export default function Dashboard({ token, username, role, onLogout }: DashboardProps) {
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
@@ -55,12 +63,30 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
 
+  // Dynamic Accent Theme state
+  const [accent, setAccent] = useState(accentColors[0]);
+
   // Dialog states for control commands
   const [dockerAction, setDockerAction] = useState("logs");
   const [dockerContainer, setDockerContainer] = useState("");
   const [sqlQuery, setSqlQuery] = useState("SELECT * FROM devices LIMIT 5;");
   const [sqlDriver, setSqlDriver] = useState("postgres");
   const [sqlConnStr, setSqlConnStr] = useState("host=127.0.0.1 port=5432 user=software_user password=litsoftware2026 dbname=software sslmode=disable");
+
+  useEffect(() => {
+    // Load Saved Accent
+    const savedAccentValue = localStorage.getItem("lit-portal-accent");
+    if (savedAccentValue) {
+      const found = accentColors.find(c => c.value === savedAccentValue);
+      if (found) setAccent(found);
+    }
+  }, []);
+
+  const changeAccent = (colorObj: typeof accentColors[0]) => {
+    setAccent(colorObj);
+    localStorage.setItem("lit-portal-accent", colorObj.value);
+    showToast(`Đã thay đổi giao diện màu nhấn sang ${colorObj.name}`, "info");
+  };
 
   useEffect(() => {
     fetchDevices();
@@ -91,7 +117,6 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         if (!selectedDevice && data.devices.length > 0) {
           setSelectedDevice(data.devices[0]);
         } else if (selectedDevice) {
-          // Update selected device info
           const updated = data.devices.find((d: Device) => d.id === selectedDevice.id);
           if (updated) setSelectedDevice(updated);
         }
@@ -104,7 +129,6 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   const fetchDeviceDetails = async () => {
     if (!selectedDevice) return;
     try {
-      // Fetch metrics
       const mRes = await fetch(`/api/v1/portal/devices/${selectedDevice.id}/metrics`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -113,7 +137,6 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         setMetrics(mData.metrics);
       }
 
-      // Fetch tasks
       const tRes = await fetch(`/api/v1/portal/devices/${selectedDevice.id}/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -141,13 +164,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
       const data = await res.json();
       if (res.ok) {
-        showToast("Đã đẩy lệnh điều khiển xuống thiết bị thành công!", "success");
+        showToast("Đã gửi lệnh RSA xác thực mã hóa xuống thiết bị!", "success");
         fetchDeviceDetails();
       } else {
         showToast(data.error?.message || "Đẩy lệnh thất bại", "error");
       }
     } catch (err) {
-      showToast("Không thể gửi lệnh điều khiển", "error");
+      showToast("Không thể kết nối để gửi lệnh điều khiển", "error");
     } finally {
       setLoading(false);
     }
@@ -162,64 +185,121 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Navbar */}
+    <div style={{ 
+      minHeight: "100vh", 
+      display: "flex", 
+      flexDirection: "column",
+      position: "relative",
+      overflowX: "hidden"
+    }}>
+      {/* Dynamic Background Spotlight based on color accent */}
+      <div style={{
+        position: "absolute",
+        width: "600px",
+        height: "600px",
+        borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(${accent.rgb}, 0.04) 0%, transparent 70%)`,
+        top: "-100px",
+        right: "-100px",
+        filter: "blur(80px)",
+        pointerEvents: "none",
+        zIndex: 0
+      }} />
+
+      {/* Navbar Glass */}
       <header style={{
-        padding: "15px 30px",
-        backgroundColor: "#111119",
-        borderBottom: "1px solid #222235",
+        padding: "18px 40px",
+        background: "rgba(17, 17, 25, 0.65)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center"
+        alignItems: "center",
+        zIndex: 10,
+        position: "sticky",
+        top: 0
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{
-            width: "8px",
-            height: "8px",
+            width: "10px",
+            height: "10px",
             borderRadius: "50%",
-            backgroundColor: "#e56a4a",
-            boxShadow: "0 0 10px #e56a4a"
+            backgroundColor: accent.value,
+            boxShadow: `0 0 12px ${accent.value}`,
+            transition: "background-color 0.3s, box-shadow 0.3s"
           }} />
-          <h1 style={{ fontSize: "18px", margin: 0, color: "#ffffff" }}>LIT SOFTWARE WARD</h1>
+          <h1 style={{ fontSize: "20px", margin: 0, color: "#ffffff", letterSpacing: "0.12em" }}>LIT SOFTWARE WARD</h1>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "13px", color: "#f8fafc" }}>{username}</div>
-            <div style={{ fontSize: "10px", color: "#6b7280", textTransform: "uppercase" }}>{role}</div>
+        {/* Dynamic Accent Color Selector */}
+        <div style={{ display: "flex", alignItems: "center", gap: "25px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase" }}>Giao diện:</span>
+            <div style={{ display: "flex", gap: "6px" }}>
+              {accentColors.map((colorObj) => (
+                <button
+                  key={colorObj.value}
+                  onClick={() => changeAccent(colorObj)}
+                  title={colorObj.name}
+                  style={{
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    backgroundColor: colorObj.value,
+                    border: accent.value === colorObj.value ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.5)",
+                    cursor: "pointer",
+                    padding: 0,
+                    boxShadow: accent.value === colorObj.value ? `0 0 8px ${colorObj.value}` : "none",
+                    transition: "transform 0.1s"
+                  }}
+                />
+              ))}
+            </div>
           </div>
-          <button
-            onClick={onLogout}
-            style={{
-              padding: "6px 12px",
-              backgroundColor: "transparent",
-              border: "1px solid #ef4444",
-              color: "#ef4444",
-              cursor: "pointer",
-              fontFamily: "Oswald, sans-serif",
-              fontSize: "12px",
-              letterSpacing: "0.05em"
-            }}
-          >
-            ĐĂNG XUẤT
-          </button>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ fontSize: "13px", color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{username}</div>
+              <div style={{ fontSize: "10px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
+            </div>
+            <button
+              onClick={onLogout}
+              style={{
+                padding: "8px 16px",
+                backgroundColor: "rgba(239, 68, 68, 0.08)",
+                border: "1px solid rgba(239, 68, 68, 0.25)",
+                borderRadius: "10px",
+                color: "#ef4444",
+                cursor: "pointer",
+                fontFamily: "Oswald, sans-serif",
+                fontSize: "12px",
+                letterSpacing: "0.05em",
+                transition: "background-color 0.2s"
+              }}
+            >
+              ĐĂNG XUẤT
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Layout */}
-      <div style={{ display: "flex", flex: 1 }}>
-        {/* Left Sidebar - Device list */}
+      <div style={{ display: "flex", flex: 1, zIndex: 1 }}>
+        {/* Left Sidebar Glass */}
         <aside style={{
-          width: "320px",
-          backgroundColor: "#0d0d12",
-          borderRight: "1px solid #222235",
-          padding: "20px"
+          width: "340px",
+          background: "rgba(13, 13, 18, 0.4)",
+          backdropFilter: "blur(16px) saturate(180%)",
+          borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+          padding: "30px 24px",
+          display: "flex",
+          flexDirection: "column"
         }}>
-          <h2 style={{ fontSize: "14px", color: "#9ca3af", marginBottom: "20px" }}>Danh sách thiết bị</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <h2 style={{ fontSize: "13px", color: "#64748b", marginBottom: "20px", letterSpacing: "0.05em" }}>THIẾT BỊ ĐANG GIÁM SÁT</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {devices.length === 0 ? (
-              <div style={{ fontSize: "12px", color: "#4b5563", fontStyle: "italic", textAlign: "center", marginTop: "20px" }}>
-                Chưa có thiết bị kết nối...
+              <div style={{ fontSize: "12px", color: "#475569", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
+                Đang quét tìm thiết bị...
               </div>
             ) : (
               devices.map((dev) => (
@@ -227,32 +307,38 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   key={dev.id}
                   onClick={() => setSelectedDevice(dev)}
                   style={{
-                    padding: "15px",
-                    backgroundColor: selectedDevice?.id === dev.id ? "#161622" : "#111119",
-                    border: `1px solid ${selectedDevice?.id === dev.id ? "#7c3aed" : "#222235"}`,
+                    padding: "18px",
+                    background: selectedDevice?.id === dev.id 
+                      ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
+                      : "rgba(255, 255, 255, 0.02)",
+                    backdropFilter: "blur(12px)",
+                    border: `1px solid ${selectedDevice?.id === dev.id ? `rgba(${accent.rgb}, 0.3)` : "rgba(255, 255, 255, 0.05)"}`,
+                    borderRadius: "14px",
                     cursor: "pointer",
-                    position: "relative"
+                    position: "relative",
+                    transition: "all 0.25s ease-out",
+                    boxShadow: selectedDevice?.id === dev.id ? `0 10px 25px rgba(${accent.rgb}, 0.05)` : "none"
                   }}
                 >
-                  {/* Status Indicator */}
+                  {/* Status Spot */}
                   <div style={{
                     position: "absolute",
-                    top: "15px",
-                    right: "15px",
-                    width: "6px",
-                    height: "6px",
+                    top: "18px",
+                    right: "18px",
+                    width: "8px",
+                    height: "8px",
                     borderRadius: "50%",
                     backgroundColor: dev.status === "online" ? "#10b981" : "#ef4444",
-                    boxShadow: `0 0 8px ${dev.status === "online" ? "#10b981" : "#ef4444"}`
+                    boxShadow: `0 0 10px ${dev.status === "online" ? "#10b981" : "#ef4444"}`
                   }} />
 
-                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#f8fafc", marginBottom: "5px", paddingRight: "15px" }}>
+                  <div style={{ fontSize: "14px", fontWeight: "bold", color: "#f8fafc", marginBottom: "6px", paddingRight: "15px" }}>
                     {dev.name}
                   </div>
-                  <div style={{ fontSize: "11px", color: "#6b7280", fontFamily: "JetBrains Mono, monospace" }}>
-                    IP: {dev.ip_address}
+                  <div style={{ fontSize: "12px", color: "#94a3b8", fontFamily: "JetBrains Mono, monospace" }}>
+                    {dev.ip_address}
                   </div>
-                  <div style={{ fontSize: "10px", color: "#6b7280", marginTop: "5px" }}>
+                  <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>
                     OS: {dev.os_name}
                   </div>
                 </div>
@@ -262,47 +348,75 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         </aside>
 
         {/* Right Dashboard Area */}
-        <main style={{ flex: 1, backgroundColor: "#0b0b0f", padding: "30px", display: "flex", flexDirection: "column", gap: "30px" }}>
+        <main style={{ flex: 1, padding: "40px", display: "flex", flexDirection: "column", gap: "35px" }}>
           {selectedDevice ? (
             <>
-              {/* Header Device */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              {/* Header Device card */}
+              <div style={{
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
+                backdropFilter: "blur(24px)",
+                border: "1px solid rgba(255, 255, 255, 0.06)",
+                borderRadius: "16px",
+                padding: "28px 35px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
+              }}>
                 <div>
-                  <h2 style={{ fontSize: "24px", color: "#ffffff", marginBottom: "5px" }}>{selectedDevice.name}</h2>
-                  <p style={{ fontSize: "12px", color: "#6b7280", margin: 0 }}>UUID: {selectedDevice.hardware_uuid}</p>
+                  <h2 style={{ fontSize: "26px", color: "#ffffff", marginBottom: "6px" }}>{selectedDevice.name}</h2>
+                  <p style={{ fontSize: "12px", color: "#64748b", margin: 0, fontFamily: "JetBrains Mono" }}>ID: {selectedDevice.hardware_uuid}</p>
                 </div>
                 <div style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "10px",
-                  padding: "8px 16px",
-                  backgroundColor: selectedDevice.status === "online" ? "#0f2f22" : "#3b1e1e",
-                  border: `1px solid ${selectedDevice.status === "online" ? "#10b981" : "#ef4444"}`,
+                  padding: "10px 20px",
+                  borderRadius: "12px",
+                  backgroundColor: selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.08)" : "rgba(239, 68, 68, 0.08)",
+                  border: `1px solid ${selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.25)" : "rgba(239, 68, 68, 0.25)"}`,
                   fontSize: "12px",
-                  color: "#ffffff",
-                  textTransform: "uppercase"
+                  fontWeight: "bold",
+                  color: selectedDevice.status === "online" ? "#10b981" : "#ef4444",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  boxShadow: `0 0 15px ${selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)"}`
                 }}>
-                  Trạng thái: {selectedDevice.status}
+                  <div style={{
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    backgroundColor: selectedDevice.status === "online" ? "#10b981" : "#ef4444"
+                  }} />
+                  {selectedDevice.status}
                 </div>
               </div>
 
-              {/* TABS */}
-              <div style={{ display: "flex", borderBottom: "1px solid #222235" }}>
+              {/* TABS Navigation Glass */}
+              <div style={{ 
+                display: "flex", 
+                background: "rgba(255, 255, 255, 0.02)", 
+                borderRadius: "12px", 
+                padding: "4px",
+                border: "1px solid rgba(255, 255, 255, 0.04)"
+              }}>
                 {(["specs", "metrics", "control", "tasks"] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     style={{
-                      padding: "12px 24px",
-                      backgroundColor: "transparent",
+                      flex: 1,
+                      padding: "12px 20px",
+                      backgroundColor: activeTab === tab ? "rgba(255, 255, 255, 0.06)" : "transparent",
                       border: "none",
-                      borderBottom: activeTab === tab ? "2px solid #e56a4a" : "none",
-                      color: activeTab === tab ? "#e56a4a" : "#6b7280",
+                      borderRadius: "10px",
+                      color: activeTab === tab ? "#ffffff" : "#64748b",
                       cursor: "pointer",
                       fontSize: "13px",
                       fontFamily: "Oswald, sans-serif",
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase"
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      transition: "all 0.2s ease-out"
                     }}
                   >
                     {tab === "specs" && "CẤU HÌNH VẬT LÝ"}
@@ -313,89 +427,140 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 ))}
               </div>
 
-              {/* TAB CONTENT */}
+              {/* TAB CONTENT Glass */}
               <div style={{ flex: 1 }}>
                 {activeTab === "specs" && (
                   <div style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "20px"
+                    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                    gap: "24px"
                   }}>
-                    <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                      <h3 style={{ fontSize: "14px", color: "#e56a4a", marginBottom: "15px" }}>Thông tin hệ thống</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "13px" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>Hostname:</span><span>{selectedDevice.hostname}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>OS Type:</span><span>{selectedDevice.os_type}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>OS Name:</span><span>{selectedDevice.os_name}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>Compiler:</span><span>{selectedDevice.os_version}</span></div>
+                    <div style={{ 
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                      border: "1px solid rgba(255, 255, 255, 0.06)", 
+                      borderRadius: "16px",
+                      padding: "25px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    }}>
+                      <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "20px" }}>Thông tin hệ thống</h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "13px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Hostname:</span><span>{selectedDevice.hostname}</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Hệ điều hành:</span><span>{selectedDevice.os_type}</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Kiến trúc OS:</span><span>{selectedDevice.os_name}</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Trình biên dịch:</span><span>{selectedDevice.os_version}</span></div>
                       </div>
                     </div>
 
-                    <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                      <h3 style={{ fontSize: "14px", color: "#7c3aed", marginBottom: "15px" }}>Vi xử lý (CPU)</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "13px" }}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                          <span style={{ color: "#6b7280" }}>Model:</span>
-                          <span style={{ fontSize: "12px", wordBreak: "break-word" }}>{selectedDevice.cpu_model || "Đang lấy dữ liệu..."}</span>
+                    <div style={{ 
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                      border: "1px solid rgba(255, 255, 255, 0.06)", 
+                      borderRadius: "16px",
+                      padding: "25px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    }}>
+                      <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "20px" }}>Vi xử lý (CPU)</h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "13px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                          <span style={{ color: "#64748b" }}>Kiểu vi xử lý:</span>
+                          <span style={{ fontSize: "12px", color: "#f8fafc", wordBreak: "break-word" }}>{selectedDevice.cpu_model || "Đang phân tích..."}</span>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px" }}><span style={{ color: "#6b7280" }}>Số nhân vật lý:</span><span>{selectedDevice.cpu_cores} nhân</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>Số luồng xử lý:</span><span>{selectedDevice.cpu_threads} luồng</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Số nhân vật lý:</span><span>{selectedDevice.cpu_cores} Cores</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Số luồng CPU:</span><span>{selectedDevice.cpu_threads} Threads</span></div>
                       </div>
                     </div>
 
-                    <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                      <h3 style={{ fontSize: "14px", color: "#0d9488", marginBottom: "15px" }}>Bộ nhớ & Lưu trữ</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "13px" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>Tổng bộ nhớ RAM:</span><span>{formatBytes(selectedDevice.ram_total)}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#6b7280" }}>Dung lượng ổ đĩa:</span><span>{formatBytes(selectedDevice.disk_total)}</span></div>
+                    <div style={{ 
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                      border: "1px solid rgba(255, 255, 255, 0.06)", 
+                      borderRadius: "16px",
+                      padding: "25px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    }}>
+                      <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "20px" }}>Bộ nhớ & Lưu trữ</h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "13px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Tổng bộ nhớ RAM:</span><span>{formatBytes(selectedDevice.ram_total)}</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Ổ đĩa cứng:</span><span>{formatBytes(selectedDevice.disk_total)}</span></div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {activeTab === "metrics" && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
                     {metrics.length === 0 ? (
-                      <div style={{ textAlign: "center", padding: "40px", color: "#4b5563", fontStyle: "italic", fontSize: "13px" }}>
-                        Chưa nhận được gói tin dữ liệu hiệu năng nào...
+                      <div style={{ 
+                        background: "rgba(255,255,255,0.01)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                        borderRadius: "16px",
+                        textAlign: "center", 
+                        padding: "60px 40px", 
+                        color: "#64748b", 
+                        fontStyle: "italic", 
+                        fontSize: "13px" 
+                      }}>
+                        Đang đợi các gói tin hiệu năng từ Agent...
                       </div>
                     ) : (
                       <>
-                        {/* Summary Metrics */}
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-                          <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                            <div style={{ fontSize: "11px", color: "#6b7280", textTransform: "uppercase" }}>Tải CPU</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: "#e56a4a", marginTop: "5px" }}>
+                        {/* Summary Metrics cards */}
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+                          <div style={{ 
+                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                            border: "1px solid rgba(255, 255, 255, 0.06)", 
+                            borderRadius: "16px",
+                            padding: "25px",
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                          }}>
+                            <div style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Tải CPU</div>
+                            <div style={{ fontSize: "36px", fontWeight: "bold", color: accent.value, marginTop: "8px" }}>
                               {metrics[metrics.length - 1].cpu_usage.toFixed(1)}%
                             </div>
                           </div>
-                          <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                            <div style={{ fontSize: "11px", color: "#6b7280", textTransform: "uppercase" }}>Tiêu thụ RAM</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: "#7c3aed", marginTop: "5px" }}>
+                          <div style={{ 
+                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                            border: "1px solid rgba(255, 255, 255, 0.06)", 
+                            borderRadius: "16px",
+                            padding: "25px",
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                          }}>
+                            <div style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Tiêu thụ RAM</div>
+                            <div style={{ fontSize: "36px", fontWeight: "bold", color: accent.value, marginTop: "8px" }}>
                               {metrics[metrics.length - 1].ram_usage.toFixed(1)}%
                             </div>
                           </div>
-                          <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                            <div style={{ fontSize: "11px", color: "#6b7280", textTransform: "uppercase" }}>Dung lượng Disk</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: "#0d9488", marginTop: "5px" }}>
+                          <div style={{ 
+                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                            border: "1px solid rgba(255, 255, 255, 0.06)", 
+                            borderRadius: "16px",
+                            padding: "25px",
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                          }}>
+                            <div style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Dung lượng Disk</div>
+                            <div style={{ fontSize: "36px", fontWeight: "bold", color: accent.value, marginTop: "8px" }}>
                               {metrics[metrics.length - 1].disk_usage.toFixed(1)}%
                             </div>
                           </div>
                         </div>
 
                         {/* Network metrics */}
-                        <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                          <h3 style={{ fontSize: "14px", color: "#ffffff", marginBottom: "15px" }}>Lưu lượng mạng Delta (Tốc độ truyền nhận)</h3>
-                          <div style={{ display: "flex", gap: "40px" }}>
+                        <div style={{ 
+                          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                          border: "1px solid rgba(255, 255, 255, 0.06)", 
+                          borderRadius: "16px",
+                          padding: "25px",
+                          boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                        }}>
+                          <h3 style={{ fontSize: "14px", color: "#ffffff", marginBottom: "20px" }}>Lưu lượng mạng Delta (Tốc độ truyền nhận)</h3>
+                          <div style={{ display: "flex", gap: "50px" }}>
                             <div>
-                              <div style={{ fontSize: "11px", color: "#6b7280" }}>BĂNG THÔNG NHẬN (RX)</div>
-                              <div style={{ fontSize: "18px", color: "#10b981", fontWeight: "bold", marginTop: "5px" }}>
+                              <div style={{ fontSize: "11px", color: "#64748b" }}>BĂNG THÔNG NHẬN (RX)</div>
+                              <div style={{ fontSize: "20px", color: "#10b981", fontWeight: "bold", marginTop: "6px" }}>
                                 {formatBytes(metrics[metrics.length - 1].network_rx)}/s
                               </div>
                             </div>
                             <div>
-                              <div style={{ fontSize: "11px", color: "#6b7280" }}>BĂNG THÔNG GỬI (TX)</div>
-                              <div style={{ fontSize: "18px", color: "#3b82f6", fontWeight: "bold", marginTop: "5px" }}>
+                              <div style={{ fontSize: "11px", color: "#64748b" }}>BĂNG THÔNG GỬI (TX)</div>
+                              <div style={{ fontSize: "20px", color: "#3b82f6", fontWeight: "bold", marginTop: "6px" }}>
                                 {formatBytes(metrics[metrics.length - 1].network_tx)}/s
                               </div>
                             </div>
@@ -409,18 +574,25 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 {activeTab === "control" && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
                     {/* Docker operations */}
-                    <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "25px" }}>
-                      <h3 style={{ fontSize: "14px", color: "#e56a4a", marginBottom: "20px" }}>Quản trị Docker Container</h3>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-end" }}>
+                    <div style={{ 
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                      border: "1px solid rgba(255, 255, 255, 0.06)", 
+                      borderRadius: "16px",
+                      padding: "30px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    }}>
+                      <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "20px" }}>Quản trị Docker Container</h3>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "flex-end" }}>
                         <div>
-                          <label style={{ display: "block", fontSize: "11px", color: "#9ca3af", marginBottom: "8px" }}>THAO TÁC</label>
+                          <label style={{ display: "block", fontSize: "11px", color: "#64748b", marginBottom: "8px" }}>THAO TÁC</label>
                           <select
                             value={dockerAction}
                             onChange={(e) => setDockerAction(e.target.value)}
                             style={{
-                              padding: "10px",
-                              backgroundColor: "#08080c",
-                              border: "1px solid #222235",
+                              padding: "11px 14px",
+                              backgroundColor: "rgba(0, 0, 0, 0.4)",
+                              border: "1px solid rgba(255, 255, 255, 0.08)",
+                              borderRadius: "8px",
                               color: "#ffffff",
                               fontFamily: "JetBrains Mono, monospace"
                             }}
@@ -432,8 +604,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           </select>
                         </div>
 
-                        <div style={{ flex: 1, minWidth: "200px" }}>
-                          <label style={{ display: "block", fontSize: "11px", color: "#9ca3af", marginBottom: "8px" }}>TÊN CONTAINER HOẶC ID</label>
+                        <div style={{ flex: 1, minWidth: "220px" }}>
+                          <label style={{ display: "block", fontSize: "11px", color: "#64748b", marginBottom: "8px" }}>TÊN CONTAINER HOẶC ID</label>
                           <input
                             type="text"
                             placeholder="vd: pg-openclaw"
@@ -441,9 +613,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             onChange={(e) => setDockerContainer(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "10px",
-                              backgroundColor: "#08080c",
-                              border: "1px solid #222235",
+                              padding: "11px 14px",
+                              backgroundColor: "rgba(0, 0, 0, 0.4)",
+                              border: "1px solid rgba(255, 255, 255, 0.08)",
+                              borderRadius: "8px",
                               color: "#ffffff",
                               fontFamily: "JetBrains Mono, monospace",
                               outline: "none"
@@ -455,14 +628,16 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           onClick={() => dispatchCommand("DOCKER_OP", JSON.stringify({ action: dockerAction, container_id: dockerContainer }))}
                           disabled={loading || !dockerContainer}
                           style={{
-                            padding: "11px 24px",
-                            backgroundColor: "#7c3aed",
+                            padding: "12px 24px",
+                            backgroundColor: accent.value,
                             color: "#ffffff",
                             border: "none",
+                            borderRadius: "8px",
                             fontFamily: "Oswald, sans-serif",
-                            letterSpacing: "0.05em",
+                            letterSpacing: "0.08em",
                             cursor: "pointer",
-                            textTransform: "uppercase"
+                            textTransform: "uppercase",
+                            boxShadow: `0 4px 14px rgba(${accent.rgb}, 0.2)`
                           }}
                         >
                           Gửi lệnh Docker
@@ -471,19 +646,26 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     </div>
 
                     {/* SQL Operations */}
-                    <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "25px" }}>
-                      <h3 style={{ fontSize: "14px", color: "#7c3aed", marginBottom: "20px" }}>Truy vấn SQL Cục bộ (Chỉ SELECT)</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                        <div style={{ display: "flex", gap: "20px" }}>
+                    <div style={{ 
+                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                      border: "1px solid rgba(255, 255, 255, 0.06)", 
+                      borderRadius: "16px",
+                      padding: "30px",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    }}>
+                      <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "20px" }}>Truy vấn SQL Cục bộ (Chỉ SELECT)</h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                        <div style={{ display: "flex", gap: "24px" }}>
                           <div>
-                            <label style={{ display: "block", fontSize: "11px", color: "#9ca3af", marginBottom: "8px" }}>DRIVE</label>
+                            <label style={{ display: "block", fontSize: "11px", color: "#64748b", marginBottom: "8px" }}>DRIVE</label>
                             <select
                               value={sqlDriver}
                               onChange={(e) => setSqlDriver(e.target.value)}
                               style={{
-                                padding: "10px",
-                                backgroundColor: "#08080c",
-                                border: "1px solid #222235",
+                                padding: "11px 14px",
+                                backgroundColor: "rgba(0, 0, 0, 0.4)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                borderRadius: "8px",
                                 color: "#ffffff",
                                 fontFamily: "JetBrains Mono, monospace"
                               }}
@@ -493,16 +675,17 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             </select>
                           </div>
                           <div style={{ flex: 1 }}>
-                            <label style={{ display: "block", fontSize: "11px", color: "#9ca3af", marginBottom: "8px" }}>CONNECTION STRING</label>
+                            <label style={{ display: "block", fontSize: "11px", color: "#64748b", marginBottom: "8px" }}>CONNECTION STRING</label>
                             <input
                               type="text"
                               value={sqlConnStr}
                               onChange={(e) => setSqlConnStr(e.target.value)}
                               style={{
                                 width: "100%",
-                                padding: "10px",
-                                backgroundColor: "#08080c",
-                                border: "1px solid #222235",
+                                padding: "11px 14px",
+                                backgroundColor: "rgba(0, 0, 0, 0.4)",
+                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                borderRadius: "8px",
                                 color: "#ffffff",
                                 fontFamily: "JetBrains Mono, monospace",
                                 outline: "none"
@@ -512,16 +695,17 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         </div>
 
                         <div>
-                          <label style={{ display: "block", fontSize: "11px", color: "#9ca3af", marginBottom: "8px" }}>CÂU LỆNH SQL QUERY</label>
+                          <label style={{ display: "block", fontSize: "11px", color: "#64748b", marginBottom: "8px" }}>CÂU LỆNH SQL QUERY</label>
                           <textarea
                             rows={3}
                             value={sqlQuery}
                             onChange={(e) => setSqlQuery(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "12px",
-                              backgroundColor: "#08080c",
-                              border: "1px solid #222235",
+                              padding: "14px",
+                              backgroundColor: "rgba(0, 0, 0, 0.4)",
+                              border: "1px solid rgba(255, 255, 255, 0.08)",
+                              borderRadius: "8px",
                               color: "#ffffff",
                               fontFamily: "JetBrains Mono, monospace",
                               outline: "none",
@@ -535,14 +719,16 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             onClick={() => dispatchCommand("SQL_QUERY", JSON.stringify({ driver: sqlDriver, conn_str: sqlConnStr, sql: sqlQuery }))}
                             disabled={loading || !sqlQuery}
                             style={{
-                              padding: "11px 24px",
-                              backgroundColor: "#7c3aed",
+                              padding: "12px 24px",
+                              backgroundColor: accent.value,
                               color: "#ffffff",
                               border: "none",
+                              borderRadius: "8px",
                               fontFamily: "Oswald, sans-serif",
-                              letterSpacing: "0.05em",
+                              letterSpacing: "0.08em",
                               cursor: "pointer",
-                              textTransform: "uppercase"
+                              textTransform: "uppercase",
+                              boxShadow: `0 4px 14px rgba(${accent.rgb}, 0.2)`
                             }}
                           >
                             Thực thi truy vấn
@@ -551,19 +737,26 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                       </div>
                     </div>
 
-                    {/* System maintenance */}
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-                      <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                        <h3 style={{ fontSize: "14px", color: "#0d9488", marginBottom: "10px" }}>Bảo trì Redis Cache</h3>
-                        <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "20px" }}>Dọn dẹp và xóa sạch cache toàn bộ Database của Redis cục bộ (`FLUSHDB`).</p>
+                    {/* System maintenance grid */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px" }}>
+                      <div style={{ 
+                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                        border: "1px solid rgba(255, 255, 255, 0.06)", 
+                        borderRadius: "16px",
+                        padding: "25px",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                      }}>
+                        <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "10px" }}>Bảo trì Redis Cache</h3>
+                        <p style={{ fontSize: "12px", color: "#64748b", marginBottom: "20px" }}>Dọn dẹp và xóa sạch cache toàn bộ Database của Redis cục bộ (`FLUSHDB`).</p>
                         <button
                           onClick={() => dispatchCommand("REDIS_FLUSH", "")}
                           disabled={loading}
                           style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#0d9488",
-                            color: "#ffffff",
-                            border: "none",
+                            padding: "11px 22px",
+                            backgroundColor: "rgba(16, 185, 129, 0.08)",
+                            border: "1px solid rgba(16, 185, 129, 0.25)",
+                            borderRadius: "8px",
+                            color: "#10b981",
                             fontFamily: "Oswald, sans-serif",
                             letterSpacing: "0.05em",
                             cursor: "pointer",
@@ -574,9 +767,15 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         </button>
                       </div>
 
-                      <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                        <h3 style={{ fontSize: "14px", color: "#e56a4a", marginBottom: "10px" }}>Reboot hệ thống</h3>
-                        <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "20px" }}>Kích hoạt khởi động lại vật lý máy chủ từ xa thông qua Agent cục bộ.</p>
+                      <div style={{ 
+                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                        border: "1px solid rgba(255, 255, 255, 0.06)", 
+                        borderRadius: "16px",
+                        padding: "25px",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                      }}>
+                        <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "10px" }}>Reboot hệ thống</h3>
+                        <p style={{ fontSize: "12px", color: "#64748b", marginBottom: "20px" }}>Kích hoạt khởi động lại vật lý máy chủ từ xa thông qua Agent cục bộ.</p>
                         <button
                           onClick={() => {
                             if (confirm("Bạn có chắc chắn muốn khởi động lại máy chủ từ xa?")) {
@@ -585,10 +784,11 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           }}
                           disabled={loading}
                           style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#e56a4a",
-                            color: "#ffffff",
-                            border: "none",
+                            padding: "11px 22px",
+                            backgroundColor: "rgba(229, 106, 74, 0.08)",
+                            border: "1px solid rgba(229, 106, 74, 0.25)",
+                            borderRadius: "8px",
+                            color: "#e56a4a",
                             fontFamily: "Oswald, sans-serif",
                             letterSpacing: "0.05em",
                             cursor: "pointer",
@@ -599,9 +799,15 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         </button>
                       </div>
 
-                      <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "20px" }}>
-                        <h3 style={{ fontSize: "14px", color: "#ef4444", marginBottom: "10px" }}>Uninstall Agent</h3>
-                        <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "20px" }}>Vô hiệu hóa service, xóa sạch các tệp thực thi, khóa và tự hủy Agent.</p>
+                      <div style={{ 
+                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                        border: "1px solid rgba(255, 255, 255, 0.06)", 
+                        borderRadius: "16px",
+                        padding: "25px",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                      }}>
+                        <h3 style={{ fontSize: "14px", color: accent.value, marginBottom: "10px" }}>Uninstall Agent</h3>
+                        <p style={{ fontSize: "12px", color: "#64748b", marginBottom: "20px" }}>Vô hiệu hóa service, xóa sạch các tệp thực thi, khóa và tự hủy Agent.</p>
                         <button
                           onClick={() => {
                             if (confirm("CẢNH BÁO: Hành động này sẽ gỡ cài đặt sạch sẽ và tự hủy Agent trên thiết bị từ xa. Tiếp tục?")) {
@@ -610,10 +816,11 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           }}
                           disabled={loading}
                           style={{
-                            padding: "10px 20px",
-                            backgroundColor: "#ef4444",
-                            color: "#ffffff",
-                            border: "none",
+                            padding: "11px 22px",
+                            backgroundColor: "rgba(239, 68, 68, 0.08)",
+                            border: "1px solid rgba(239, 68, 68, 0.25)",
+                            borderRadius: "8px",
+                            color: "#ef4444",
                             fontFamily: "Oswald, sans-serif",
                             letterSpacing: "0.05em",
                             cursor: "pointer",
@@ -628,35 +835,42 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 )}
 
                 {activeTab === "tasks" && (
-                  <div style={{ backgroundColor: "#111119", border: "1px solid #222235", padding: "25px" }}>
+                  <div style={{ 
+                    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
+                    border: "1px solid rgba(255, 255, 255, 0.06)", 
+                    borderRadius: "16px",
+                    padding: "30px",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                  }}>
                     <h3 style={{ fontSize: "14px", color: "#ffffff", marginBottom: "20px" }}>Lịch sử công việc điều khiển</h3>
                     <div style={{ overflowX: "auto" }}>
                       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
                         <thead>
-                          <tr style={{ borderBottom: "1px solid #222235", textAlign: "left" }}>
-                            <th style={{ padding: "12px", color: "#6b7280" }}>MÃ TASK</th>
-                            <th style={{ padding: "12px", color: "#6b7280" }}>LOẠI LỆNH</th>
-                            <th style={{ padding: "12px", color: "#6b7280" }}>TRẠNG THÁI</th>
-                            <th style={{ padding: "12px", color: "#6b7280" }}>PHẢN HỒI KẾT QUẢ / THÔNG BÁO LỖI</th>
-                            <th style={{ padding: "12px", color: "#6b7280" }}>THỜI GIAN KHỞI TẠO</th>
+                          <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)", textAlign: "left" }}>
+                            <th style={{ padding: "12px", color: "#64748b" }}>MÃ TASK</th>
+                            <th style={{ padding: "12px", color: "#64748b" }}>LOẠI LỆNH</th>
+                            <th style={{ padding: "12px", color: "#64748b" }}>TRẠNG THÁI</th>
+                            <th style={{ padding: "12px", color: "#64748b" }}>PHẢN HỒI KẾT QUẢ / THÔNG BÁO LỖI</th>
+                            <th style={{ padding: "12px", color: "#64748b" }}>THỜI GIAN KHỞI TẠO</th>
                           </tr>
                         </thead>
                         <tbody>
                           {tasks.length === 0 ? (
                             <tr>
-                              <td colSpan={5} style={{ padding: "20px", textAlign: "center", color: "#4b5563", fontStyle: "italic" }}>
+                              <td colSpan={5} style={{ padding: "20px", textAlign: "center", color: "#64748b", fontStyle: "italic" }}>
                                 Chưa có lịch sử tác vụ nào được thực hiện...
                               </td>
                             </tr>
                           ) : (
                             tasks.map((task) => (
-                              <tr key={task.id} style={{ borderBottom: "1px solid #161622" }}>
+                              <tr key={task.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
                                 <td style={{ padding: "12px", fontFamily: "JetBrains Mono, monospace", fontSize: "11px" }}>{task.id.substring(0, 8)}...</td>
                                 <td style={{ padding: "12px" }}>
                                   <span style={{
-                                    padding: "3px 8px",
-                                    backgroundColor: "#161622",
-                                    border: "1px solid #222235",
+                                    padding: "4px 8px",
+                                    backgroundColor: "rgba(255,255,255,0.02)",
+                                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                                    borderRadius: "6px",
                                     fontSize: "11px"
                                   }}>{task.command_type}</span>
                                 </td>
@@ -668,7 +882,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <td style={{ padding: "12px", maxWidth: "300px", whiteSpace: "pre-wrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: "11px" }}>
                                   {task.result || "-"}
                                 </td>
-                                <td style={{ padding: "12px", color: "#6b7280", fontSize: "11px" }}>
+                                <td style={{ padding: "12px", color: "#64748b", fontSize: "11px" }}>
                                   {new Date(task.created_at).toLocaleString("vi-VN")}
                                 </td>
                               </tr>
@@ -683,7 +897,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             </>
           ) : (
             <div style={{ display: "flex", flex: 1, alignItems: "center", justifyItems: "center", justifyContent: "center" }}>
-              <div style={{ textAlign: "center", color: "#6b7280" }}>
+              <div style={{ textAlign: "center", color: "#64748b" }}>
                 Vui lòng kết nối thiết bị hoặc chọn thiết bị cần giám sát.
               </div>
             </div>
