@@ -226,7 +226,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         zIndex: 200, /* Higher than standard page elements to stay above grid but below mobile sidebar (1000) */
         position: "sticky",
         top: 0
-      }}>
+      }} className="topbar-header">
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {/* Mobile hamburger menu toggle */}
           <button
@@ -361,6 +361,29 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             >
               <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
             </button>
+          </div>
+
+          {/* Web Logo & Brand inside Sidebar (Mobile only) */}
+          <div className="sidebar-brand-mobile" style={{ display: "none", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #262626" }}>
+            <div style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              backgroundColor: accent.value,
+              boxShadow: `0 0 12px ${accent.value}`,
+              transition: "background-color 0.3s, box-shadow 0.3s"
+            }} />
+            <h1 style={{ fontSize: "16px", margin: 0, color: "#ededed", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+            <span style={{
+              fontSize: "9px",
+              backgroundColor: "#1c1c1c",
+              border: "1px solid #262626",
+              padding: "2px 6px",
+              borderRadius: "6px",
+              color: "#9ca3af",
+              fontFamily: "JetBrains Mono",
+              marginLeft: "6px"
+            }}>v1.0.3</span>
           </div>
 
           <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>

@@ -149,6 +149,19 @@ h1, h2, h3, h4, h5, h6 {
   .sidebar-container.open {
     left: 0 !important;
   }
+
+  .sidebar-brand-mobile {
+    display: flex !important;
+  }
+
+  .topbar-header h1, 
+  .topbar-header span:not(.material-symbols-outlined) {
+    display: none !important;
+  }
+  
+  .topbar-header div:first-child div {
+    display: none !important;
+  }
   
   .nav-controls {
     gap: 10px !important;
