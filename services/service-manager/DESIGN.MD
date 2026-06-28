@@ -82,21 +82,31 @@ CREATE TABLE audit_logs (
 Để đảm bảo an toàn tối đa cho hệ thống của cộng đồng, Server trung tâm **không bao giờ kết nối trực tiếp** đến cổng dịch vụ của thiết bị. Mọi thao tác được Agent thực thi cục bộ tại máy đích:
 
 ### 3.1 Quản trị Docker (Docker Management Engine)
-- Agent kết nối cục bộ thông qua Unix Socket `/var/run/docker.sock` (Linux/macOS) hoặc Named Pipe `\\.\pipe\docker_engine` (Windows) sử dụng Docker SDK chính thức.
+- **Phương thức kết nối an toàn**: 
+  - Agent kết nối cục bộ thông qua Unix Socket `/var/run/docker.sock` (Linux/macOS) hoặc Named Pipe `\\.\pipe\docker_engine` (Windows) sử dụng Docker SDK chính thức.
+  - **Giới hạn đặc quyền (Docker Socket Security)**: 
+    - Lập trình viên phải cấu hình đặc quyền của tiến trình Agent chạy dưới user hệ điều hành không thuộc nhóm `root`. Chỉ phân quyền truy cập thông qua một dịch vụ API Socket Proxy nội bộ có cấu hình lọc (ví dụ: cấm các yêu cầu API tạo container có thuộc tính `Privileged: true` hoặc cấm mount thư mục gốc `/` của hệ thống máy chủ vật lý).
 - **Lệnh hỗ trợ**:
   - `GET_CONTAINERS`: Lấy danh sách container, trạng thái, và tài nguyên CPU/RAM tiêu thụ.
   - `CONTAINER_OP`: Thực hiện `start`, `stop`, `restart`, `remove` container.
   - `GET_CONTAINER_LOGS`: Đọc 200 dòng nhật ký chạy gần nhất của container.
+    - **Mặt nạ hóa dữ liệu nhạy cảm (Data Masking)**: Agent bắt buộc phải chạy qua một bộ lọc Regex để tự động phát hiện và thay thế các chuỗi ký tự nhạy cảm (như mật khẩu, API key, JWT token) bằng chuỗi `******` trước khi truyền logs về Server.
 
 ### 3.2 Quản trị SQL Database (SQL Engine)
-- Agent kết nối cục bộ tới máy chủ SQL (PostgreSQL, MySQL, SQLite) thông qua địa chỉ loopback `127.0.0.1` sử dụng thông tin đăng nhập được mã hóa cấu hình cục bộ tại file `config.yaml` của Agent.
+- **Phương thức kết nối an toàn**:
+  - Agent kết nối cục bộ tới máy chủ SQL (PostgreSQL, MySQL, SQLite) thông qua địa chỉ loopback `127.0.0.1` sử dụng thông tin đăng nhập được mã hóa cấu hình cục bộ tại file `config.yaml` của Agent.
+  - **Giới hạn đặc quyền DB (DB Privilege Limiting)**: Tài khoản database cấu hình cho Agent kết nối bắt buộc phải là tài khoản có quyền tối thiểu (đối với người dùng thường chỉ cho phép quyền `SELECT` trên schema được chỉ định; cấm các quyền Superuser/Dba).
+- **Chống lỗi treo cơ sở dữ liệu (Query Timeout & Full Table Scan Prevention)**:
+  - Mọi câu lệnh SQL gửi từ Frontend xuống Agent bắt buộc phải đính kèm cấu hình thời gian chạy tối đa (Query Timeout) là 5 giây. Sau 5 giây, Agent phải tự động gửi tín hiệu ngắt truy vấn (`cancel query`) để bảo vệ tài nguyên CPU của thiết bị.
+  - Chặn các câu lệnh SQL dạng quét toàn bộ bảng (Full Table Scan) không có index đối với tài khoản người dùng thường.
 - **Lệnh hỗ trợ**:
   - `SQL_INFO`: Lấy danh sách bảng, kích thước đĩa của từng bảng và số lượng kết nối đang hoạt động.
   - `SQL_QUERY`: Thực thi câu lệnh truy vấn dữ liệu (`SELECT`). Giới hạn tối đa 100 dòng kết quả trả về để chống tràn bộ nhớ.
-  - `SQL_EXEC`: Thực thi câu lệnh thay đổi dữ liệu (`INSERT`, `UPDATE`, `DELETE`, `CREATE`). **Bắt buộc yêu cầu xác thực OTP/Mật khẩu người dùng tại Frontend trước khi gửi lệnh xuống Agent.**
+  - `SQL_EXEC`: Thực thi câu lệnh thay đổi dữ liệu (`INSERT`, `UPDATE`, `DELETE`, `CREATE`). **Bắt buộc yêu cầu xác thực OTP/Mật khẩu người dùng tại Frontend trước khi gửi lệnh xuống Agent.** Cấm tuyệt đối chạy các hàm hệ thống nguy hiểm cho phép gọi shell của OS (như `COPY ... FROM PROGRAM` trong PostgreSQL).
 
 ### 3.3 Quản trị Redis Cache (Redis Engine)
-- Agent kết nối tới Redis nội bộ thông qua cổng `127.0.0.1:6379`.
+- **Phương thức kết nối an toàn**:
+  - Agent kết nối tới Redis nội bộ thông qua cổng `127.0.0.1:6379`.
 - **Lệnh hỗ trợ**:
   - `REDIS_INFO`: Lấy dung lượng RAM đang chiếm dụng, số lượng key hiện tại.
   - `REDIS_FLUSH`: Thực hiện dọn sạch bộ nhớ cache (`FLUSHDB` hoặc `FLUSHALL`). **Bắt buộc xác thực OTP/Mật khẩu người dùng tại Frontend trước khi gửi.**
