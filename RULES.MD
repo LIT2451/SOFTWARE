@@ -11,7 +11,7 @@ Mọi tác vụ phát triển tính năng hoặc sửa đổi hệ thống phả
 ### PHA 1: KHẢO SÁT, ĐẶC TẢ VÀ THIẾT KẾ KIẾN TRÚC
 Trước khi viết bất kỳ dòng mã nguồn nào, Agent phải thu thập thông tin và lập tài liệu thiết kế:
 1. **Khảo sát yêu cầu**: Thực hiện quy trình phỏng vấn người dùng bằng các câu hỏi nghiệp vụ cụ thể.
-2. **Xây dựng tài liệu thiết kế sơ bộ**: Tạo tệp tin `DESIGN.md` trong thư mục dự án con, mô tả:
+2. **Xây dựng tài liệu thiết kế sơ bộ**: Tạo tệp tin `DESIGN.MD` trong thư mục dự án con, mô tả:
    - Sơ đồ cơ sở dữ liệu (Database Schema) nếu có thay đổi.
    - Đặc tả các API mới (đường dẫn, phương thức, cấu hình tham số đầu vào và cấu trúc JSON đầu ra).
    - Biểu đồ tuần tự (Sequence Diagram) mô tả luồng đi của dữ liệu giữa Frontend, Backend và Cơ sở dữ liệu.
@@ -45,7 +45,7 @@ Trước khi viết bất kỳ dòng mã nguồn nào, Agent phải thu thập t
 1. **Dọn dẹp mã nguồn**:
    - Xóa bỏ tất cả các tệp tin tạm, các đoạn mã nguồn chú thích dư thừa (commented-out code) và các dòng ghi nhật ký (log) dùng để debug tạm thời.
 2. **Cập nhật tài liệu**:
-   - Cập nhật hướng dẫn vận hành, cài đặt cấu hình mới vào tệp `README.md` của dự án con.
+   - Cập nhật hướng dẫn vận hành, cài đặt cấu hình mới vào tệp `README.MD` của dự án con.
 3. **Báo cáo và cam kết Git**:
    - Tạo commit với thông điệp rõ ràng, đúng chuẩn conventional commits.
    - Đẩy mã nguồn lên kho lưu trữ từ xa (GitHub).
