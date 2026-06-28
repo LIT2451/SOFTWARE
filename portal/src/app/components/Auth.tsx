@@ -119,11 +119,23 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
           background: "linear-gradient(90deg, transparent, rgba(229, 106, 74, 0.6), transparent)"
         }} />
 
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "12px" }}>
+          <img 
+            src="/fire_logo.png" 
+            alt="LIT-VPS Logo" 
+            style={{
+              width: "48px",
+              height: "48px",
+              objectFit: "contain"
+            }} 
+          />
+        </div>
+
         <h1 style={{
           fontSize: "24px",
           textAlign: "center",
           marginBottom: "10px",
-          color: "#ededed",
+          color: "var(--color-text-main)",
           fontFamily: "Oswald, sans-serif",
           letterSpacing: "0.1em"
         }}>

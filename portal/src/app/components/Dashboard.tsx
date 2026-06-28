@@ -261,6 +261,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         }}
         className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
       >
+        {/* macOS Style Traffic Light Window Controls (Three Dots) */}
+        <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }} className="mac-window-controls">
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ff5f56", border: "1px solid #e0443e" }} />
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ffbd2e", border: "1px solid #dea123" }} />
+          <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#27c93f", border: "1px solid #1aab29" }} />
+        </div>
+
         {/* Close button inside sidebar for mobile view to prevent it from overlaying forever without a close button */}
         <div style={{ display: "none", justifyContent: "flex-end", marginBottom: "15px" }} className="mobile-close-container">
           <button 
@@ -280,26 +287,29 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         </div>
 
         {/* Web Logo & Brand inside Sidebar */}
-        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #2a2a2a" }}>
-          <div style={{
-            width: "10px",
-            height: "10px",
-            borderRadius: "50%",
-            backgroundColor: accent.value,
-            boxShadow: `0 0 12px ${accent.value}`,
-            transition: "background-color 0.3s, box-shadow 0.3s"
-          }} />
-          <h1 style={{ fontSize: "16px", margin: 0, color: "#ededed", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
-          <span style={{
-            fontSize: "9px",
-            backgroundColor: "var(--color-bg)",
-            border: "1px solid var(--color-border-subtle)",
-            padding: "2px 6px",
-            borderRadius: "6px",
-            color: "#9ca3af",
-            fontFamily: "JetBrains Mono",
-            marginLeft: "6px"
-          }}>v1.0.3</span>
+        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #2a2a2a" }}>
+          <img 
+            src="/fire_logo.png" 
+            alt="LIT-VPS Logo" 
+            style={{
+              width: "28px",
+              height: "28px",
+              objectFit: "contain",
+              display: "block"
+            }} 
+          />
+          <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+            <h1 style={{ fontSize: "16px", margin: 0, color: "var(--color-text-main)", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+            <span style={{
+              fontSize: "9px",
+              backgroundColor: "var(--color-bg)",
+              border: "1px solid var(--color-border-subtle)",
+              padding: "2px 6px",
+              borderRadius: "6px",
+              color: "var(--color-text-muted)",
+              fontFamily: "JetBrains Mono"
+            }}>v1.0.3</span>
+          </div>
         </div>
 
         <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
