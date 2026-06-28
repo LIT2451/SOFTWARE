@@ -19,17 +19,33 @@ Mô hình lập trình tuyệt đối không được tự ý giả lập hoặc
 
 ---
 
-## 2. NGUYÊN TẮC BẢN ĐỒ HOÁ ĐỘ MƠ HỒ (AMBIGUITY CONTROL)
+## 2. QUY TRÌNH THU THẬP THÔNG TIN VÀ KIỂM SOÁT ĐỘ MƠ HỒ (REQUIREMENTS ELICITATION)
 
-Để tránh việc sinh ra mã nguồn không đúng yêu cầu do hiểu sai ý tưởng:
+Để tránh việc sinh ra mã nguồn thiếu tính năng, sai yêu cầu hoặc lập trình mơ hồ, Agent bắt buộc phải thực hiện quy trình khảo sát và thu thập thông tin đa chiều trước khi viết mã nguồn.
 
-### 2.1 Làm rõ yêu cầu kỹ thuật
-- Khi nhận được yêu cầu từ người dùng, nếu thiếu một trong các thông tin sau, **bắt buộc phải đặt câu hỏi làm rõ**, tuyệt đối không tự ý chọn giá trị mặc định:
-  - Kiểu dữ liệu của các trường thông tin quan trọng.
-  - Luồng xử lý khi xảy ra lỗi (ví dụ: có cần rollback database không, hiển thị thông báo lỗi cụ thể ra sao).
-  - Tác động mong muốn đến các phân hệ đang chạy song song.
+### 2.1 Bản đồ câu hỏi khảo sát tính năng (Feature Elicitation Map)
+Khi người dùng yêu cầu thực hiện một tính năng (ví dụ: "Trang đăng nhập", "Bộ lọc sản phẩm"), Agent phải tự đối chiếu với danh sách kiểm tra tương ứng dưới đây để đặt câu hỏi thu thập thông tin:
 
-### 2.2 Định vị thay đổi cụ thể
+- **Tính năng xác thực / Đăng nhập (Auth)**:
+  - Phương thức đăng nhập: Chỉ dùng tài khoản mật khẩu thường hay có bên thứ ba (Google, GitHub)?
+  - Bảo mật: Có cần chức năng "Ghi nhớ mật khẩu" (Remember Me), xác thực 2 lớp (2FA), hay mã xác thực captcha không?
+  - Xử lý lỗi: Các trường hợp validation (email sai định dạng, mật khẩu quá ngắn) hiển thị ở đâu và như thế nào?
+  - Cơ chế lưu trữ phiên: Sử dụng Cookie, LocalStorage hay SessionToken?
+- **Tính năng danh sách / Bộ lọc (Filters & Lists)**:
+  - Cơ chế phân trang: Phân trang truyền thống (Pagination), nút "Xem thêm" (Load More), hay cuộn vô tận (Infinite Scroll)?
+  - Tiêu chí lọc: Tìm kiếm văn bản, khoảng giá, phân loại (category) hay trạng thái?
+  - Lưu trạng thái: Có cần đồng bộ bộ lọc lên thanh địa chỉ URL (URL Search Params) để chia sẻ liên kết không?
+- **Tính năng biểu mẫu / Dữ liệu (Forms & Submissions)**:
+  - Validation: Ràng buộc dữ liệu ở phía client (ngay khi gõ) hay đợi nhấn nút submit gửi lên server mới báo lỗi?
+  - Trạng thái gửi: Có cần cơ chế chống nhấn nút gửi nhiều lần (Double Submit Prevention) và hiển thị loader không?
+
+### 2.2 Quy trình 3 câu hỏi bắt buộc (The 3-Question Protocol)
+Khi nhận bất kỳ yêu cầu lập trình nào, Agent **không được viết mã nguồn ngay**, mà phải phản hồi bằng một bảng tóm tắt kèm theo đúng 3 câu hỏi kỹ thuật cụ thể gửi cho người dùng:
+1. **Câu hỏi về Nghiệp vụ (Business Logic)**: Làm rõ các kịch bản sử dụng thực tế (ví dụ: đăng nhập thành công thì chuyển hướng về đâu, đăng nhập thất bại tối đa mấy lần thì khóa tài khoản).
+2. **Câu hỏi về Giao diện & Trải nghiệm (UI/UX)**: Làm rõ các yếu tố hiển thị (ví dụ: có sử dụng thư viện UI nào có sẵn không, bố cục mong muốn là gì).
+3. **Câu hỏi về Kỹ thuật & Tích hợp (Technical & Integration)**: Làm rõ các API đầu cuối sẽ giao tiếp hoặc cấu trúc dữ liệu cần trả về.
+
+### 2.3 Định vị và ghi nhận thay đổi cụ thể
 - Trước khi thực hiện thay đổi, phải liệt kê rõ ràng:
   - Tên tệp tin (đường dẫn tuyệt đối).
   - Các dòng mã nguồn cũ sẽ bị thay thế (old_string) và đoạn mã nguồn mới tương ứng (new_string).
