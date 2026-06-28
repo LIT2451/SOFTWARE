@@ -251,6 +251,25 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       {/* 9Router Radial Glow Orbs */}
       <div className="radial-glows" />
 
+      {/* Mobile Dark Backdrop Overlay with opacity fade */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+            zIndex: 999,
+            transition: "opacity 0.3s ease-in-out"
+          }}
+        />
+      )}
+
       {/* 9Router Glow Indicator */}
       <div style={{
         position: "absolute",
