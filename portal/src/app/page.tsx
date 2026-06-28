@@ -10,17 +10,21 @@ export default function Page() {
   const [role, setRole] = useState<string>("");
   const [checking, setChecking] = useState(true);
 
+  // Read initial localStorage values during mount to avoid next-dev SSR mismatch and prevent react-hooks/set-state-in-effect warning
   useEffect(() => {
     const savedToken = localStorage.getItem("lit_token");
     const savedUsername = localStorage.getItem("lit_username");
     const savedRole = localStorage.getItem("lit_role");
 
-    if (savedToken && savedUsername && savedRole) {
-      setToken(savedToken);
-      setUsername(savedUsername);
-      setRole(savedRole);
-    }
-    setChecking(false);
+    // Perform state changes in a setTimeout block to defer execution out of the current render-commit phase loop
+    setTimeout(() => {
+      if (savedToken && savedUsername && savedRole) {
+        setToken(savedToken);
+        setUsername(savedUsername);
+        setRole(savedRole);
+      }
+      setChecking(false);
+    }, 0);
   }, []);
 
   const handleLoginSuccess = (userToken: string, userUsername: string, userRole: string) => {

@@ -23,7 +23,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     }
 
     setLoading(true);
-    const endpoint = isRegister ? "/api/v1/auth/register" : "/api/v1/auth/login";
+    const endpoint = "/api/v1/auth/" + (isRegister ? "register" : "login");
     const body = isRegister 
       ? { username, password, email }
       : { username, password };
@@ -37,7 +37,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
       const data = await res.json();
       if (!res.ok) {
-        showToast(data.error?.message || "Đăng nhập thất bại. Kiểm tra lại thông tin", "error");
+        showToast(data.error?.message || "Xác thực thất bại. Vui lòng kiểm tra lại", "error");
         setLoading(false);
         return;
       }
@@ -63,7 +63,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       alignItems: "center",
       justifyContent: "center",
       minHeight: "100vh",
-      padding: "20px",
+      padding: "16px",
       position: "relative",
       overflow: "hidden"
     }}>
@@ -99,7 +99,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         backdropFilter: "blur(24px) saturate(180%) contrast(1.05)",
         border: "1px solid rgba(255, 255, 255, 0.08)",
         borderRadius: "16px",
-        padding: "50px 35px",
+        padding: "40px 30px",
         position: "relative",
         boxShadow: "0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
         zIndex: 1
@@ -157,8 +157,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 color: "#ffffff",
                 fontSize: "14px",
                 fontFamily: "JetBrains Mono, monospace",
-                outline: "none",
-                transition: "border-color 0.2s, box-shadow 0.2s"
+                outline: "none"
               }}
               required
             />
