@@ -33,17 +33,6 @@ Bề mặt kính không phải là một màu xám mờ đơn thuần, mà là s
 - **Trạng thái rê chuột (Hover)**: Kích hoạt hiệu ứng thấu kính hội tụ. Sử dụng một quầng sáng tím mờ di chuyển bám đuổi theo tọa độ của con trỏ chuột phía dưới lớp kính bề mặt (Spotlight effect).
 - **Trạng thái nhấn (Active)**: Co giãn vật lý theo tỷ lệ `scale(0.97)` bằng thuật toán Spring Physics (độ cứng `stiffness: 120`, độ cản `damping: 14`) để tạo cảm giác đàn hồi chân thực như phím cơ vật lý.
 
-### 2.3 Hiệu ứng biến dạng nước khi chuyển đổi (Liquid Transition Distortion)
-Để tạo hiệu ứng như có nước bên trong tấm kính làm biến dạng hình ảnh phía sau khi chuyển trang hoặc hover mạnh, chúng ta không dùng các hoạt ảnh tuyến tính thông thường mà áp dụng bộ lọc nhiễu sóng SVG (SVG Turbulence Filter) kết hợp CSS Displacement Map:
-- **Nguyên lý hoạt động**: Định nghĩa một thẻ `<svg>` ẩn chứa bộ lọc nhiễu động tần số thấp:
-  ```xml
-  <filter id="liquid-distortion">
-    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="displacement" />
-  </filter>
-  ```
-- **Kích hoạt chuyển động**: Khi người dùng click chuyển trang hoặc tương tác, giá trị `scale` của `feDisplacementMap` sẽ được đẩy từ `0` lên `30` (tạo độ méo vặn lớn như nước sóng sánh) bằng thư viện Motion, sau đó trả dần về `0` theo đồ thị spring physics để giao diện ổn định trở lại tại trang mới.
-
 ### 2.4 Cơ chế chuyển đổi màu sắc chủ đạo (Dynamic Accent Color Theme)
 Để cá nhân hóa trải nghiệm sử dụng các hệ thống riêng biệt một cách trực quan, cổng dịch vụ cung cấp bộ cấu hình đổi màu nhấn linh hoạt (Accent Color Picker):
 - **Cấu trúc bảng màu (Color Palette Options)**: Thiết lập danh sách các mã màu nhấn neon có độ tương phản cao, hiển thị hoàn hảo trên nền tối:
@@ -55,6 +44,17 @@ Bề mặt kính không phải là một màu xám mờ đơn thuần, mà là s
 - **Phản chiếu màu nhấn lên chất liệu kính**: Màu nhấn được cấu hình làm nguồn sáng của hiệu ứng spotlight dưới lớp kính:
   `background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(var(--color-accent-rgb), 0.15) 0%, transparent 80%)`
   Điều này giúp toàn bộ các phần tử tương tác (nút bấm, quầng sáng, đường viền thấu kính) tự động đổi màu mượt mà theo màu nhấn đã chọn.
+
+### 2.5 Tiêu chuẩn hiển thị đa nền tảng (Responsive Design)
+Để đảm bảo chất lượng hiển thị hoàn hảo trên mọi kích thước màn hình từ điện thoại di động, máy tính bảng đến máy tính để bàn:
+- **Nguyên lý bố cục co giãn (Fluid Layout)**:
+  - Sử dụng hệ thống lưới linh hoạt `grid-cols-1` trên thiết bị di động (`< 768px`) và tự động chuyển sang `grid-cols-3` trên màn hình máy tính để bàn (`>= 1024px`).
+  - Sử dụng khoảng đệm co giãn linh hoạt: `px-4 py-8` cho điện thoại di động và `px-12 py-24` cho màn hình lớn.
+- **Tối ưu hóa hiệu ứng cho thiết bị di động**:
+  - Tự động phát hiện thiết bị màn hình cảm ứng để tắt hiệu ứng Spotlight bám đuổi con trỏ chuột, tránh xung đột tương tác chạm (Touch Event) và giảm tải CPU cho điện thoại.
+  - Giảm độ mờ (Blur) của `backdrop-filter` từ `24px` xuống `12px` trên các thiết bị di động cấu hình thấp để tiết kiệm năng lượng và ổn định tốc độ cuộn trang.
+- **Tiêu chuẩn kích thước vùng chạm (Tap Targets)**:
+  - Chiều cao tối thiểu của tất cả các nút bấm hoặc liên kết điều hướng trên thiết bị di động phải đạt ít nhất `48px` với khoảng cách an toàn tối thiểu `8px` giữa các phần tử để tránh ấn nhầm.
 
 ---
 
