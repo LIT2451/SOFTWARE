@@ -1,28 +1,153 @@
+:root {
+  --color-bg: #1a1a1a;
+  --color-surface: #262626;
+  --color-surface-hover: #303030;
+  --color-border: #333333;
+  --color-border-subtle: #2a2a2a;
+  --color-text-main: #ededed;
+  --color-text-muted: #9ca3af;
+  --color-text-subtle: #6b7280;
+  --color-primary: #e56a4a;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  background-color: #1a1a1a; /* Reset ve dung goc 9Router */
-  color: #ededed;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
 
+/* 9Router Layout Classes */
+.root-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  position: relative;
+  overflow: hidden;
+}
+
 /* 9Router Static Grid Background */
-body::before, .dashboard-grid-bg::before {
+.landing-grid {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -10;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  background-color: #1a1a1a; /* Reset ve dung goc 9Router */
   background-image: 
-    linear-gradient(to right, rgba(229, 106, 74, 0.04) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1.5px, transparent 1.5px); /* Duong ke luoi karo la mau cam dat mo 0.04 cua 9Router (#e56a4a) */
+    linear-gradient(to right, rgba(229, 106, 74, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
+  z-index: 1;
+}
+
+/* 9Router Radial Glow Orbs */
+.radial-glows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(229, 106, 74, 0.06) 0px, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(229, 106, 74, 0.04) 0px, transparent 50%);
+}
+
+/* 9Router Desktop Sidebar */
+.sidebar-container {
+  width: 320px;
+  background-color: rgba(38, 38, 38, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid var(--color-border-subtle);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;
+  z-index: 10;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 9Router Main Viewport */
+.main-viewport {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+  min-width: 0;
+  position: relative;
+  z-index: 5;
+}
+
+/* 9Router Topbar Header */
+.topbar-header {
+  padding: 14px 20px;
+  background-color: transparent;
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  justify-content: space-between;
+  alignItems: center;
+  z-index: 20;
+  height: 57px;
+  box-sizing: border-box;
+}
+
+/* 9Router Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  height: calc(100vh - 57px);
+  box-sizing: border-box;
+  z-index: 5;
+}
+
+/* Card classes */
+.content-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.widget-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-main);
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
 }
 
 /* 9Router Icon Class definition */
@@ -44,21 +169,6 @@ body::before, .dashboard-grid-bg::before {
   font-feature-settings: "liga";
 }
 
-/* 9Router Radial Glow Orbs */
-body::after, .dashboard-grid-bg::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -9;
-  pointer-events: none;
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(229, 106, 74, 0.06) 0px, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(229, 106, 74, 0.04) 0px, transparent 50%);
-}
-
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Oswald', sans-serif;
   letter-spacing: 0.1em;
@@ -72,16 +182,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #121212;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: var(--color-surface-hover);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: #444444;
 }
 
 /* Animations */
@@ -98,22 +208,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .auth-card {
   padding: 40px 30px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
 }
 
 /* Responsive CSS rules for mobile screens */
 @media (max-width: 1024px) {
-  .main-layout {
+  .root-layout {
     flex-direction: column !important;
-    height: calc(100vh - 57px) !important;
   }
   
   .sidebar-container {
     width: 100% !important;
     border-right: none !important;
-    border-bottom: 1px solid #262626 !important;
+    border-bottom: 1px solid var(--color-border-subtle) !important;
     padding: 20px 16px !important;
     position: relative !important;
     top: 0 !important;
+    height: auto !important;
+  }
+  
+  .main-viewport {
     height: auto !important;
   }
   
@@ -134,17 +250,17 @@ h1, h2, h3, h4, h5, h6 {
   
   .sidebar-container {
     position: fixed !important;
-    top: 0 !important; /* Sidebar should start from top to bottom on mobile, not 57px */
+    top: 0 !important;
     left: -100% !important;
     bottom: 0 !important;
     height: 100vh !important;
-    z-index: 1000 !important; /* Extremely high z-index to overlay everything on mobile */
+    z-index: 1000 !important;
     transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     width: 280px !important;
-    background: rgba(18, 18, 18, 0.95) !important; /* semi-solid blur background */
+    background-color: rgba(38, 38, 38, 0.95) !important;
     backdrop-filter: blur(28px) !important;
     WebkitBackdropFilter: blur(28px) !important;
-    border-right: 1px solid #262626 !important;
+    border-right: 1px solid var(--color-border-subtle) !important;
     box-shadow: 20px 0 50px rgba(0,0,0,0.8) !important;
   }
   

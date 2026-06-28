@@ -100,8 +100,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         style={{
           width: "100%",
           maxWidth: "420px",
-          backgroundColor: "#262626", /* Reset: The card noi nay bay gio la #262626 */
-          border: "1.5px solid #262626", /* Vien the hien tai la #262626 */
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border-subtle)",
           borderRadius: "14px",
           position: "relative",
           boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
@@ -164,8 +164,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                  width: "100%",
                  boxSizing: "border-box",
                  padding: "12px 16px",
-                 backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
-                 border: "1px solid #333333",
+                 backgroundColor: "var(--color-bg)",
+                 border: "1px solid var(--color-border)",
                  borderRadius: "10px",
                  color: "#ededed",
                  fontSize: "14px",
@@ -199,8 +199,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 16px",
-                  backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
-                  border: "1px solid #333333",
+                  backgroundColor: "var(--color-bg)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "10px",
                   color: "#ededed",
                   fontSize: "14px",
@@ -235,8 +235,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 46px 12px 16px",
-                  backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
-                  border: "1px solid #333333",
+                  backgroundColor: "var(--color-bg)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "10px",
                   color: "#ededed",
                   fontSize: "14px",
