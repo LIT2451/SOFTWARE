@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { ToastProvider } from "./components/ToastProvider";
+import { ToastProvider } from "./components/Toast";
 
 export const metadata: Metadata = {
-  title: "VPS-WARD",
-  description: "Hệ thống giám sát thiết bị thời gian thực",
+  title: "LIT SOFTWARE PORTAL",
+  description: "Trang Portal hợp nhất dịch vụ LIT Software",
 };
 
 export const viewport: Viewport = {
