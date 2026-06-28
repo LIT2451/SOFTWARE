@@ -7,6 +7,7 @@ import (
 
 	"github.com/LIT2451/SOFTWARE/services/device-monitor/db"
 	"github.com/LIT2451/SOFTWARE/services/device-monitor/handlers"
+	"github.com/LIT2451/SOFTWARE/services/device-monitor/worker"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -17,6 +18,9 @@ func main() {
 
 	// Khoi tao ket noi Database
 	db.InitDB()
+
+	// Khoi chay trinh quet thiet bi offline chay ngam
+	worker.StartOfflineScanner()
 
 	// Cau hinh router
 	r := gin.Default()
