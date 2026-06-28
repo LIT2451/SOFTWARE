@@ -69,6 +69,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   // Theme state (dark or light)
   const [theme, setTheme] = useState("dark");
 
+  // Grid dropdown open state (like 9Router grid_view)
+  const [gridDropdownOpen, setGridDropdownOpen] = useState(false);
+
   // Dynamic Accent Theme state (Default to 9Router Orange)
   const [accent, setAccent] = useState(accentColors[0]);
 
@@ -462,32 +465,159 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>
               <div style={{ textAlign: "right" }} className="user-info">
-                <div style={{ fontSize: "13px", color: "#ededed", fontFamily: "JetBrains Mono" }}>{username}</div>
-                <div style={{ fontSize: "9px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
+                <div style={{ fontSize: "13px", color: "var(--color-text-main)", fontFamily: "JetBrains Mono" }}>{username}</div>
+                <div style={{ fontSize: "9px", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
               </div>
+              
+              {/* 9Router Grid View Dropdown trigger */}
               <button
-                onClick={onLogout}
+                onClick={() => setGridDropdownOpen(!gridDropdownOpen)}
                 style={{
-                  padding: "6px 12px",
-                  backgroundColor: "rgba(239, 68, 68, 0.08)",
-                  border: "1px solid rgba(239, 68, 68, 0.25)",
-                  borderRadius: "8px",
-                  color: "#ef4444",
+                  background: "transparent",
+                  border: "none",
+                  color: "var(--color-text-muted)",
                   cursor: "pointer",
-                  fontFamily: "Oswald, sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.05em",
-                  transition: "background-color 0.2s",
+                  padding: "6px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "4px"
+                  justifyContent: "center",
+                  borderRadius: "8px",
+                  transition: "background-color 0.2s"
                 }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-surface-hover)"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
-                <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>logout</span>
-                ĐĂNG XUẤT
+                <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>grid_view</span>
               </button>
+
+              {/* 9Router Dropdown Menu */}
+              {gridDropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: "100%",
+                    marginTop: "8px",
+                    width: "240px",
+                    backgroundColor: "var(--color-surface)",
+                    border: "1px solid var(--color-border-subtle)",
+                    borderRadius: "12px",
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 25px 50px -12px",
+                    zIndex: 50,
+                    overflow: "hidden",
+                    padding: "4px 0px",
+                    animation: "slideIn 0.15s ease-out"
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      showToast("LIT-VPS phiên bản v1.0.3 hoạt động bình thường", "success");
+                      setGridDropdownOpen(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      width: "100%",
+                      padding: "10px 16px",
+                      fontSize: "13px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "var(--color-text-main)",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-surface-hover)"}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--color-text-muted)" }}>history</span>
+                    <span style={{ flex: 1 }}>Change Log</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      toggleTheme();
+                      setGridDropdownOpen(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      width: "100%",
+                      padding: "10px 16px",
+                      fontSize: "13px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "var(--color-text-main)",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-surface-hover)"}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "var(--color-text-muted)" }}>dark_mode</span>
+                    <span style={{ flex: 1 }}>Theme</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm("Xác nhận tắt máy chủ giám sát LIT-VPS?")) {
+                        showToast("Đang gửi lệnh Shutdown tới Agent...", "info");
+                      }
+                      setGridDropdownOpen(false);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      width: "100%",
+                      padding: "10px 16px",
+                      fontSize: "13px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "#ef4444",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(239, 68, 68, 0.08)"}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "#ef4444" }}>power_settings_new</span>
+                    <span style={{ flex: 1 }}>Shutdown</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setGridDropdownOpen(false);
+                      onLogout();
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      width: "100%",
+                      padding: "10px 16px",
+                      fontSize: "13px",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      color: "#ef4444",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(239, 68, 68, 0.08)"}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: "18px", color: "#ef4444" }}>logout</span>
+                    <span style={{ flex: 1 }}>Logout</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
