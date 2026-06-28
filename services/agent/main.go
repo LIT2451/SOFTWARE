@@ -57,11 +57,17 @@ func main() {
 	// 3. Dang ky thiet bi (Enrollment) neu chua dang ky
 	enrollDevice(hwUUID)
 
-	// 4. Bat dau vong lap gui metrics thoi gian thuc
+	// 4. Khoi tao engine RSA xac thuc
+	InitAgentRSA()
+
+	// 5. Bat dau vong lap gui metrics thoi gian thuc
 	stopChan := make(chan bool)
 	go startMetricsReporting(stopChan)
 
-	// 5. Lang nghe cac tin hieu tat may/sleep de thong bao cho Server
+	// 6. Bat dau vong lap lay va thuc thi tasks tu Server
+	go startTasksFetcher(stopChan)
+
+	// 7. Lang nghe cac tin hieu tat may/sleep de thong bao cho Server
 	setupSignalHandler(stopChan)
 }
 
