@@ -30,6 +30,39 @@ body {
   color: var(--color-text-main);
   position: relative;
   overflow: hidden;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Light Mode overrides */
+html.light {
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f4f4f5;
+  --color-border: #e4e4e7;
+  --color-border-subtle: #eaeaea;
+  --color-text-main: #09090b;
+  --color-text-muted: #71717a;
+  --color-text-subtle: #a1a1aa;
+}
+
+html.light .landing-grid {
+  background-image: 
+    linear-gradient(to right, rgba(229, 106, 74, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 106, 74, 0.08) 1px, transparent 1px);
+}
+
+html.light .sidebar-container {
+  background-color: rgba(255, 255, 255, 0.72);
+}
+
+html.light .input-field {
+  background-color: #f4f4f5;
+  border-color: #e4e4e7;
+  color: #09090b;
+}
+
+html.light .input-field:focus {
+  border-color: var(--color-primary);
 }
 
 /* 9Router Static Grid Background */

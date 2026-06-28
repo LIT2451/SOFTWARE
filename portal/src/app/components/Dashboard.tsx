@@ -66,6 +66,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   // Mobile menu responsive state
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Theme state (dark or light)
+  const [theme, setTheme] = useState("dark");
+
   // Dynamic Accent Theme state (Default to 9Router Orange)
   const [accent, setAccent] = useState(accentColors[0]);
 
@@ -80,6 +83,20 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
     setAccent(colorObj);
     localStorage.setItem("lit-portal-accent", colorObj.value);
     showToast(`Đã thay đổi giao diện màu nhấn sang ${colorObj.name}`, "info");
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("lit-portal-theme", nextTheme);
+    
+    const rootEl = document.documentElement;
+    if (nextTheme === "light") {
+      rootEl.classList.add("light");
+    } else {
+      rootEl.classList.remove("light");
+    }
+    showToast(`Đã chuyển sang giao diện ${nextTheme === "light" ? "Sáng" : "Tối"}`, "info");
   };
 
   const fetchDevices = useCallback(async () => {
@@ -135,6 +152,19 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           setAccent(found);
         }, 0);
       }
+    }
+
+    const savedTheme = localStorage.getItem("lit-portal-theme");
+    if (savedTheme) {
+      setTimeout(() => {
+        setTheme(savedTheme);
+        const rootEl = document.documentElement;
+        if (savedTheme === "light") {
+          rootEl.classList.add("light");
+        } else {
+          rootEl.classList.remove("light");
+        }
+      }, 0);
     }
   }, []);
 
@@ -355,10 +385,61 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             </button>
           </div>
 
-          {/* Dynamic Accent Color Selector */}
-          <div style={{ display: "flex", alignItems: "center", gap: "15px" }} className="nav-controls">
+          {/* Dynamic Controls (Donate, Theme Mode, Accent Color Selector) */}
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }} className="nav-controls">
+            
+            {/* Donate Button */}
+            <a 
+              href="https://litsoftware.io.vn" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                backgroundColor: "rgba(229, 106, 74, 0.08)",
+                border: "1px solid rgba(229, 106, 74, 0.25)",
+                borderRadius: "8px",
+                color: "var(--color-primary)",
+                fontFamily: "Oswald, sans-serif",
+                fontSize: "11px",
+                letterSpacing: "0.05em",
+                textDecoration: "none",
+                transition: "background-color 0.2s"
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "14px", color: "var(--color-primary)" }}>favorite</span>
+              DONATE
+            </a>
+
+            {/* Theme Switcher Toggle (Sáng/Tối) */}
+            <button
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Chuyển sang chế độ Sáng" : "Chuyển sang chế độ Tối"}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "var(--color-text-muted)",
+                cursor: "pointer",
+                padding: "6px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "8px",
+                transition: "background-color 0.2s"
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-surface-hover)"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
+                {theme === "dark" ? "light_mode" : "dark_mode"}
+              </span>
+            </button>
+
+            {/* Accent Picker */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }} className="accent-picker-container">
-              <span style={{ fontSize: "11px", color: "#9ca3af", textTransform: "uppercase" }}>Giao diện:</span>
+              <span style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase" }}>Màu nhấn:</span>
               <div style={{ display: "flex", gap: "6px" }}>
                 {accentColors.map((colorObj) => (
                   <button
@@ -370,7 +451,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                       height: "12px",
                       borderRadius: "50%",
                       backgroundColor: colorObj.value,
-                      border: accent.value === colorObj.value ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.5)",
+                      border: accent.value === colorObj.value ? "2px solid var(--color-text-main)" : "1px solid rgba(0,0,0,0.3)",
                       cursor: "pointer",
                       padding: 0,
                       boxShadow: accent.value === colorObj.value ? `0 0 8px ${colorObj.value}` : "none",
