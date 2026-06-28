@@ -1,0 +1,8 @@
+# Git Ignore
+.env
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+/device-monitor
