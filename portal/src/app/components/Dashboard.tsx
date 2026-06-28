@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useToast } from "./Toast";
+import { Server, Cpu, HardDrive, Network, Settings, Terminal, Shield, LogOut, Menu, X, Check } from "lucide-react";
 
 interface Device {
   id: string;
@@ -127,7 +128,6 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   }, [token, selectedDevice]);
 
   useEffect(() => {
-    // Load Saved Accent safely without triggering direct synchronous setState during render
     const savedAccentValue = localStorage.getItem("lit-portal-accent");
     if (savedAccentValue) {
       const found = accentColors.find(c => c.value === savedAccentValue);
@@ -152,33 +152,31 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       setTimeout(() => {
         fetchDeviceDetails();
       }, 0);
-      const interval = setInterval(fetchDeviceDetails, 5000);
-      return () => clearInterval(interval);
     }
   }, [selectedDevice, fetchDeviceDetails]);
 
   const dispatchCommand = async (type: string, payload: string) => {
     if (!selectedDevice) return;
     setLoading(true);
+    showToast(`Đang gửi tác vụ ${type} tới thiết bị...`, "info");
     try {
       const res = await fetch(`/api/v1/portal/devices/${selectedDevice.id}/tasks/dispatch`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ command_type: type, payload }),
+        body: JSON.stringify({ command_type: type, payload })
       });
-
       const data = await res.json();
       if (res.ok) {
-        showToast("Đã gửi lệnh RSA xác thực mã hóa xuống thiết bị!", "success");
+        showToast("Đã điều phối tác vụ thành công", "success");
         fetchDeviceDetails();
       } else {
-        showToast(data.error?.message || "Đẩy lệnh thất bại", "error");
+        showToast(data.error?.message || "Điều phối tác vụ thất bại", "error");
       }
     } catch (err) {
-      showToast("Không thể kết nối để gửi lệnh điều khiển", "error");
+      showToast("Lỗi kết nối khi gửi lệnh điều phối", "error");
     } finally {
       setLoading(false);
     }
@@ -193,10 +191,12 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   };
 
   return (
-    <div style={{ 
-      minHeight: "100vh", 
-      display: "flex", 
+    <div style={{
+      display: "flex",
       flexDirection: "column",
+      minHeight: "100vh",
+      backgroundColor: "#050508",
+      color: "#f1f5f9",
       position: "relative",
       overflowX: "hidden"
     }}>
@@ -223,7 +223,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        zIndex: 10,
+        zIndex: 110,
         position: "sticky",
         top: 0
       }}>
@@ -242,9 +242,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             }}
             className="mobile-toggle"
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
           
           <div style={{
@@ -255,7 +253,17 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             boxShadow: `0 0 12px ${accent.value}`,
             transition: "background-color 0.3s, box-shadow 0.3s"
           }} />
-          <h1 style={{ fontSize: "16px", margin: 0, color: "#ffffff", letterSpacing: "0.12em" }}>LIT SOFTWARE WARD</h1>
+          <h1 style={{ fontSize: "16px", margin: 0, color: "#ffffff", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+          <span style={{
+            fontSize: "9px",
+            backgroundColor: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            padding: "2px 6px",
+            borderRadius: "6px",
+            color: "#64748b",
+            fontFamily: "JetBrains Mono",
+            marginLeft: "6px"
+          }}>v1.0.3</span>
         </div>
 
         {/* Dynamic Accent Color Selector */}
@@ -301,9 +309,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 fontFamily: "Oswald, sans-serif",
                 fontSize: "11px",
                 letterSpacing: "0.05em",
-                transition: "background-color 0.2s"
+                transition: "background-color 0.2s",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px"
               }}
             >
+              <LogOut size={12} />
               ĐĂNG XUẤT
             </button>
           </div>
@@ -316,16 +328,20 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         <aside 
           style={{
             width: "320px",
-            background: "rgba(13, 13, 18, 0.4)",
-            backdropFilter: "blur(16px) saturate(180%)",
+            background: "rgba(13, 13, 18, 0.6)",
+            backdropFilter: "blur(24px) saturate(180%)",
             borderRight: "1px solid rgba(255, 255, 255, 0.06)",
             padding: "24px 20px",
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            overflowY: "auto"
           }}
           className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
         >
-          <h2 style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px", letterSpacing: "0.05em" }}>THIẾT BỊ ĐANG GIÁM SÁT</h2>
+          <h2 style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
+            <Server size={12} />
+            THIẾT BỊ ĐANG GIÁM SÁT
+          </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {devices.length === 0 ? (
               <div style={{ fontSize: "11px", color: "#475569", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
@@ -368,11 +384,11 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ fontSize: "13px", fontWeight: "bold", color: "#f8fafc", marginBottom: "6px", paddingRight: "15px" }}>
                     {dev.name}
                   </div>
-                  <div style={{ fontSize: "11px", color: "#94a3b8", fontFamily: "JetBrains Mono, monospace" }}>
+                  <div style={{ fontSize: "11px", color: "#94a3b8", fontFamily: "JetBrains Mono", marginBottom: "4px" }}>
                     {dev.ip_address}
                   </div>
-                  <div style={{ fontSize: "10px", color: "#64748b", marginTop: "8px" }}>
-                    OS: {dev.os_name}
+                  <div style={{ fontSize: "10px", color: "#64748b" }}>
+                    OS: {dev.os_name} {dev.os_version}
                   </div>
                 </div>
               ))
@@ -380,450 +396,494 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           </div>
         </aside>
 
-        {/* Right Dashboard Area */}
-        <main style={{ flex: 1, padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }} className="main-content">
+        {/* Main Details Area */}
+        <main style={{ flex: 1, padding: "30px", display: "flex", flexDirection: "column", gap: "24px", overflowY: "auto" }} className="main-content">
           {selectedDevice ? (
             <>
-              {/* Header Device card */}
-              <div style={{
-                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
-                backdropFilter: "blur(24px)",
-                border: "1px solid rgba(255, 255, 255, 0.06)",
-                borderRadius: "16px",
-                padding: "20px 24px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
-              }} className="device-header-card">
-                <div>
-                  <h2 style={{ fontSize: "20px", color: "#ffffff", marginBottom: "6px" }}>{selectedDevice.name}</h2>
-                  <p style={{ fontSize: "11px", color: "#64748b", margin: 0, fontFamily: "JetBrains Mono" }}>ID: {selectedDevice.hardware_uuid}</p>
-                </div>
-                <div style={{
+              {/* Device Header Info Card */}
+              <div 
+                style={{
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  borderRadius: "16px",
+                  padding: "24px",
                   display: "flex",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  gap: "10px",
-                  padding: "8px 16px",
-                  borderRadius: "12px",
-                  backgroundColor: selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.08)" : "rgba(239, 68, 68, 0.08)",
-                  border: `1px solid ${selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.25)" : "rgba(239, 68, 68, 0.25)"}`,
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  color: selectedDevice.status === "online" ? "#10b981" : "#ef4444",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  boxShadow: `0 0 15px ${selectedDevice.status === "online" ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)"}`
-                }}>
-                  <div style={{
-                    width: "6px",
-                    height: "6px",
-                    borderRadius: "50%",
-                    backgroundColor: selectedDevice.status === "online" ? "#10b981" : "#ef4444"
-                  }} />
-                  {selectedDevice.status}
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                }}
+                className="device-header-card"
+              >
+                <div>
+                  <h2 style={{ fontSize: "20px", color: "#ffffff", margin: "0 0 6px 0", fontFamily: "Oswald, sans-serif" }}>
+                    {selectedDevice.name.toUpperCase()}
+                  </h2>
+                  <p style={{ fontSize: "11px", color: "#64748b", margin: 0, fontFamily: "JetBrains Mono" }}>
+                    ID: {selectedDevice.id}
+                  </p>
+                </div>
+
+                {/* Accent-colored Action Tab Selector */}
+                <div 
+                  style={{
+                    display: "flex",
+                    background: "rgba(0, 0, 0, 0.4)",
+                    padding: "4px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255, 255, 255, 0.05)"
+                  }}
+                  className="tabs-container"
+                >
+                  {[
+                    { id: "specs", name: "CẤU HÌNH VẬT LÝ", icon: <Server size={11} /> },
+                    { id: "metrics", name: "HIỆU NĂNG", icon: <Cpu size={11} /> },
+                    { id: "control", name: "ĐIỀU KHIỂN", icon: <Terminal size={11} /> },
+                    { id: "tasks", name: "LỊCH SỬ", icon: <Shield size={11} /> }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id as any)}
+                      style={{
+                        padding: "8px 16px",
+                        background: activeTab === tab.id ? accent.value : "transparent",
+                        border: "none",
+                        borderRadius: "8px",
+                        color: activeTab === tab.id ? "#ffffff" : "#94a3b8",
+                        fontSize: "11px",
+                        fontFamily: "Oswald, sans-serif",
+                        letterSpacing: "0.05em",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        transition: "all 0.2s"
+                      }}
+                    >
+                      {tab.icon}
+                      {tab.name}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* TABS Navigation Glass */}
-              <div style={{ 
-                display: "flex", 
-                background: "rgba(255, 255, 255, 0.02)", 
-                borderRadius: "12px", 
-                padding: "4px",
-                border: "1px solid rgba(255, 255, 255, 0.04)"
-              }} className="tabs-container">
-                {(["specs", "metrics", "control", "tasks"] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    style={{
-                      flex: 1,
-                      padding: "10px 8px",
-                      backgroundColor: activeTab === tab ? "rgba(255, 255, 255, 0.06)" : "transparent",
-                      border: "none",
-                      borderRadius: "10px",
-                      color: activeTab === tab ? "#ffffff" : "#64748b",
-                      cursor: "pointer",
-                      fontSize: "12px",
-                      fontFamily: "Oswald, sans-serif",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      transition: "all 0.2s ease-out"
-                    }}
-                  >
-                    {tab === "specs" && "CẤU HÌNH VẬT LÝ"}
-                    {tab === "metrics" && "HIỆU NĂNG"}
-                    {tab === "control" && "ĐIỀU KHIỂN"}
-                    {tab === "tasks" && "LỊCH SỬ"}
-                  </button>
-                ))}
-              </div>
-
-              {/* TAB CONTENT Glass */}
-              <div style={{ flex: 1 }} className="tab-content-container">
+              {/* Tab Contents */}
+              <div style={{ flex: 1 }}>
                 {activeTab === "specs" && (
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "20px"
-                  }} className="specs-grid">
-                    <div style={{ 
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                      border: "1px solid rgba(255, 255, 255, 0.06)", 
-                      borderRadius: "16px",
-                      padding: "20px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+                    {/* Specs block 1 */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
+                      padding: "20px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "16px" }}>Thông tin hệ thống</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "12px" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Hostname:</span><span>{selectedDevice.hostname}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Hệ điều hành:</span><span>{selectedDevice.os_type}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Kiến trúc OS:</span><span>{selectedDevice.os_name}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Trình biên dịch:</span><span>{selectedDevice.os_version}</span></div>
-                      </div>
-                    </div>
-
-                    <div style={{ 
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                      border: "1px solid rgba(255, 255, 255, 0.06)", 
-                      borderRadius: "16px",
-                      padding: "20px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                    }}>
-                      <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "16px" }}>Vi xử lý (CPU)</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "12px" }}>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                          <span style={{ color: "#64748b" }}>Kiểu vi xử lý:</span>
-                          <span style={{ fontSize: "11px", color: "#f8fafc", wordBreak: "break-word" }}>{selectedDevice.cpu_model || "Đang phân tích..."}</span>
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <Server size={14} className="accent-icon" style={{ color: accent.value }} />
+                        THÔNG TIN HỆ THỐNG
+                      </h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Tên máy chủ (Hostname):</span>
+                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{selectedDevice.hostname}</span>
                         </div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Số nhân vật lý:</span><span>{selectedDevice.cpu_cores} Cores</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Số luồng CPU:</span><span>{selectedDevice.cpu_threads} Threads</span></div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Hệ điều hành:</span>
+                          <span style={{ color: "#f8fafc" }}>{selectedDevice.os_name} ({selectedDevice.os_type})</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Phiên bản OS:</span>
+                          <span style={{ color: "#f8fafc" }}>{selectedDevice.os_version}</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Địa chỉ IP mạng:</span>
+                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{selectedDevice.ip_address}</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div style={{ 
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                      border: "1px solid rgba(255, 255, 255, 0.06)", 
-                      borderRadius: "16px",
-                      padding: "20px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                    {/* Specs block 2 */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
+                      padding: "20px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "16px" }}>Bộ nhớ & Lưu trữ</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "12px" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Tổng bộ nhớ RAM:</span><span>{formatBytes(selectedDevice.ram_total)}</span></div>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "#64748b" }}>Ổ đĩa cứng:</span><span>{formatBytes(selectedDevice.disk_total)}</span></div>
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <Cpu size={14} className="accent-icon" style={{ color: accent.value }} />
+                        VI XỬ LÝ (CPU)
+                      </h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                          <span style={{ color: "#64748b" }}>Dòng chip xử lý:</span>
+                          <span style={{ color: "#f8fafc", fontSize: "11px", fontFamily: "JetBrains Mono" }}>{selectedDevice.cpu_model}</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
+                          <span style={{ color: "#64748b" }}>Số nhân vật lý (Cores):</span>
+                          <span style={{ color: "#f8fafc" }}>{selectedDevice.cpu_cores} nhân</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Số luồng logic (Threads):</span>
+                          <span style={{ color: "#f8fafc" }}>{selectedDevice.cpu_threads} luồng</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Specs block 3 */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
+                      padding: "20px"
+                    }}>
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <HardDrive size={14} className="accent-icon" style={{ color: accent.value }} />
+                        BỘ NHỚ & LƯU TRỮ
+                      </h3>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Tổng dung lượng RAM:</span>
+                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.ram_total)}</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Bộ nhớ lưu trữ (Disk):</span>
+                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.disk_total)}</span>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ color: "#64748b" }}>Kết nối lần cuối:</span>
+                          <span style={{ color: "#f8fafc" }}>{new Date(selectedDevice.updated_at).toLocaleString("vi-VN")}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {activeTab === "metrics" && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    {metrics.length === 0 ? (
-                      <div style={{ 
-                        background: "rgba(255,255,255,0.01)",
-                        border: "1px solid rgba(255,255,255,0.05)",
-                        borderRadius: "16px",
-                        textAlign: "center", 
-                        padding: "40px 20px", 
-                        color: "#64748b", 
-                        fontStyle: "italic", 
-                        fontSize: "12px" 
-                      }}>
-                        Đang đợi các gói tin hiệu năng từ Agent...
-                      </div>
-                    ) : (
-                      <>
-                        {/* Summary Metrics cards */}
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "20px" }} className="metrics-grid">
-                          <div style={{ 
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                            border: "1px solid rgba(255, 255, 255, 0.06)", 
-                            borderRadius: "16px",
-                            padding: "20px",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                          }}>
-                            <div style={{ fontSize: "10px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Tải CPU</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: accent.value, marginTop: "6px" }}>
-                              {metrics[metrics.length - 1].cpu_usage.toFixed(1)}%
+                  <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                    {/* Performance bars */}
+                    {metrics.length > 0 ? (
+                      (() => {
+                        const latest = metrics[metrics.length - 1];
+                        return (
+                          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px" }}>
+                            {/* CPU Widget */}
+                            <div style={{
+                              background: "rgba(255, 255, 255, 0.02)",
+                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              borderRadius: "14px",
+                              padding: "20px",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "12px"
+                            }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
+                                <span style={{ color: "#64748b" }}>Mức sử dụng CPU:</span>
+                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.cpu_usage.toFixed(1)}%</span>
+                              </div>
+                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                                <div style={{
+                                  width: `${latest.cpu_usage}%`,
+                                  height: "100%",
+                                  backgroundColor: accent.value,
+                                  boxShadow: `0 0 10px ${accent.value}`,
+                                  transition: "width 0.5s ease-out"
+                                }} />
+                              </div>
                             </div>
-                          </div>
-                          <div style={{ 
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                            border: "1px solid rgba(255, 255, 255, 0.06)", 
-                            borderRadius: "16px",
-                            padding: "20px",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                          }}>
-                            <div style={{ fontSize: "10px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Tiêu thụ RAM</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: accent.value, marginTop: "6px" }}>
-                              {metrics[metrics.length - 1].ram_usage.toFixed(1)}%
-                            </div>
-                          </div>
-                          <div style={{ 
-                            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                            border: "1px solid rgba(255, 255, 255, 0.06)", 
-                            borderRadius: "16px",
-                            padding: "20px",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                          }}>
-                            <div style={{ fontSize: "10px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>Dung lượng Disk</div>
-                            <div style={{ fontSize: "32px", fontWeight: "bold", color: accent.value, marginTop: "6px" }}>
-                              {metrics[metrics.length - 1].disk_usage.toFixed(1)}%
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Network metrics */}
-                        <div style={{ 
-                          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                          border: "1px solid rgba(255, 255, 255, 0.06)", 
-                          borderRadius: "16px",
-                          padding: "20px",
-                          boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                        }}>
-                          <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px" }}>Lưu lượng mạng Delta (Tốc độ truyền nhận)</h3>
-                          <div style={{ display: "flex", gap: "40px" }} className="network-flow">
-                            <div>
-                              <div style={{ fontSize: "10px", color: "#64748b" }}>BĂNG THÔNG NHẬN (RX)</div>
-                              <div style={{ fontSize: "18px", color: "#10b981", fontWeight: "bold", marginTop: "6px" }}>
-                                {formatBytes(metrics[metrics.length - 1].network_rx)}/s
+                            {/* RAM Widget */}
+                            <div style={{
+                              background: "rgba(255, 255, 255, 0.02)",
+                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              borderRadius: "14px",
+                              padding: "20px",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "12px"
+                            }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
+                                <span style={{ color: "#64748b" }}>Mức sử dụng RAM:</span>
+                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.ram_usage.toFixed(1)}%</span>
+                              </div>
+                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                                <div style={{
+                                  width: `${latest.ram_usage}%`,
+                                  height: "100%",
+                                  backgroundColor: accent.value,
+                                  boxShadow: `0 0 10px ${accent.value}`,
+                                  transition: "width 0.5s ease-out"
+                                }} />
                               </div>
                             </div>
-                            <div>
-                              <div style={{ fontSize: "10px", color: "#64748b" }}>BĂNG THÔNG GỬI (TX)</div>
-                              <div style={{ fontSize: "18px", color: "#3b82f6", fontWeight: "bold", marginTop: "6px" }}>
-                                {formatBytes(metrics[metrics.length - 1].network_tx)}/s
+
+                            {/* Disk Widget */}
+                            <div style={{
+                              background: "rgba(255, 255, 255, 0.02)",
+                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              borderRadius: "14px",
+                              padding: "20px",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "12px"
+                            }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
+                                <span style={{ color: "#64748b" }}>Mức sử dụng Dung lượng:</span>
+                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.disk_usage.toFixed(1)}%</span>
+                              </div>
+                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                                <div style={{
+                                  width: `${latest.disk_usage}%`,
+                                  height: "100%",
+                                  backgroundColor: accent.value,
+                                  boxShadow: `0 0 10px ${accent.value}`,
+                                  transition: "width 0.5s ease-out"
+                                }} />
+                              </div>
+                            </div>
+
+                            {/* Network Widget */}
+                            <div style={{
+                              background: "rgba(255, 255, 255, 0.02)",
+                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              borderRadius: "14px",
+                              padding: "20px",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "8px",
+                              fontSize: "12px"
+                            }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ffffff", marginBottom: "4px" }}>
+                                <Network size={14} style={{ color: accent.value }} />
+                                BĂNG THÔNG MẠNG (TỨC THỜI)
+                              </div>
+                              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <span style={{ color: "#64748b" }}>Nhận (Rx):</span>
+                                <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_rx)}/s</span>
+                              </div>
+                              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <span style={{ color: "#64748b" }}>Gửi (Tx):</span>
+                                <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_tx)}/s</span>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </>
+                        );
+                      })()
+                    ) : (
+                      <div style={{ textAlign: "center", color: "#64748b", padding: "40px", fontSize: "12px" }}>
+                        Chưa có dữ liệu hiệu năng báo cáo từ Agent...
+                      </div>
                     )}
                   </div>
                 )}
 
                 {activeTab === "control" && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }} className="control-tab">
-                    {/* Docker operations */}
-                    <div style={{ 
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                      border: "1px solid rgba(255, 255, 255, 0.06)", 
-                      borderRadius: "16px",
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
+                    {/* Docker controller */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
                       padding: "20px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "14px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "16px" }}>Quản trị Docker Container</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }} className="docker-controls">
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-                          <div style={{ flex: "1 1 200px" }}>
-                            <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>THAO TÁC</label>
-                            <select
-                              value={dockerAction}
-                              onChange={(e) => setDockerAction(e.target.value)}
-                              style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
-                                borderRadius: "8px",
-                                color: "#ffffff",
-                                fontFamily: "JetBrains Mono, monospace"
-                              }}
-                            >
-                              <option value="logs">Đọc logs (200 dòng + Data Masking)</option>
-                              <option value="start">Khởi chạy (Start)</option>
-                              <option value="stop">Dừng lại (Stop)</option>
-                              <option value="restart">Khởi động lại (Restart)</option>
-                            </select>
-                          </div>
-
-                          <div style={{ flex: "2 2 260px" }}>
-                            <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>TÊN CONTAINER HOẶC ID</label>
-                            <input
-                              type="text"
-                              placeholder="vd: pg-openclaw"
-                              value={dockerContainer}
-                              onChange={(e) => setDockerContainer(e.target.value)}
-                              style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
-                                borderRadius: "8px",
-                                color: "#ffffff",
-                                fontFamily: "JetBrains Mono, monospace",
-                                outline: "none"
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                          <button
-                            onClick={() => dispatchCommand("DOCKER_OP", JSON.stringify({ action: dockerAction, container_id: dockerContainer }))}
-                            disabled={loading || !dockerContainer}
-                            style={{
-                              padding: "10px 24px",
-                              backgroundColor: accent.value,
-                              color: "#ffffff",
-                              border: "none",
-                              borderRadius: "8px",
-                              fontFamily: "Oswald, sans-serif",
-                              letterSpacing: "0.08em",
-                              cursor: "pointer",
-                              textTransform: "uppercase",
-                              boxShadow: `0 4px 14px rgba(${accent.rgb}, 0.2)`
-                            }}
-                          >
-                            Gửi lệnh Docker
-                          </button>
-                        </div>
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>QUẢN LÝ DỊCH VỤ DOCKER CỤC BỘ</h3>
+                      <div>
+                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Tên Container</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. pg-openclaw"
+                          value={dockerContainer}
+                          onChange={(e) => setDockerContainer(e.target.value)}
+                          style={{
+                            width: "100%",
+                            boxSizing: "border-box",
+                            padding: "10px",
+                            backgroundColor: "rgba(0,0,0,0.3)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "8px",
+                            color: "#ffffff",
+                            fontSize: "13px",
+                            fontFamily: "JetBrains Mono",
+                            outline: "none"
+                          }}
+                        />
                       </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Hành động</label>
+                        <select
+                          value={dockerAction}
+                          onChange={(e) => setDockerAction(e.target.value)}
+                          style={{
+                            width: "100%",
+                            padding: "10px",
+                            backgroundColor: "rgba(0,0,0,0.3)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "8px",
+                            color: "#ffffff",
+                            fontSize: "13px",
+                            outline: "none"
+                          }}
+                        >
+                          <option value="logs">Xem Logs (50 dòng cuối)</option>
+                          <option value="start">Khởi chạy (Start)</option>
+                          <option value="stop">Dừng chạy (Stop)</option>
+                          <option value="restart">Tải lại (Restart)</option>
+                        </select>
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (!dockerContainer) {
+                            showToast("Vui lòng nhập tên Container", "error");
+                            return;
+                          }
+                          dispatchCommand("DOCKER", `${dockerAction}:${dockerContainer}`);
+                        }}
+                        disabled={loading}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          backgroundColor: "rgba(255,255,255,0.03)",
+                          border: `1px solid rgba(${accent.rgb}, 0.3)`,
+                          borderRadius: "8px",
+                          color: accent.value,
+                          fontSize: "12px",
+                          fontFamily: "Oswald, sans-serif",
+                          letterSpacing: "0.05em",
+                          cursor: "pointer",
+                          textTransform: "uppercase"
+                        }}
+                      >
+                        Thực thi lệnh Docker
+                      </button>
                     </div>
 
-                    {/* SQL Operations */}
-                    <div style={{ 
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                      border: "1px solid rgba(255, 255, 255, 0.06)", 
-                      borderRadius: "16px",
+                    {/* Database controller */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
                       padding: "20px",
-                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "14px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "16px" }}>Truy vấn SQL Cục bộ (Chỉ SELECT)</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-                          <div style={{ flex: "1 1 120px" }}>
-                            <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>DRIVE</label>
-                            <select
-                              value={sqlDriver}
-                              onChange={(e) => setSqlDriver(e.target.value)}
-                              style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
-                                borderRadius: "8px",
-                                color: "#ffffff",
-                                fontFamily: "JetBrains Mono, monospace"
-                              }}
-                            >
-                              <option value="postgres">PostgreSQL</option>
-                              <option value="mysql">MySQL</option>
-                            </select>
-                          </div>
-                          <div style={{ flex: "3 3 280px" }}>
-                            <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>CONNECTION STRING</label>
-                            <input
-                              type="text"
-                              value={sqlConnStr}
-                              onChange={(e) => setSqlConnStr(e.target.value)}
-                              style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
-                                borderRadius: "8px",
-                                color: "#ffffff",
-                                fontFamily: "JetBrains Mono, monospace",
-                                outline: "none"
-                              }}
-                            />
-                          </div>
-                        </div>
-
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>TRUY VẤN SQL DATABASE CỤC BỘ</h3>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                         <div>
-                          <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "8px" }}>CÂU LỆNH SQL QUERY</label>
-                          <textarea
-                            rows={3}
-                            value={sqlQuery}
-                            onChange={(e) => setSqlQuery(e.target.value)}
+                          <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Hệ quản trị DB</label>
+                          <select
+                            value={sqlDriver}
+                            onChange={(e) => setSqlDriver(e.target.value)}
                             style={{
                               width: "100%",
-                              padding: "12px",
-                              backgroundColor: "rgba(0, 0, 0, 0.4)",
-                              border: "1px solid rgba(255, 255, 255, 0.08)",
+                              padding: "10px",
+                              backgroundColor: "rgba(0,0,0,0.3)",
+                              border: "1px solid rgba(255,255,255,0.08)",
                               borderRadius: "8px",
                               color: "#ffffff",
-                              fontFamily: "JetBrains Mono, monospace",
-                              outline: "none",
-                              resize: "vertical"
+                              fontSize: "13px",
+                              outline: "none"
+                            }}
+                          >
+                            <option value="postgres">PostgreSQL</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Chuỗi kết nối</label>
+                          <input
+                            type="text"
+                            value={sqlConnStr}
+                            onChange={(e) => setSqlConnStr(e.target.value)}
+                            style={{
+                              width: "100%",
+                              boxSizing: "border-box",
+                              padding: "10px",
+                              backgroundColor: "rgba(0,0,0,0.3)",
+                              border: "1px solid rgba(255,255,255,0.08)",
+                              borderRadius: "8px",
+                              color: "#ffffff",
+                              fontSize: "11px",
+                              fontFamily: "JetBrains Mono",
+                              outline: "none"
                             }}
                           />
                         </div>
-
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                          <button
-                            onClick={() => dispatchCommand("SQL_QUERY", JSON.stringify({ driver: sqlDriver, conn_str: sqlConnStr, sql: sqlQuery }))}
-                            disabled={loading || !sqlQuery}
-                            style={{
-                              padding: "10px 24px",
-                              backgroundColor: accent.value,
-                              color: "#ffffff",
-                              border: "none",
-                              borderRadius: "8px",
-                              fontFamily: "Oswald, sans-serif",
-                              letterSpacing: "0.08em",
-                              cursor: "pointer",
-                              textTransform: "uppercase",
-                              boxShadow: `0 4px 14px rgba(${accent.rgb}, 0.2)`
-                            }}
-                          >
-                            Thực thi truy vấn
-                          </button>
-                        </div>
                       </div>
+                      <div>
+                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Câu lệnh SQL</label>
+                        <textarea
+                          rows={3}
+                          value={sqlQuery}
+                          onChange={(e) => setSqlQuery(e.target.value)}
+                          style={{
+                            width: "100%",
+                            boxSizing: "border-box",
+                            padding: "10px",
+                            backgroundColor: "rgba(0,0,0,0.3)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "8px",
+                            color: "#ffffff",
+                            fontSize: "12px",
+                            fontFamily: "JetBrains Mono",
+                            outline: "none",
+                            resize: "none"
+                          }}
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          const payloadObj = {
+                            driver: sqlDriver,
+                            connection_string: sqlConnStr,
+                            query: sqlQuery
+                          };
+                          dispatchCommand("SQL", JSON.stringify(payloadObj));
+                        }}
+                        disabled={loading}
+                        style={{
+                          width: "100%",
+                          padding: "12px",
+                          backgroundColor: "rgba(255,255,255,0.03)",
+                          border: `1px solid rgba(${accent.rgb}, 0.3)`,
+                          borderRadius: "8px",
+                          color: accent.value,
+                          fontSize: "12px",
+                          fontFamily: "Oswald, sans-serif",
+                          letterSpacing: "0.05em",
+                          cursor: "pointer",
+                          textTransform: "uppercase"
+                        }}
+                      >
+                        Thực thi lệnh SQL
+                      </button>
                     </div>
 
-                    {/* System maintenance grid */}
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }} className="maintenance-grid">
-                      <div style={{ 
-                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                        border: "1px solid rgba(255, 255, 255, 0.06)", 
-                        borderRadius: "16px",
-                        padding: "20px",
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                      }}>
-                        <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "10px" }}>Bảo trì Redis Cache</h3>
-                        <p style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px" }}>Dọn dẹp và xóa sạch cache toàn bộ Database của Redis cục bộ (`FLUSHDB`).</p>
-                        <button
-                          onClick={() => dispatchCommand("REDIS_FLUSH", "")}
-                          disabled={loading}
-                          style={{
-                            padding: "10px 20px",
-                            backgroundColor: "rgba(16, 185, 129, 0.08)",
-                            border: "1px solid rgba(16, 185, 129, 0.25)",
-                            borderRadius: "8px",
-                            color: "#10b981",
-                            fontFamily: "Oswald, sans-serif",
-                            letterSpacing: "0.05em",
-                            cursor: "pointer",
-                            textTransform: "uppercase"
-                          }}
-                        >
-                          Dọn sạch Cache Redis
-                        </button>
-                      </div>
-
-                      <div style={{ 
-                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                        border: "1px solid rgba(255, 255, 255, 0.06)", 
-                        borderRadius: "16px",
-                        padding: "20px",
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                      }}>
-                        <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "10px" }}>Reboot hệ thống</h3>
-                        <p style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px" }}>Kích hoạt khởi động lại vật lý máy chủ từ xa thông qua Agent cục bộ.</p>
+                    {/* System controller */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.02)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "14px",
+                      padding: "20px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "14px"
+                    }}>
+                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>HỆ THỐNG VÀ BẢO TRÌ</h3>
+                      <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>
+                        Các tùy chọn khởi động và bảo trì phần cứng mức hệ điều hành (chỉ có Admin mới được thực hiện).
+                      </p>
+                      <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                         <button
                           onClick={() => {
-                            if (confirm("Bạn có chắc chắn muốn khởi động lại máy chủ từ xa?")) {
-                              dispatchCommand("REBOOT", JSON.stringify({ delay: 0 }));
+                            if (confirm("Bạn có chắc chắn muốn phát lệnh khởi động lại thiết bị từ xa không?")) {
+                              dispatchCommand("REBOOT", "");
                             }
                           }}
                           disabled={loading}
                           style={{
-                            padding: "10px 20px",
+                            flex: 1,
+                            padding: "10px",
                             backgroundColor: "rgba(229, 106, 74, 0.08)",
                             border: "1px solid rgba(229, 106, 74, 0.25)",
                             borderRadius: "8px",
@@ -834,19 +894,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             textTransform: "uppercase"
                           }}
                         >
-                          Reboot thiết bị
+                          Khởi động lại máy
                         </button>
-                      </div>
-
-                      <div style={{ 
-                        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                        border: "1px solid rgba(255, 255, 255, 0.06)", 
-                        borderRadius: "16px",
-                        padding: "20px",
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
-                      }}>
-                        <h3 style={{ fontSize: "13px", color: accent.value, marginBottom: "10px" }}>Uninstall Agent</h3>
-                        <p style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px" }}>Vô hiệu hóa service, xóa sạch các tệp thực thi, khóa và tự hủy Agent.</p>
                         <button
                           onClick={() => {
                             if (confirm("CẢNH BÁO: Hành động này sẽ gỡ cài đặt sạch sẽ và tự hủy Agent trên thiết bị từ xa. Tiếp tục?")) {
@@ -855,7 +904,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           }}
                           disabled={loading}
                           style={{
-                            padding: "10px 20px",
+                            flex: 1,
+                            padding: "10px",
                             backgroundColor: "rgba(239, 68, 68, 0.08)",
                             border: "1px solid rgba(239, 68, 68, 0.25)",
                             borderRadius: "8px",
