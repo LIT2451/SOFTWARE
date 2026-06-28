@@ -329,7 +329,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         </div>
 
         {/* Google & GitHub OAuth Buttons with SVG Logo */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "10px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "12px", marginBottom: "10px" }}>
           <button
             onClick={() => handleOAuthLogin("google")}
             disabled={loading}
