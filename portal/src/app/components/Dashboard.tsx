@@ -47,10 +47,10 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-// Map color choices for dynamic styling
+// 9Router Vibe Accents
 const accentColors = [
-  { name: "Tím Neon", value: "#a855f7", rgb: "168, 85, 247" },
   { name: "Cam Đất", value: "#e56a4a", rgb: "229, 106, 74" },
+  { name: "Tím Neon", value: "#a855f7", rgb: "168, 85, 247" },
   { name: "Xanh Ngọc", value: "#10b981", rgb: "16, 185, 129" },
   { name: "Xanh Dương", value: "#3b82f6", rgb: "59, 130, 246" }
 ];
@@ -67,7 +67,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   // Mobile menu responsive state
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Dynamic Accent Theme state
+  // Dynamic Accent Theme state (Default to 9Router Orange)
   const [accent, setAccent] = useState(accentColors[0]);
 
   // Dialog states for control commands
@@ -195,12 +195,12 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       display: "flex",
       flexDirection: "column",
       minHeight: "100vh",
-      backgroundColor: "#050508",
-      color: "#f1f5f9",
+      backgroundColor: "#1a1a1a",
+      color: "#ededed",
       position: "relative",
       overflowX: "hidden"
     }}>
-      {/* Dynamic Background Spotlight based on color accent */}
+      {/* 9Router Glow Indicator */}
       <div style={{
         position: "absolute",
         width: "600px",
@@ -217,9 +217,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       {/* Navbar Glass */}
       <header style={{
         padding: "14px 20px",
-        background: "rgba(17, 17, 25, 0.65)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+        background: "#1f1f1e",
+        borderBottom: "1px solid #333333",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -235,7 +234,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               display: "none",
               background: "transparent",
               border: "none",
-              color: "#ffffff",
+              color: "#ededed",
               cursor: "pointer",
               padding: "4px",
               marginRight: "6px"
@@ -253,14 +252,14 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             boxShadow: `0 0 12px ${accent.value}`,
             transition: "background-color 0.3s, box-shadow 0.3s"
           }} />
-          <h1 style={{ fontSize: "16px", margin: 0, color: "#ffffff", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+          <h1 style={{ fontSize: "16px", margin: 0, color: "#ededed", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
           <span style={{
             fontSize: "9px",
-            backgroundColor: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            backgroundColor: "#262626",
+            border: "1px solid #333333",
             padding: "2px 6px",
             borderRadius: "6px",
-            color: "#64748b",
+            color: "#9ca3af",
             fontFamily: "JetBrains Mono",
             marginLeft: "6px"
           }}>v1.0.3</span>
@@ -269,7 +268,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         {/* Dynamic Accent Color Selector */}
         <div style={{ display: "flex", alignItems: "center", gap: "15px" }} className="nav-controls">
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }} className="accent-picker-container">
-            <span style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase" }}>Giao diện:</span>
+            <span style={{ fontSize: "11px", color: "#9ca3af", textTransform: "uppercase" }}>Giao diện:</span>
             <div style={{ display: "flex", gap: "6px" }}>
               {accentColors.map((colorObj) => (
                 <button
@@ -294,8 +293,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div style={{ textAlign: "right" }} className="user-info">
-              <div style={{ fontSize: "13px", color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{username}</div>
-              <div style={{ fontSize: "9px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
+              <div style={{ fontSize: "13px", color: "#ededed", fontFamily: "JetBrains Mono" }}>{username}</div>
+              <div style={{ fontSize: "9px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
             </div>
             <button
               onClick={onLogout}
@@ -328,9 +327,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         <aside 
           style={{
             width: "320px",
-            background: "rgba(13, 13, 18, 0.6)",
+            background: "#1e1e1ed9",
             backdropFilter: "blur(24px) saturate(180%)",
-            borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+            borderRight: "1px solid #333333",
             padding: "24px 20px",
             display: "flex",
             flexDirection: "column",
@@ -338,13 +337,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           }}
           className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
         >
-          <h2 style={{ fontSize: "11px", color: "#64748b", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
+          <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
             <Server size={12} />
             THIẾT BỊ ĐANG GIÁM SÁT
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {devices.length === 0 ? (
-              <div style={{ fontSize: "11px", color: "#475569", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
+              <div style={{ fontSize: "11px", color: "#9ca3af", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
                 Đang quét tìm thiết bị...
               </div>
             ) : (
@@ -359,9 +358,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     padding: "16px",
                     background: selectedDevice?.id === dev.id 
                       ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
-                      : "rgba(255, 255, 255, 0.02)",
-                    backdropFilter: "blur(12px)",
-                    border: `1px solid ${selectedDevice?.id === dev.id ? `rgba(${accent.rgb}, 0.3)` : "rgba(255, 255, 255, 0.05)"}`,
+                      : "#262626",
+                    border: `1.5px solid ${selectedDevice?.id === dev.id ? `rgba(${accent.rgb}, 0.5)` : "#333333"}`,
                     borderRadius: "14px",
                     cursor: "pointer",
                     position: "relative",
@@ -381,10 +379,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     boxShadow: `0 0 10px ${dev.status === "online" ? "#10b981" : "#ef4444"}`
                   }} />
 
-                  <div style={{ fontSize: "13px", fontWeight: "bold", color: "#f8fafc", marginBottom: "6px", paddingRight: "15px" }}>
+                  <div style={{ fontSize: "13px", fontWeight: "bold", color: "#ededed", marginBottom: "6px", paddingRight: "15px" }}>
                     {dev.name}
                   </div>
-                  <div style={{ fontSize: "11px", color: "#94a3b8", fontFamily: "JetBrains Mono", marginBottom: "4px" }}>
+                  <div style={{ fontSize: "11px", color: "#9ca3af", fontFamily: "JetBrains Mono", marginBottom: "4px" }}>
                     {dev.ip_address}
                   </div>
                   <div style={{ fontSize: "10px", color: "#64748b" }}>
@@ -403,9 +401,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               {/* Device Header Info Card */}
               <div 
                 style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
-                  borderRadius: "16px",
+                  background: "#262626",
+                  border: "1.5px solid #333333",
+                  borderRadius: "14px",
                   padding: "24px",
                   display: "flex",
                   justifyContent: "space-between",
@@ -415,10 +413,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 className="device-header-card"
               >
                 <div>
-                  <h2 style={{ fontSize: "20px", color: "#ffffff", margin: "0 0 6px 0", fontFamily: "Oswald, sans-serif" }}>
+                  <h2 style={{ fontSize: "20px", color: "#ededed", margin: "0 0 6px 0", fontFamily: "Oswald, sans-serif" }}>
                     {selectedDevice.name.toUpperCase()}
                   </h2>
-                  <p style={{ fontSize: "11px", color: "#64748b", margin: 0, fontFamily: "JetBrains Mono" }}>
+                  <p style={{ fontSize: "11px", color: "#9ca3af", margin: 0, fontFamily: "JetBrains Mono" }}>
                     ID: {selectedDevice.id}
                   </p>
                 </div>
@@ -427,10 +425,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 <div 
                   style={{
                     display: "flex",
-                    background: "rgba(0, 0, 0, 0.4)",
+                    background: "#1f1f1e",
                     padding: "4px",
                     borderRadius: "10px",
-                    border: "1px solid rgba(255, 255, 255, 0.05)"
+                    border: "1px solid #333333"
                   }}
                   className="tabs-container"
                 >
@@ -448,7 +446,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         background: activeTab === tab.id ? accent.value : "transparent",
                         border: "none",
                         borderRadius: "8px",
-                        color: activeTab === tab.id ? "#ffffff" : "#94a3b8",
+                        color: activeTab === tab.id ? "#ffffff" : "#9ca3af",
                         fontSize: "11px",
                         fontFamily: "Oswald, sans-serif",
                         letterSpacing: "0.05em",
@@ -472,85 +470,85 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
                     {/* Specs block 1 */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
                         <Server size={14} className="accent-icon" style={{ color: accent.value }} />
                         THÔNG TIN HỆ THỐNG
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Tên máy chủ (Hostname):</span>
-                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{selectedDevice.hostname}</span>
+                          <span style={{ color: "#9ca3af" }}>Tên máy chủ (Hostname):</span>
+                          <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{selectedDevice.hostname}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Hệ điều hành:</span>
-                          <span style={{ color: "#f8fafc" }}>{selectedDevice.os_name} ({selectedDevice.os_type})</span>
+                          <span style={{ color: "#9ca3af" }}>Hệ điều hành:</span>
+                          <span style={{ color: "#ededed" }}>{selectedDevice.os_name} ({selectedDevice.os_type})</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Phiên bản OS:</span>
-                          <span style={{ color: "#f8fafc" }}>{selectedDevice.os_version}</span>
+                          <span style={{ color: "#9ca3af" }}>Phiên bản OS:</span>
+                          <span style={{ color: "#ededed" }}>{selectedDevice.os_version}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Địa chỉ IP mạng:</span>
-                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{selectedDevice.ip_address}</span>
+                          <span style={{ color: "#9ca3af" }}>Địa chỉ IP mạng:</span>
+                          <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{selectedDevice.ip_address}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Specs block 2 */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
                         <Cpu size={14} className="accent-icon" style={{ color: accent.value }} />
                         VI XỬ LÝ (CPU)
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                          <span style={{ color: "#64748b" }}>Dòng chip xử lý:</span>
-                          <span style={{ color: "#f8fafc", fontSize: "11px", fontFamily: "JetBrains Mono" }}>{selectedDevice.cpu_model}</span>
+                          <span style={{ color: "#9ca3af" }}>Dòng chip xử lý:</span>
+                          <span style={{ color: "#ededed", fontSize: "11px", fontFamily: "JetBrains Mono" }}>{selectedDevice.cpu_model}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "4px" }}>
-                          <span style={{ color: "#64748b" }}>Số nhân vật lý (Cores):</span>
-                          <span style={{ color: "#f8fafc" }}>{selectedDevice.cpu_cores} nhân</span>
+                          <span style={{ color: "#9ca3af" }}>Số nhân vật lý (Cores):</span>
+                          <span style={{ color: "#ededed" }}>{selectedDevice.cpu_cores} nhân</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Số luồng logic (Threads):</span>
-                          <span style={{ color: "#f8fafc" }}>{selectedDevice.cpu_threads} luồng</span>
+                          <span style={{ color: "#9ca3af" }}>Số luồng logic (Threads):</span>
+                          <span style={{ color: "#ededed" }}>{selectedDevice.cpu_threads} luồng</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Specs block 3 */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
                         <HardDrive size={14} className="accent-icon" style={{ color: accent.value }} />
                         BỘ NHỚ & LƯU TRỮ
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Tổng dung lượng RAM:</span>
-                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.ram_total)}</span>
+                          <span style={{ color: "#9ca3af" }}>Tổng dung lượng RAM:</span>
+                          <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.ram_total)}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Bộ nhớ lưu trữ (Disk):</span>
-                          <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.disk_total)}</span>
+                          <span style={{ color: "#9ca3af" }}>Bộ nhớ lưu trữ (Disk):</span>
+                          <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{formatBytes(selectedDevice.disk_total)}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span style={{ color: "#64748b" }}>Kết nối lần cuối:</span>
-                          <span style={{ color: "#f8fafc" }}>{new Date(selectedDevice.updated_at).toLocaleString("vi-VN")}</span>
+                          <span style={{ color: "#9ca3af" }}>Kết nối lần cuối:</span>
+                          <span style={{ color: "#ededed" }}>{new Date(selectedDevice.updated_at).toLocaleString("vi-VN")}</span>
                         </div>
                       </div>
                     </div>
@@ -567,8 +565,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px" }}>
                             {/* CPU Widget */}
                             <div style={{
-                              background: "rgba(255, 255, 255, 0.02)",
-                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              background: "#262626",
+                              border: "1.5px solid #333333",
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -576,10 +574,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               gap: "12px"
                             }}>
                               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-                                <span style={{ color: "#64748b" }}>Mức sử dụng CPU:</span>
-                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.cpu_usage.toFixed(1)}%</span>
+                                <span style={{ color: "#9ca3af" }}>Mức sử dụng CPU:</span>
+                                <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.cpu_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#1f1f1e", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.cpu_usage}%`,
                                   height: "100%",
@@ -592,8 +590,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* RAM Widget */}
                             <div style={{
-                              background: "rgba(255, 255, 255, 0.02)",
-                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              background: "#262626",
+                              border: "1.5px solid #333333",
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -601,10 +599,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               gap: "12px"
                             }}>
                               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-                                <span style={{ color: "#64748b" }}>Mức sử dụng RAM:</span>
-                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.ram_usage.toFixed(1)}%</span>
+                                <span style={{ color: "#9ca3af" }}>Mức sử dụng RAM:</span>
+                                <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.ram_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#1f1f1e", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.ram_usage}%`,
                                   height: "100%",
@@ -617,8 +615,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Disk Widget */}
                             <div style={{
-                              background: "rgba(255, 255, 255, 0.02)",
-                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              background: "#262626",
+                              border: "1.5px solid #333333",
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -626,10 +624,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               gap: "12px"
                             }}>
                               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-                                <span style={{ color: "#64748b" }}>Mức sử dụng Dung lượng:</span>
-                                <span style={{ color: "#ffffff", fontWeight: "bold" }}>{latest.disk_usage.toFixed(1)}%</span>
+                                <span style={{ color: "#9ca3af" }}>Mức sử dụng Dung lượng:</span>
+                                <span style={{ color: "#ededed", fontWeight: "bold" }}>{latest.disk_usage.toFixed(1)}%</span>
                               </div>
-                              <div style={{ height: "6px", backgroundColor: "rgba(255,255,255,0.06)", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ height: "6px", backgroundColor: "#1f1f1e", borderRadius: "3px", overflow: "hidden" }}>
                                 <div style={{
                                   width: `${latest.disk_usage}%`,
                                   height: "100%",
@@ -642,8 +640,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Network Widget */}
                             <div style={{
-                              background: "rgba(255, 255, 255, 0.02)",
-                              border: "1px solid rgba(255, 255, 255, 0.05)",
+                              background: "#262626",
+                              border: "1.5px solid #333333",
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -651,24 +649,24 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               gap: "8px",
                               fontSize: "12px"
                             }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ffffff", marginBottom: "4px" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ededed", marginBottom: "4px" }}>
                                 <Network size={14} style={{ color: accent.value }} />
                                 BĂNG THÔNG MẠNG (TỨC THỜI)
                               </div>
                               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <span style={{ color: "#64748b" }}>Nhận (Rx):</span>
-                                <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_rx)}/s</span>
+                                <span style={{ color: "#9ca3af" }}>Nhận (Rx):</span>
+                                <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_rx)}/s</span>
                               </div>
                               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <span style={{ color: "#64748b" }}>Gửi (Tx):</span>
-                                <span style={{ color: "#f8fafc", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_tx)}/s</span>
+                                <span style={{ color: "#9ca3af" }}>Gửi (Tx):</span>
+                                <span style={{ color: "#ededed", fontFamily: "JetBrains Mono" }}>{formatBytes(latest.network_tx)}/s</span>
                               </div>
                             </div>
                           </div>
                         );
                       })()
                     ) : (
-                      <div style={{ textAlign: "center", color: "#64748b", padding: "40px", fontSize: "12px" }}>
+                      <div style={{ textAlign: "center", color: "#9ca3af", padding: "40px", fontSize: "12px" }}>
                         Chưa có dữ liệu hiệu năng báo cáo từ Agent...
                       </div>
                     )}
@@ -679,17 +677,17 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
                     {/* Docker controller */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
                       flexDirection: "column",
                       gap: "14px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>QUẢN LÝ DỊCH VỤ DOCKER CỤC BỘ</h3>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", margin: 0 }}>QUẢN LÝ DỊCH VỤ DOCKER CỤC BỘ</h3>
                       <div>
-                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Tên Container</label>
+                        <label style={{ display: "block", fontSize: "10px", color: "#9ca3af", marginBottom: "6px", textTransform: "uppercase" }}>Tên Container</label>
                         <input
                           type="text"
                           placeholder="e.g. pg-openclaw"
@@ -699,10 +697,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             width: "100%",
                             boxSizing: "border-box",
                             padding: "10px",
-                            backgroundColor: "rgba(0,0,0,0.3)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "8px",
-                            color: "#ffffff",
+                            backgroundColor: "#1f1f1e",
+                            border: "1px solid #333333",
+                            borderRadius: "10px",
+                            color: "#ededed",
                             fontSize: "13px",
                             fontFamily: "JetBrains Mono",
                             outline: "none"
@@ -710,17 +708,17 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         />
                       </div>
                       <div>
-                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Hành động</label>
+                        <label style={{ display: "block", fontSize: "10px", color: "#9ca3af", marginBottom: "6px", textTransform: "uppercase" }}>Hành động</label>
                         <select
                           value={dockerAction}
                           onChange={(e) => setDockerAction(e.target.value)}
                           style={{
                             width: "100%",
                             padding: "10px",
-                            backgroundColor: "rgba(0,0,0,0.3)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "8px",
-                            color: "#ffffff",
+                            backgroundColor: "#1f1f1e",
+                            border: "1px solid #333333",
+                            borderRadius: "10px",
+                            color: "#ededed",
                             fontSize: "13px",
                             outline: "none"
                           }}
@@ -743,9 +741,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         style={{
                           width: "100%",
                           padding: "12px",
-                          backgroundColor: "rgba(255,255,255,0.03)",
-                          border: `1px solid rgba(${accent.rgb}, 0.3)`,
-                          borderRadius: "8px",
+                          backgroundColor: "#303030",
+                          border: `1.5px solid rgba(${accent.rgb}, 0.5)`,
+                          borderRadius: "10px",
                           color: accent.value,
                           fontSize: "12px",
                           fontFamily: "Oswald, sans-serif",
@@ -760,28 +758,28 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Database controller */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
                       flexDirection: "column",
                       gap: "14px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>TRUY VẤN SQL DATABASE CỤC BỘ</h3>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", margin: 0 }}>TRUY VẤN SQL DATABASE CỤC BỘ</h3>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                         <div>
-                          <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Hệ quản trị DB</label>
+                          <label style={{ display: "block", fontSize: "10px", color: "#9ca3af", marginBottom: "6px", textTransform: "uppercase" }}>Hệ quản trị DB</label>
                           <select
                             value={sqlDriver}
                             onChange={(e) => setSqlDriver(e.target.value)}
                             style={{
                               width: "100%",
                               padding: "10px",
-                              backgroundColor: "rgba(0,0,0,0.3)",
-                              border: "1px solid rgba(255,255,255,0.08)",
-                              borderRadius: "8px",
-                              color: "#ffffff",
+                              backgroundColor: "#1f1f1e",
+                              border: "1px solid #333333",
+                              borderRadius: "10px",
+                              color: "#ededed",
                               fontSize: "13px",
                               outline: "none"
                             }}
@@ -790,7 +788,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           </select>
                         </div>
                         <div>
-                          <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Chuỗi kết nối</label>
+                          <label style={{ display: "block", fontSize: "10px", color: "#9ca3af", marginBottom: "6px", textTransform: "uppercase" }}>Chuỗi kết nối</label>
                           <input
                             type="text"
                             value={sqlConnStr}
@@ -799,10 +797,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               width: "100%",
                               boxSizing: "border-box",
                               padding: "10px",
-                              backgroundColor: "rgba(0,0,0,0.3)",
-                              border: "1px solid rgba(255,255,255,0.08)",
-                              borderRadius: "8px",
-                              color: "#ffffff",
+                              backgroundColor: "#1f1f1e",
+                              border: "1px solid #333333",
+                              borderRadius: "10px",
+                              color: "#ededed",
                               fontSize: "11px",
                               fontFamily: "JetBrains Mono",
                               outline: "none"
@@ -811,7 +809,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         </div>
                       </div>
                       <div>
-                        <label style={{ display: "block", fontSize: "10px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Câu lệnh SQL</label>
+                        <label style={{ display: "block", fontSize: "10px", color: "#9ca3af", marginBottom: "6px", textTransform: "uppercase" }}>Câu lệnh SQL</label>
                         <textarea
                           rows={3}
                           value={sqlQuery}
@@ -820,10 +818,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             width: "100%",
                             boxSizing: "border-box",
                             padding: "10px",
-                            backgroundColor: "rgba(0,0,0,0.3)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "8px",
-                            color: "#ffffff",
+                            backgroundColor: "#1f1f1e",
+                            border: "1px solid #333333",
+                            borderRadius: "10px",
+                            color: "#ededed",
                             fontSize: "12px",
                             fontFamily: "JetBrains Mono",
                             outline: "none",
@@ -844,9 +842,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                         style={{
                           width: "100%",
                           padding: "12px",
-                          backgroundColor: "rgba(255,255,255,0.03)",
-                          border: `1px solid rgba(${accent.rgb}, 0.3)`,
-                          borderRadius: "8px",
+                          backgroundColor: "#303030",
+                          border: `1.5px solid rgba(${accent.rgb}, 0.5)`,
+                          borderRadius: "10px",
                           color: accent.value,
                           fontSize: "12px",
                           fontFamily: "Oswald, sans-serif",
@@ -861,16 +859,16 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* System controller */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "#262626",
+                      border: "1.5px solid #333333",
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
                       flexDirection: "column",
                       gap: "14px"
                     }}>
-                      <h3 style={{ fontSize: "13px", color: "#ffffff", margin: 0 }}>HỆ THỐNG VÀ BẢO TRÌ</h3>
-                      <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>
+                      <h3 style={{ fontSize: "13px", color: "#ededed", margin: 0 }}>HỆ THỐNG VÀ BẢO TRÌ</h3>
+                      <p style={{ fontSize: "11px", color: "#9ca3af", margin: 0 }}>
                         Các tùy chọn khởi động và bảo trì phần cứng mức hệ điều hành (chỉ có Admin mới được thực hiện).
                       </p>
                       <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
@@ -885,8 +883,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             flex: 1,
                             padding: "10px",
                             backgroundColor: "rgba(229, 106, 74, 0.08)",
-                            border: "1px solid rgba(229, 106, 74, 0.25)",
-                            borderRadius: "8px",
+                            border: "1.5px solid rgba(229, 106, 74, 0.25)",
+                            borderRadius: "10px",
                             color: "#e56a4a",
                             fontFamily: "Oswald, sans-serif",
                             letterSpacing: "0.05em",
@@ -908,7 +906,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             padding: "10px",
                             backgroundColor: "rgba(239, 68, 68, 0.08)",
                             border: "1px solid rgba(239, 68, 68, 0.25)",
-                            borderRadius: "8px",
+                            borderRadius: "10px",
                             color: "#ef4444",
                             fontFamily: "Oswald, sans-serif",
                             letterSpacing: "0.05em",
@@ -925,40 +923,40 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                 {activeTab === "tasks" && (
                   <div style={{ 
-                    background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01))", 
-                    border: "1px solid rgba(255, 255, 255, 0.06)", 
-                    borderRadius: "16px",
+                    background: "#262626", 
+                    border: "1.5px solid #333333", 
+                    borderRadius: "14px",
                     padding: "20px",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
                   }} className="tasks-history-card">
-                    <h3 style={{ fontSize: "13px", color: "#ffffff", marginBottom: "16px" }}>Lịch sử công việc điều khiển</h3>
+                    <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px" }}>Lịch sử công việc điều khiển</h3>
                     <div style={{ overflowX: "auto" }}>
                       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
                         <thead>
-                          <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)", textAlign: "left" }}>
-                            <th style={{ padding: "10px", color: "#64748b" }}>MÃ TASK</th>
-                            <th style={{ padding: "10px", color: "#64748b" }}>LOẠI LỆNH</th>
-                            <th style={{ padding: "10px", color: "#64748b" }}>TRẠNG THÁI</th>
-                            <th style={{ padding: "10px", color: "#64748b" }}>PHẢN HỒI KẾT QUẢ / THÔNG BÁO LỖI</th>
-                            <th style={{ padding: "10px", color: "#64748b" }}>THỜI GIAN KHỞI TẠO</th>
+                          <tr style={{ borderBottom: "1px solid #333333", textAlign: "left" }}>
+                            <th style={{ padding: "10px", color: "#9ca3af" }}>MÃ TASK</th>
+                            <th style={{ padding: "10px", color: "#9ca3af" }}>LOẠI LỆNH</th>
+                            <th style={{ padding: "10px", color: "#9ca3af" }}>TRẠNG THÁI</th>
+                            <th style={{ padding: "10px", color: "#9ca3af" }}>PHẢN HỒI KẾT QUẢ / THÔNG BÁO LỖI</th>
+                            <th style={{ padding: "10px", color: "#9ca3af" }}>THỜI GIAN KHỞI TẠO</th>
                           </tr>
                         </thead>
                         <tbody>
                           {tasks.length === 0 ? (
                             <tr>
-                              <td colSpan={5} style={{ padding: "20px", textAlign: "center", color: "#64748b", fontStyle: "italic" }}>
+                              <td colSpan={5} style={{ padding: "20px", textAlign: "center", color: "#9ca3af", fontStyle: "italic" }}>
                                 Chưa có lịch sử tác vụ nào được thực hiện...
                               </td>
                             </tr>
                           ) : (
                             tasks.map((task) => (
-                              <tr key={task.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.03)" }}>
+                              <tr key={task.id} style={{ borderBottom: "1px solid #333333" }}>
                                 <td style={{ padding: "10px", fontFamily: "JetBrains Mono, monospace", fontSize: "11px" }}>{task.id.substring(0, 8)}...</td>
                                 <td style={{ padding: "10px" }}>
                                   <span style={{
                                     padding: "4px 8px",
-                                    backgroundColor: "rgba(255,255,255,0.02)",
-                                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                                    backgroundColor: "#1f1f1e",
+                                    border: "1px solid #333333",
                                     borderRadius: "6px",
                                     fontSize: "10px"
                                   }}>{task.command_type}</span>
@@ -971,7 +969,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                                 <td style={{ padding: "10px", maxWidth: "260px", whiteSpace: "pre-wrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: "11px" }}>
                                   {task.result || "-"}
                                 </td>
-                                <td style={{ padding: "10px", color: "#64748b", fontSize: "11px" }}>
+                                <td style={{ padding: "10px", color: "#9ca3af", fontSize: "11px" }}>
                                   {new Date(task.created_at).toLocaleString("vi-VN")}
                                 </td>
                               </tr>
@@ -986,7 +984,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             </>
           ) : (
             <div style={{ display: "flex", flex: 1, alignItems: "center", justifyItems: "center", justifyContent: "center" }}>
-              <div style={{ textAlign: "center", color: "#64748b" }}>
+              <div style={{ textAlign: "center", color: "#9ca3af" }}>
                 Vui lòng kết nối thiết bị hoặc chọn thiết bị cần giám sát.
               </div>
             </div>

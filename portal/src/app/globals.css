@@ -2,17 +2,42 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'JetBrains Mono', monospace;
-  background-color: #050508;
-  color: #f1f5f9;
+  background-color: #1a1a1a;
+  color: #ededed;
   -webkit-font-smoothing: antialiased;
-  /* Dark backdrop with subtle purple dot grid pattern */
+  position: relative;
+}
+
+/* 9Router Static Grid Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+  background-color: #1a1a1a;
   background-image: 
-    radial-gradient(circle at 1px 1px, rgba(124, 58, 237, 0.04) 1px, transparent 0),
-    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(229, 106, 74, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(13, 148, 136, 0.08) 0px, transparent 50%);
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%;
-  background-attachment: fixed;
+    linear-gradient(to right, rgba(229, 106, 74, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 9Router Radial Glow Orbs */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -9;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(229, 106, 74, 0.12) 0px, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(229, 106, 74, 0.08) 0px, transparent 50%);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -21,23 +46,23 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
-/* Base scrollbars matching the glass theme */
+/* Base scrollbars matching the 9Router surface theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.2);
+  background: #1a1a1a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
+  background: #303030;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #3a3a3a;
 }
 
 /* Animations */
@@ -65,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
   .sidebar-container {
     width: 100% !important;
     border-right: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid #333333;
     padding: 20px 16px !important;
   }
   
@@ -87,9 +112,9 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 100;
     transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     width: 280px !important;
-    background: rgba(13, 13, 18, 0.95) !important;
+    background: rgba(26, 26, 26, 0.95) !important;
     backdrop-filter: blur(28px) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-right: 1px solid #333333 !important;
     box-shadow: 20px 0 50px rgba(0,0,0,0.8);
   }
   
@@ -102,7 +127,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .accent-picker-container {
-    display: none !important; /* Hide picker on very small screens for clean UI */
+    display: none !important;
   }
   
   .user-info {
@@ -126,7 +151,6 @@ h1, h2, h3, h4, h5, h6 {
     padding: 16px !important;
   }
 
-  /* Optimize Auth Card on Mobile screens to avoid overflowing */
   .auth-card {
     padding: 24px 16px !important;
   }

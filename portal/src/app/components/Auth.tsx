@@ -94,71 +94,46 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       justifyContent: "center",
       minHeight: "100vh",
       padding: "16px",
-      position: "relative",
-      overflow: "hidden"
+      position: "relative"
     }}>
-      {/* Decorative Blur Orbs */}
-      <div style={{
-        position: "absolute",
-        width: "300px",
-        height: "300px",
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
-        top: "20%",
-        left: "15%",
-        filter: "blur(40px)",
-        zIndex: 0
-      }} />
-      <div style={{
-        position: "absolute",
-        width: "400px",
-        height: "400px",
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(229, 106, 74, 0.12) 0%, transparent 70%)",
-        bottom: "15%",
-        right: "10%",
-        filter: "blur(50px)",
-        zIndex: 0
-      }} />
-
-      {/* Glassmorphic Login Card */}
+      {/* 9Router Vibe Glassmorphic Login Card */}
       <div 
         style={{
           width: "100%",
           maxWidth: "420px",
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
-          backdropFilter: "blur(24px) saturate(180%) contrast(1.05)",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
-          borderRadius: "16px",
+          backgroundColor: "#262626",
+          border: "1.5px solid rgba(229, 106, 74, 0.25)",
+          borderRadius: "14px",
           position: "relative",
-          boxShadow: "0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
           zIndex: 1
         }}
         className="auth-card"
       >
-        {/* Glow indicator line at top of card */}
+        {/* Cam Đất Accent indicator line at top of card */}
         <div style={{
           position: "absolute",
           top: 0,
-          left: "30px",
-          right: "30px",
+          left: "20px",
+          right: "20px",
           height: "1px",
-          background: "linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), rgba(229, 106, 74, 0.4), transparent)"
+          background: "linear-gradient(90deg, transparent, rgba(229, 106, 74, 0.6), transparent)"
         }} />
 
         <h1 style={{
-          fontSize: "26px",
+          fontSize: "24px",
           textAlign: "center",
           marginBottom: "10px",
-          color: "#ffffff",
-          textShadow: "0 2px 10px rgba(0,0,0,0.5)"
+          color: "#ededed",
+          fontFamily: "Oswald, sans-serif",
+          letterSpacing: "0.1em"
         }}>
-          LIT SOFTWARE
+          LIT-VPS
         </h1>
         <p style={{
           fontSize: "11px",
           textAlign: "center",
-          color: "#94a3b8",
+          color: "#9ca3af",
           marginBottom: "30px",
           textTransform: "uppercase",
           letterSpacing: "0.15em"
@@ -173,12 +148,12 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               alignItems: "center",
               gap: "6px",
               fontSize: "11px",
-              color: "#94a3b8",
+              color: "#9ca3af",
               marginBottom: "8px",
               textTransform: "uppercase",
               letterSpacing: "0.05em"
             }}>
-              <User size={12} />
+              <User size={12} style={{ color: "#e56a4a" }} />
               Tên đăng nhập
             </label>
             <input
@@ -189,10 +164,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 width: "100%",
                 boxSizing: "border-box",
                 padding: "12px 16px",
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "8px",
-                color: "#ffffff",
+                backgroundColor: "#1f1f1e",
+                border: "1px solid #333333",
+                borderRadius: "10px",
+                color: "#ededed",
                 fontSize: "14px",
                 fontFamily: "JetBrains Mono, monospace",
                 outline: "none"
@@ -208,12 +183,12 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 alignItems: "center",
                 gap: "6px",
                 fontSize: "11px",
-                color: "#94a3b8",
+                color: "#9ca3af",
                 marginBottom: "8px",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em"
               }}>
-                <Mail size={12} />
+                <Mail size={12} style={{ color: "#e56a4a" }} />
                 Địa chỉ Email
               </label>
               <input
@@ -224,10 +199,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 16px",
-                  backgroundColor: "rgba(0, 0, 0, 0.4)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "8px",
-                  color: "#ffffff",
+                  backgroundColor: "#1f1f1e",
+                  border: "1px solid #333333",
+                  borderRadius: "10px",
+                  color: "#ededed",
                   fontSize: "14px",
                   fontFamily: "JetBrains Mono, monospace",
                   outline: "none"
@@ -243,12 +218,12 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               alignItems: "center",
               gap: "6px",
               fontSize: "11px",
-              color: "#94a3b8",
+              color: "#9ca3af",
               marginBottom: "8px",
               textTransform: "uppercase",
               letterSpacing: "0.05em"
             }}>
-              <Lock size={12} />
+              <Lock size={12} style={{ color: "#e56a4a" }} />
               Mật khẩu
             </label>
             <div style={{ position: "relative", width: "100%" }}>
@@ -260,10 +235,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 46px 12px 16px",
-                  backgroundColor: "rgba(0, 0, 0, 0.4)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "8px",
-                  color: "#ffffff",
+                  backgroundColor: "#1f1f1e",
+                  border: "1px solid #333333",
+                  borderRadius: "10px",
+                  color: "#ededed",
                   fontSize: "14px",
                   fontFamily: "JetBrains Mono, monospace",
                   outline: "none"
@@ -278,7 +253,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   top: "50%",
                   transform: "translateY(-50%)",
                   cursor: "pointer",
-                  color: "#94a3b8",
+                  color: "#9ca3af",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -296,18 +271,20 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             style={{
               width: "100%",
               padding: "14px",
-              background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+              backgroundColor: "#e56a4a",
               color: "#ffffff",
               border: "none",
-              borderRadius: "8px",
+              borderRadius: "10px",
               fontSize: "14px",
               fontFamily: "Oswald, sans-serif",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               cursor: "pointer",
-              boxShadow: "0 4px 15px rgba(124, 58, 237, 0.3)",
-              transition: "transform 0.1s ease-in-out, opacity 0.2s"
+              boxShadow: "0 4px 15px rgba(229, 106, 74, 0.2)",
+              transition: "background-color 0.2s"
             }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#cc5236"}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#e56a4a"}
           >
             {loading ? "Đang xử lý..." : isRegister ? "Đăng ký" : "Đăng nhập"}
           </button>
@@ -323,9 +300,9 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
           textTransform: "uppercase",
           letterSpacing: "0.05em"
         }}>
-          <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} />
+          <div style={{ flex: 1, height: "1px", backgroundColor: "#333333" }} />
           <span style={{ padding: "0 10px" }}>Hoặc đăng nhập bằng</span>
-          <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} />
+          <div style={{ flex: 1, height: "1px", backgroundColor: "#333333" }} />
         </div>
 
         {/* Google & GitHub OAuth Buttons with SVG Logo */}
@@ -335,10 +312,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             disabled={loading}
             style={{
               padding: "10px",
-              backgroundColor: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "8px",
-              color: "#f8fafc",
+              backgroundColor: "#303030",
+              border: "1px solid #3a3a3a",
+              borderRadius: "10px",
+              color: "#ededed",
               fontSize: "11px",
               fontFamily: "Oswald, sans-serif",
               letterSpacing: "0.05em",
@@ -350,6 +327,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               gap: "8px",
               transition: "background-color 0.2s"
             }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#3a3a3a"}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#303030"}
           >
             {/* Google SVG Logo */}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -366,10 +345,10 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             disabled={loading}
             style={{
               padding: "10px",
-              backgroundColor: "rgba(255, 255, 255, 0.02)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "8px",
-              color: "#f8fafc",
+              backgroundColor: "#303030",
+              border: "1px solid #3a3a3a",
+              borderRadius: "10px",
+              color: "#ededed",
               fontSize: "11px",
               fontFamily: "Oswald, sans-serif",
               letterSpacing: "0.05em",
@@ -381,6 +360,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               gap: "8px",
               transition: "background-color 0.2s"
             }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#3a3a3a"}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#303030"}
           >
             {/* GitHub SVG Logo */}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -394,13 +375,13 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
           marginTop: "24px",
           textAlign: "center",
           fontSize: "12px",
-          color: "#94a3b8"
+          color: "#9ca3af"
         }}>
           {isRegister ? "Đã có tài khoản hệ thống?" : "Chưa có tài khoản truy cập?"}{" "}
           <span
             onClick={() => setIsRegister(!isRegister)}
             style={{
-              color: "#a855f7",
+              color: "#e56a4a",
               cursor: "pointer",
               textDecoration: "underline"
             }}
