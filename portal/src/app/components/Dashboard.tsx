@@ -221,9 +221,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        zIndex: 110,
-        position: "sticky",
-        top: 0
+        zIndex: 20, /* 9Router's layout has header zIndex 20 */
+        position: "relative" /* Static/relative instead of fixed/sticky for desktop to avoid overlaying */
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {/* Mobile hamburger menu toggle */}
@@ -337,6 +336,24 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           }}
           className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
         >
+          {/* Close button inside sidebar for mobile view to prevent it from overlaying forever without a close button */}
+          <div style={{ display: "none", justifyContent: "flex-end", marginBottom: "15px" }} className="mobile-close-container">
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#9ca3af",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                padding: "4px"
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
+            </button>
+          </div>
+
           <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
             <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>dns</span>
             THIẾT BỊ ĐANG GIÁM SÁT

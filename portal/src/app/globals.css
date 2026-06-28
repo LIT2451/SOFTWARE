@@ -123,15 +123,19 @@ h1, h2, h3, h4, h5, h6 {
     display: block !important;
   }
   
+  .mobile-close-container {
+    display: flex !important;
+  }
+  
   .sidebar-container {
     position: fixed !important;
-    top: 57px;
+    top: 0 !important; /* Sidebar should start from top to bottom on mobile, not 57px */
     left: -100%;
     bottom: 0;
-    z-index: 100;
+    z-index: 1000 !important; /* Extremely high z-index to overlay everything on mobile */
     transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     width: 280px !important;
-    background: #121212f2 !important;
+    background: #121212 !important; /* solid background so it isn't transparent */
     backdrop-filter: blur(28px) !important;
     border-right: 1px solid #262626 !important;
     box-shadow: 20px 0 50px rgba(0,0,0,0.8);
