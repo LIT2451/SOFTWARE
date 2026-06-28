@@ -193,11 +193,11 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
     <div className="dashboard-grid-bg" style={{
       display: "flex",
       flexDirection: "column",
-      minHeight: "100vh",
+      height: "100vh", /* Thay the minHeight bang chieu cao co dinh 100vh de cuon noi bo */
       backgroundColor: "transparent",
       color: "#ededed",
       position: "relative",
-      overflowX: "hidden"
+      overflow: "hidden" /* An thanh cuon ngoai cua trinh duyet */
     }}>
       {/* 9Router Glow Indicator */}
       <div style={{
@@ -325,7 +325,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       </header>
 
       {/* Main Layout */}
-      <div style={{ display: "flex", flex: 1, zIndex: 1 }} className="main-layout">
+      <div style={{ display: "flex", flex: 1, zIndex: 1, overflow: "hidden" }} className="main-layout">
         {/* Left Sidebar Glass */}
         <aside 
           style={{
