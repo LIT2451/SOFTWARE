@@ -90,12 +90,17 @@ Trước khi viết bất kỳ dòng mã nguồn nào, Agent phải thu thập t
   }
   ```
 
-### 3.2 An toàn thông tin (Security Guidelines)
+### 3.2 An toàn thông tin và Quản lý thông tin nhạy cảm (Secrets Management)
 - **Xác thực dữ liệu đầu vào (Input Validation)**: Tất cả dữ liệu gửi lên từ người dùng phải được lọc và xác thực kiểu dữ liệu, độ dài, định dạng trước khi xử lý. Sử dụng các thư viện validation chuẩn để tránh lỗi SQL Injection và Cross-Site Scripting (XSS).
 - **Lưu trữ mật khẩu**: Mật khẩu của người dùng phải được băm (hash) bằng các thuật toán an toàn như bcrypt hoặc argon2 trước khi lưu vào cơ sở dữ liệu. Không bao giờ lưu mật khẩu dưới dạng văn bản rõ.
 - **Quản lý phiên đăng nhập (Session/Token)**:
   - Nếu sử dụng JWT: Token phải có thời gian hết hạn ngắn (dưới 15 phút) và sử dụng Refresh Token được lưu trữ an toàn trong HttpOnly Cookie để tránh bị đánh cắp qua mã JavaScript.
   - Không bao giờ hiển thị thông tin nhạy cảm của người dùng (như mật khẩu đã băm, khóa bí mật) trong các phản hồi API.
+- **Quản lý thông tin nhạy cảm (Secrets Management)**:
+  - Tuyệt đối không được ghi cứng (hardcode) mật khẩu, khóa bí mật (Secret Keys), JWT Keys, hoặc API Keys của các dịch vụ liên kết vào trong mã nguồn.
+  - Mọi thông tin nhạy cảm phải được khai báo trong tệp tin môi trường cục bộ `.env` (hoặc `config.yaml`) và được gọi thông qua biến môi trường của hệ thống.
+  - Tạo tệp tin `.env.example` chứa danh sách các khóa trống để làm mẫu cấu hình.
+  - Tất cả các tệp chứa thông tin cấu hình thực tế hoặc khóa bí mật (ví dụ: `.env`, các tệp `.pem`, `.key`, `id_rsa`) phải được thêm vào tệp `.gitignore` trước khi thực hiện commit đầu tiên lên Git.
 
 ---
 
@@ -128,3 +133,46 @@ Lập trình viên AI phải chủ động viết mã nguồn để xử lý cá
 ### 5.3 Tràn bộ nhớ và Quá tải dữ liệu
 - **Truy vấn cơ sở dữ liệu lớn**: Cấm sử dụng các truy vấn lấy toàn bộ dữ liệu của bảng mà không có giới hạn (`LIMIT` và `OFFSET`). Bắt buộc phải áp dụng phân trang ở mức cơ sở dữ liệu.
 - **Xử lý tệp tin lớn**: Khi xử lý tải lên hoặc ghi tệp tin lớn, phải sử dụng cơ chế luồng dữ liệu (Stream) thay vì đọc toàn bộ tệp tin vào bộ nhớ đệm RAM để tránh gây tràn bộ nhớ hệ thống.
+
+---
+
+## CHƯƠNG 6: QUẢN LÝ DỰ PHÒNG PHỤ THUỘC VÀ KIỂM TRA MÃ NGUỒN TĨNH
+
+### 6.1 Quản lý môi trường ảo và dependencies khóa phiên bản
+- **Đối với dự án Next.js / Node.js**:
+  - Không cài đặt các gói thư viện ngẫu nhiên không có mục đích rõ ràng.
+  - Khi cài đặt trên môi trường Production hoặc CI, bắt buộc sử dụng lệnh `npm ci` (hoặc `yarn install --frozen-lockfile`) để đảm bảo các gói thư viện được tải đúng với cấu trúc và phiên bản lưu giữ trong tệp `package-lock.json` hoặc `yarn.lock`.
+- **Đối với dự án Golang**:
+  - Sau khi thêm hoặc bớt thư viện, bắt buộc phải chạy `go mod tidy` để đồng bộ tệp tin mô tả dependencies `go.mod` và tệp khóa phiên bản `go.sum`.
+- **Đối với dự án Python**:
+  - Bắt buộc chạy ứng dụng trong môi trường ảo (venv hoặc uv).
+  - Cập nhật danh sách thư viện và phiên bản chính xác vào tệp `requirements.txt` bằng công cụ quản lý gói tương ứng.
+
+### 6.2 Công cụ kiểm tra mã nguồn tĩnh (Static Analysis & Linting)
+- Agent và lập trình viên phải chạy các công cụ linter tương ứng của dự án trước khi tạo commit hoặc yêu cầu gộp mã nguồn (Pull Request):
+  - **Next.js / TypeScript**: Chạy `npm run lint` (ESLint) và sửa toàn bộ lỗi liên quan đến kiểu dữ liệu (`any`), biến chưa sử dụng.
+  - **Golang**: Chạy `golangci-lint run` (nếu dự án cấu hình) hoặc `go vet`.
+- Mọi cảnh báo (warnings) hoặc lỗi về cấu trúc của linter phải được khắc phục triệt để. Tuyệt đối không được bỏ qua bằng cách sử dụng các thẻ tắt cảnh báo ép buộc (như `// eslint-disable-next-line` hay `//no-lint`) trừ trường hợp bất khả kháng và có giải thích kỹ thuật rõ ràng.
+
+---
+
+## CHƯƠNG 7: QUY TRÌNH TRIỂN KHAI VÀ KHÔI PHỤC (DEPLOYMENT & ROLLBACK)
+
+### 7.1 Triển khai mã nguồn an toàn (Deployment)
+- **Kiểm tra trước khi Deploy (Pre-flight Checks)**:
+  - Dự án Frontend phải biên dịch thành công (`npm run build`).
+  - Dự án Backend phải vượt qua toàn bộ các ca kiểm thử kiểm tra (`go test ./...` hoặc `pytest`).
+  - Xác nhận các tệp tin cấu hình môi trường `.env` trên máy chủ đã khai báo đầy đủ các khóa mới cần thiết của bản phát hành mới.
+- **Triển khai giảm thiểu thời gian chết (Zero-downtime Deployment)**:
+  - Đối với dịch vụ chạy qua PM2, sử dụng lệnh `pm2 reload <tên_ứng_dụng>` thay vì `pm2 restart` để hệ thống tự động tải lại cấu hình và mã nguồn mới mà không làm đứt quãng các yêu cầu API đang xử lý của người dùng.
+  - Đối với Frontend tĩnh (Static Export) phục vụ trực tiếp qua Nginx: Sau khi đẩy bản build mới vào thư mục đích, bắt buộc phải xóa cache của các dịch vụ CDN (nếu có) và kiểm tra lại thuộc tính HTTP header `Cache-Control: no-store, no-cache, must-revalidate` để trình duyệt người dùng không bị lưu trữ cache bản build cũ.
+
+### 7.2 Quy trình khôi phục nhanh (Rollback)
+Khi phiên bản mới triển khai trên production gặp sự cố nghiêm trọng (crash hệ thống, rò rỉ dữ liệu, lỗi logic nghiêm trọng không thể sửa ngay):
+- **Bước 1**: Xác định nhanh phiên bản hoạt động ổn định gần nhất thông qua mã băm commit của Git (`git log`).
+- **Bước 2**: Thực hiện khôi phục mã nguồn bằng lệnh:
+  ```bash
+  git checkout <commit_sha_gần_nhất_ổn_định>
+  ```
+- **Bước 3**: Tiến hành biên dịch lại và thực hiện `pm2 reload` hoặc nạp lại thư mục static của Nginx tương tự như quy trình triển khai ở phần 7.1.
+- **Bước 4**: Kiểm tra trạng thái hoạt động của hệ thống qua nhật ký log để xác nhận hệ thống đã trở lại trạng thái an toàn trước khi bắt đầu tiến trình điều tra nguyên nhân sự cố của bản build lỗi.
