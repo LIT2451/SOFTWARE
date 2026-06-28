@@ -190,11 +190,11 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   };
 
   return (
-    <div style={{
+    <div className="dashboard-grid-bg" style={{
       display: "flex",
       flexDirection: "column",
       minHeight: "100vh",
-      backgroundColor: "#1a1a1a",
+      backgroundColor: "transparent",
       color: "#ededed",
       position: "relative",
       overflowX: "hidden"
@@ -216,13 +216,16 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       {/* Navbar Glass */}
       <header style={{
         padding: "14px 20px",
-        background: "#121212",
+        background: "rgba(18, 18, 18, 0.72)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         borderBottom: "1px solid #262626",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        zIndex: 20, /* 9Router's layout has header zIndex 20 */
-        position: "relative" /* Static/relative instead of fixed/sticky for desktop to avoid overlaying */
+        zIndex: 200, /* Higher than standard page elements to stay above grid but below mobile sidebar (1000) */
+        position: "sticky",
+        top: 0
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {/* Mobile hamburger menu toggle */}
@@ -327,12 +330,18 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         <aside 
           style={{
             width: "320px",
-            background: "#121212",
+            background: "rgba(18, 18, 18, 0.72)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
             borderRight: "1px solid #262626",
             padding: "24px 20px",
             display: "flex",
             flexDirection: "column",
-            overflowY: "auto"
+            overflowY: "auto",
+            position: "sticky",
+            top: "57px", /* Height of topbar to stick nicely */
+            height: "calc(100vh - 57px)",
+            zIndex: 10
           }}
           className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
         >

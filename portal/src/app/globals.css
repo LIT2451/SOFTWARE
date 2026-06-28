@@ -9,7 +9,7 @@ body {
 }
 
 /* 9Router Static Grid Background */
-body::before {
+body::before, .dashboard-grid-bg::before {
   content: "";
   position: fixed;
   top: 0;
@@ -20,8 +20,8 @@ body::before {
   pointer-events: none;
   background-color: #1a1a1a;
   background-image: 
-  linear-gradient(to right, rgba(229, 106, 74, 0.04) 1px, transparent 1px),
-  linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, rgba(229, 106, 74, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 106, 74, 0.08) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -45,7 +45,7 @@ body::before {
 }
 
 /* 9Router Radial Glow Orbs */
-body::after {
+body::after, .dashboard-grid-bg::after {
   content: "";
   position: fixed;
   top: 0;
@@ -111,6 +111,9 @@ h1, h2, h3, h4, h5, h6 {
     border-right: none !important;
     border-bottom: 1px solid #262626 !important;
     padding: 20px 16px !important;
+    position: relative !important;
+    top: 0 !important;
+    height: auto !important;
   }
   
   .main-content {
@@ -130,15 +133,17 @@ h1, h2, h3, h4, h5, h6 {
   .sidebar-container {
     position: fixed !important;
     top: 0 !important; /* Sidebar should start from top to bottom on mobile, not 57px */
-    left: -100%;
-    bottom: 0;
+    left: -100% !important;
+    bottom: 0 !important;
+    height: 100vh !important;
     z-index: 1000 !important; /* Extremely high z-index to overlay everything on mobile */
     transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     width: 280px !important;
-    background: #121212 !important; /* solid background so it isn't transparent */
+    background: rgba(18, 18, 18, 0.95) !important; /* semi-solid blur background */
     backdrop-filter: blur(28px) !important;
+    WebkitBackdropFilter: blur(28px) !important;
     border-right: 1px solid #262626 !important;
-    box-shadow: 20px 0 50px rgba(0,0,0,0.8);
+    box-shadow: 20px 0 50px rgba(0,0,0,0.8) !important;
   }
   
   .sidebar-container.open {
