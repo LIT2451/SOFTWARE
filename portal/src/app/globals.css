@@ -290,7 +290,7 @@ h1, h2, h3, h4, h5, h6 {
   .sidebar-container {
     position: fixed !important;
     top: 0 !important;
-    left: -100% !important;
+    left: -280px !important; /* Thay vi dung -100% de tranh lam cham hieu ung lag trans */
     bottom: 0 !important;
     height: 100vh !important;
     z-index: 1000 !important;

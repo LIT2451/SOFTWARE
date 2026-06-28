@@ -302,16 +302,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               display: "block"
             }} 
           />
-          <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-            <h1 style={{ fontSize: "19px", margin: 0, color: "var(--color-text-main)", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <h1 style={{ fontSize: "19px", margin: 0, color: "var(--color-text-main)", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif", lineHeight: "1.1" }}>LIT-VPS</h1>
             <span style={{
-              fontSize: "9px",
-              backgroundColor: "var(--color-bg)",
-              border: "1px solid var(--color-border-subtle)",
-              padding: "2px 6px",
-              borderRadius: "6px",
+              fontSize: "10px",
               color: "var(--color-text-muted)",
-              fontFamily: "JetBrains Mono"
+              fontFamily: "JetBrains Mono",
+              marginTop: "2px"
             }}>v1.0.3</span>
           </div>
         </div>
