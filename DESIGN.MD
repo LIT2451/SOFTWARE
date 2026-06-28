@@ -1,4 +1,4 @@
-# THIẾT KẾ HỆ THỐNG CỔNG DỊCH VỤ LIT-SOFTWARE (DESIGN.md)
+# THIẾT KẾ HỆ THỐNG CỔNG DỊCH VỤ LIT-SOFTWARE (DESIGN.MD)
 
 Tài liệu này đặc tả kiến trúc tổng quan và chi tiết thiết kế giao diện Apple Liquid Glass cho cổng dịch vụ tích hợp LIT-SOFTWARE, vận hành tại tên miền `litsoftware.io.vn`.
 

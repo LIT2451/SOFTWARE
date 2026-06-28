@@ -1,4 +1,4 @@
-# ĐẶC TẢ THIẾT KẾ PHÂN HỆ GIÁM SÁT THIẾT BỊ (DESIGN.md)
+# ĐẶC TẢ THIẾT KẾ PHÂN HỆ GIÁM SÁT THIẾT BỊ (DESIGN.MD)
 
 Tài liệu này đặc tả thiết kế kiến trúc, cấu trúc dữ liệu và giao diện cho phân hệ Giám sát Thiết bị Đa nền tảng (VPS, Windows, MacBook) thuộc hệ thống LIT-SOFTWARE.
 
