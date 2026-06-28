@@ -23,10 +23,10 @@ body::before {
   linear-gradient(to right, rgba(229, 106, 74, 0.04) 1px, transparent 1px),
   linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
-  }
+}
 
-  /* 9Router Icon Class definition */
-  .material-symbols-outlined {
+/* 9Router Icon Class definition */
+.material-symbols-outlined {
   font-family: 'Material Symbols Outlined', sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -42,7 +42,7 @@ body::before {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga";
-  }
+}
 
 /* 9Router Radial Glow Orbs */
 body::after {
@@ -72,16 +72,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #121212;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #303030;
+  background: #262626;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
+  background: #333333;
 }
 
 /* Animations */
@@ -109,7 +109,7 @@ h1, h2, h3, h4, h5, h6 {
   .sidebar-container {
     width: 100% !important;
     border-right: none !important;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid #262626 !important;
     padding: 20px 16px !important;
   }
   
@@ -131,9 +131,9 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 100;
     transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     width: 280px !important;
-    background: rgba(26, 26, 26, 0.95) !important;
+    background: #121212f2 !important;
     backdrop-filter: blur(28px) !important;
-    border-right: 1px solid #333333 !important;
+    border-right: 1px solid #262626 !important;
     box-shadow: 20px 0 50px rgba(0,0,0,0.8);
   }
   
