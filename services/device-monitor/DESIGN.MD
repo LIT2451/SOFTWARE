@@ -34,15 +34,22 @@ Tài liệu này đặc tả thiết kế kiến trúc, cấu trúc dữ liệu 
 Sử dụng cơ sở dữ liệu PostgreSQL để quản lý cấu hình và trạng thái thiết bị.
 
 ### 2.1 Bảng cấu hình thiết bị (`devices`)
-Lưu trữ thông tin định danh và phân quyền của từng thiết bị.
+Lưu trữ thông tin định danh, cấu hình phần cứng vật lý cố định và phân quyền của từng thiết bị.
 
 ```sql
 CREATE TABLE devices (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL, -- Tên thiết bị do người dùng đặt hoặc tự động lấy từ Hostname
+    hostname VARCHAR(100) NOT NULL, -- Tên máy tính thực tế trong hệ điều hành
     os_type VARCHAR(20) NOT NULL, -- 'linux', 'windows', 'darwin'
-    os_version VARCHAR(100),
-    ip_address VARCHAR(45),
+    os_name VARCHAR(100) NOT NULL, -- Tên chi tiết hệ điều hành (ví dụ: 'Windows 11 Pro', 'macOS Sonoma', 'Ubuntu 22.04.3 LTS')
+    os_version VARCHAR(100), -- Số phiên bản hệ điều hành
+    cpu_model VARCHAR(150) NOT NULL, -- Tên model chip xử lý (ví dụ: 'Apple M2 Pro', 'Intel Core i9-13900K')
+    cpu_cores INTEGER NOT NULL, -- Số nhân vật lý
+    cpu_threads INTEGER NOT NULL, -- Số luồng logic
+    ram_total BIGINT NOT NULL, -- Tổng dung lượng RAM vật lý (bytes)
+    disk_total BIGINT NOT NULL, -- Tổng dung lượng ổ cứng (bytes)
+    ip_address VARCHAR(45), -- Địa chỉ IP công cộng (Public IP) hoặc IP nội bộ (Private IP) của Agent
     secret_key VARCHAR(64) NOT NULL, -- Mã khóa dùng để Agent xác thực với Server
     workspace_id UUID NOT NULL, -- Định danh không gian làm việc (Cá nhân / Cộng đồng)
     status VARCHAR(20) DEFAULT 'offline', -- 'online', 'offline', 'maintenance'
