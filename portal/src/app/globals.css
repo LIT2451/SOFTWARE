@@ -287,10 +287,6 @@ h1, h2, h3, h4, h5, h6 {
     display: block !important;
   }
   
-  .mobile-close-container {
-    display: flex !important;
-  }
-  
   .sidebar-container {
     position: fixed !important;
     top: 0 !important;

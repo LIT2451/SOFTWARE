@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useToast } from "./Toast";
 
 interface Device {
@@ -65,6 +65,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
   // Mobile menu responsive state
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Sidebar Ref to detect click out
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   // Theme state (dark or light)
   const [theme, setTheme] = useState("dark");
@@ -172,6 +175,24 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   }, []);
 
   useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      // If sidebar is open and we click outside the sidebar element, close it
+      if (sidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        // Specifically check if the click target is the mobile toggle button, to let its onClick handle toggling
+        const toggleBtn = document.querySelector(".mobile-toggle");
+        if (toggleBtn && toggleBtn.contains(event.target as Node)) {
+          return;
+        }
+        setSidebarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [sidebarOpen]);
+
+  useEffect(() => {
     setTimeout(() => {
       fetchDevices();
     }, 0);
@@ -246,6 +267,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
       {/* Left Sidebar Glass (Desktop Sidebar) */}
       <aside 
+        ref={sidebarRef}
         style={{
           width: "320px",
           backgroundColor: "rgba(38, 38, 38, 0.72)", /* 9Router Original Sidebar bg */
@@ -262,44 +284,26 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
       >
         {/* macOS Style Traffic Light Window Controls (Three Dots) */}
-        <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }} className="mac-window-controls">
+        <div style={{ display: "flex", gap: "8px", marginBottom: "24px", paddingLeft: "4px" }} className="mac-window-controls">
           <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ff5f56", border: "1px solid #e0443e" }} />
           <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#ffbd2e", border: "1px solid #dea123" }} />
           <div style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: "#27c93f", border: "1px solid #1aab29" }} />
         </div>
 
-        {/* Close button inside sidebar for mobile view to prevent it from overlaying forever without a close button */}
-        <div style={{ display: "none", justifyContent: "flex-end", marginBottom: "15px" }} className="mobile-close-container">
-          <button 
-            onClick={() => setSidebarOpen(false)}
-            style={{
-              background: "transparent",
-              border: "none",
-              color: "#9ca3af",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              padding: "4px"
-            }}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
-          </button>
-        </div>
-
         {/* Web Logo & Brand inside Sidebar */}
-        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #2a2a2a" }}>
+        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "20px", paddingBottom: "15px", paddingLeft: "4px", borderBottom: "1px solid #2a2a2a" }}>
           <img 
             src="/fire_logo.png" 
             alt="LIT-VPS Logo" 
             style={{
-              width: "28px",
-              height: "28px",
+              width: "44px",
+              height: "44px",
               objectFit: "contain",
               display: "block"
             }} 
           />
           <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
-            <h1 style={{ fontSize: "16px", margin: 0, color: "var(--color-text-main)", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
+            <h1 style={{ fontSize: "19px", margin: 0, color: "var(--color-text-main)", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
             <span style={{
               fontSize: "9px",
               backgroundColor: "var(--color-bg)",
