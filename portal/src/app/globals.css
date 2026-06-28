@@ -251,34 +251,45 @@ h1, h2, h3, h4, h5, h6 {
 /* Responsive CSS rules for mobile screens */
 @media (max-width: 1024px) {
   .root-layout {
-    flex-direction: column !important;
+    flex-direction: row !important; /* Giu nguyen layout flex-row de khong bi giat chuyen layout */
   }
   
   .sidebar-container {
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid var(--color-border-subtle) !important;
-    padding: 20px 16px !important;
-    position: relative !important;
+    position: fixed !important;
     top: 0 !important;
-    height: auto !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    width: 288px !important;
+    background-color: rgba(38, 38, 38, 0.72) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border-right: 1px solid var(--color-border-subtle) !important;
+    transform: translateX(-100%) !important;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .sidebar-container.open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
   }
   
   .main-viewport {
-    height: auto !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    flex: 1 !important;
   }
   
   .topbar-header {
     height: 57px !important;
     padding: 14px 20px !important;
-    background-color: rgba(38, 38, 38, 0.6) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
   }
   
   .main-content {
-    padding: 20px 16px !important;
-    height: auto !important;
+    height: calc(100vh - 57px) !important;
+    overflow-y: auto !important;
   }
 }
 
@@ -294,20 +305,19 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 0 !important;
     height: 100vh !important;
     z-index: 1000 !important;
-    width: 280px !important;
-    background-color: rgba(38, 38, 38, 0.95) !important;
-    backdrop-filter: blur(28px) !important;
-    WebkitBackdropFilter: blur(28px) !important;
+    width: 288px !important;
+    background-color: rgba(38, 38, 38, 0.72) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
     border-right: 1px solid var(--color-border-subtle) !important;
     transform: translateX(-100%) !important;
     opacity: 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
   
   .sidebar-container.open {
     transform: translateX(0) !important;
     opacity: 1 !important;
-    left: 0 !important;
   }
 
   .sidebar-brand-mobile {
@@ -322,7 +332,7 @@ h1, h2, h3, h4, h5, h6 {
   .topbar-header div:first-child div {
     display: none !important;
   }
-  
+
   .nav-controls {
     gap: 10px !important;
   }
