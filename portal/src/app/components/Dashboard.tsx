@@ -325,7 +325,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       </header>
 
       {/* Main Layout */}
-      <div style={{ display: "flex", flex: 1, zIndex: 1, overflow: "hidden" }} className="main-layout">
+      <div style={{ display: "flex", flex: 1, zIndex: 1, overflow: "visible" }} className="main-layout">
         {/* Left Sidebar Glass */}
         <aside 
           style={{
@@ -448,7 +448,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         </aside>
 
         {/* Main Details Area */}
-        <main style={{ flex: 1, padding: "30px", display: "flex", flexDirection: "column", gap: "24px", overflowY: "auto" }} className="main-content">
+        <main style={{ flex: 1, padding: "30px", display: "flex", flexDirection: "column", gap: "24px", overflowY: "auto", height: "calc(100vh - 59px)" }} className="main-content">
           {selectedDevice ? (
             <>
               {/* Device Header Info Card */}
