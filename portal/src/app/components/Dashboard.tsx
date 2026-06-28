@@ -261,7 +261,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           <h1 style={{ fontSize: "16px", margin: 0, color: "#ededed", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
           <span style={{
             fontSize: "9px",
-            backgroundColor: "#1c1c1c",
+            backgroundColor: "#262626",
             border: "1px solid #262626",
             padding: "2px 6px",
             borderRadius: "6px",
@@ -294,7 +294,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     padding: "16px",
                     background: isSelected 
                       ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
-                      : "#1c1c1c",
+                      : "#262626",
                     border: `1.5px solid ${isSelected ? accent.value : "#262626"}`,
                     borderLeft: isSelected ? `4px solid ${accent.value}` : `1.5px solid #262626`,
                     borderRadius: "10px",
@@ -431,7 +431,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               {/* Device Header Info Card */}
               <div 
                 style={{
-                  background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                  background: "#262626", /* Reset: Card tren body trong suot nay la mau xam card 9Router */
                   border: "1.5px solid #262626",
                   borderRadius: "14px",
                   padding: "24px",
@@ -500,7 +500,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
                     {/* Specs block 1 */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -531,7 +531,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Specs block 2 */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -558,7 +558,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Specs block 3 */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px"
@@ -595,7 +595,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "20px" }}>
                             {/* CPU Widget */}
                             <div style={{
-                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                              background: "#262626", /* Reset ve dung goc 9Router */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -620,7 +620,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* RAM Widget */}
                             <div style={{
-                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                              background: "#262626", /* Reset ve dung goc 9Router */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -645,7 +645,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Disk Widget */}
                             <div style={{
-                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                              background: "#262626", /* Reset ve dung goc 9Router */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -670,7 +670,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                             {/* Network Widget */}
                             <div style={{
-                              background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                              background: "#262626", /* Reset ve dung goc 9Router */
                               border: "1.5px solid #262626",
                               borderRadius: "14px",
                               padding: "20px",
@@ -707,7 +707,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
                     {/* Docker controller */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -788,7 +788,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* Database controller */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -889,7 +889,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                     {/* System controller */}
                     <div style={{
-                      background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+                      background: "#262626", /* Reset ve dung goc 9Router */
                       border: "1.5px solid #262626",
                       borderRadius: "14px",
                       padding: "20px",
@@ -953,7 +953,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
                 {activeTab === "tasks" && (
                   <div style={{ 
-                    background: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */ 
+                    background: "#262626", /* Reset ve dung goc 9Router */ 
                     border: "1.5px solid #262626", 
                     borderRadius: "14px",
                     padding: "20px",

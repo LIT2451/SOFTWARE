@@ -100,7 +100,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
         style={{
           width: "100%",
           maxWidth: "420px",
-          backgroundColor: "#1a1a1a", /* Hoan doi: Nen the la #1a1a1a (mau nen truoc day) */
+          backgroundColor: "#262626", /* Reset: The card noi nay bay gio la #262626 */
           border: "1.5px solid #262626", /* Vien the hien tai la #262626 */
           borderRadius: "14px",
           position: "relative",
@@ -164,7 +164,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                  width: "100%",
                  boxSizing: "border-box",
                  padding: "12px 16px",
-                 backgroundColor: "#262626", /* Hoan doi: Nen input bay gio la #262626 */
+                 backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
                  border: "1px solid #333333",
                  borderRadius: "10px",
                  color: "#ededed",
@@ -199,7 +199,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 16px",
-                  backgroundColor: "#262626", /* Hoan doi: Nen input bay gio la #262626 */
+                  backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
                   border: "1px solid #333333",
                   borderRadius: "10px",
                   color: "#ededed",
@@ -235,7 +235,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                   width: "100%",
                   boxSizing: "border-box",
                   padding: "12px 46px 12px 16px",
-                  backgroundColor: "#262626", /* Hoan doi: Nen input bay gio la #262626 */
+                  backgroundColor: "#1a1a1a", /* Reset: Nen input bay gio la #1a1a1a */
                   border: "1px solid #333333",
                   borderRadius: "10px",
                   color: "#ededed",
