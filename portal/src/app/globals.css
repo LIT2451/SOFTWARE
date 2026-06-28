@@ -299,7 +299,6 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(28px) !important;
     WebkitBackdropFilter: blur(28px) !important;
     border-right: 1px solid var(--color-border-subtle) !important;
-    box-shadow: 20px 0 50px rgba(0,0,0,0.8) !important;
     transform: translateX(-100%) !important;
     transition: transform 0.3s ease-in-out !important;
   }
