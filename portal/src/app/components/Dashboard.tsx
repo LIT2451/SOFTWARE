@@ -192,12 +192,12 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
   return (
     <div className="dashboard-grid-bg" style={{
       display: "flex",
-      flexDirection: "column",
-      height: "100vh", /* Thay the minHeight bang chieu cao co dinh 100vh de cuon noi bo */
+      flexDirection: "row", /* Dat hang ngang cho Desktop: Sidebar ben trai, Main ben phai */
+      height: "100vh",
       backgroundColor: "transparent",
       color: "#ededed",
       position: "relative",
-      overflow: "hidden" /* An thanh cuon ngoai cua trinh duyet */
+      overflow: "hidden"
     }}>
       {/* 9Router Glow Indicator */}
       <div style={{
@@ -213,40 +213,43 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         zIndex: 0
       }} />
 
-      {/* Navbar Glass */}
-      <header style={{
-        padding: "14px 20px",
-        background: "rgba(18, 18, 18, 0.72)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid #262626",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        zIndex: 200, /* Higher than standard page elements to stay above grid but below mobile sidebar (1000) */
-        position: "sticky",
-        top: 0
-      }} className="topbar-header">
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {/* Mobile hamburger menu toggle */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+      {/* Left Sidebar Glass (Desktop Sidebar) */}
+      <aside 
+        style={{
+          width: "320px",
+          background: "rgba(18, 18, 18, 0.72)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderRight: "1px solid #262626",
+          padding: "24px 20px",
+          display: "flex",
+          flexDirection: "column",
+          overflowY: "auto",
+          height: "100vh",
+          zIndex: 10
+        }}
+        className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
+      >
+        {/* Close button inside sidebar for mobile view to prevent it from overlaying forever without a close button */}
+        <div style={{ display: "none", justifyContent: "flex-end", marginBottom: "15px" }} className="mobile-close-container">
+          <button 
+            onClick={() => setSidebarOpen(false)}
             style={{
-              display: "none",
               background: "transparent",
               border: "none",
-              color: "#ededed",
+              color: "#9ca3af",
               cursor: "pointer",
-              padding: "4px",
-              marginRight: "6px"
+              display: "flex",
+              alignItems: "center",
+              padding: "4px"
             }}
-            className="mobile-toggle"
           >
-            <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
-              {sidebarOpen ? "close" : "menu"}
-            </span>
+            <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
           </button>
-          
+        </div>
+
+        {/* Web Logo & Brand inside Sidebar */}
+        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #262626" }}>
           <div style={{
             width: "10px",
             height: "10px",
@@ -268,187 +271,161 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           }}>v1.0.3</span>
         </div>
 
-        {/* Dynamic Accent Color Selector */}
-        <div style={{ display: "flex", alignItems: "center", gap: "15px" }} className="nav-controls">
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }} className="accent-picker-container">
-            <span style={{ fontSize: "11px", color: "#9ca3af", textTransform: "uppercase" }}>Giao diện:</span>
-            <div style={{ display: "flex", gap: "6px" }}>
-              {accentColors.map((colorObj) => (
-                <button
-                  key={colorObj.value}
-                  onClick={() => changeAccent(colorObj)}
-                  title={colorObj.name}
-                  style={{
-                    width: "12px",
-                    height: "12px",
-                    borderRadius: "50%",
-                    backgroundColor: colorObj.value,
-                    border: accent.value === colorObj.value ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.5)",
-                    cursor: "pointer",
-                    padding: 0,
-                    boxShadow: accent.value === colorObj.value ? `0 0 8px ${colorObj.value}` : "none",
-                    transition: "transform 0.1s"
+        <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
+          <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>dns</span>
+          THIẾT BỊ ĐANG GIÁM SÁT
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {devices.length === 0 ? (
+            <div style={{ fontSize: "11px", color: "#9ca3af", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
+              Đang quét tìm thiết bị...
+            </div>
+          ) : (
+            devices.map((dev) => {
+              const isSelected = selectedDevice?.id === dev.id;
+              return (
+                <div
+                  key={dev.id}
+                  onClick={() => {
+                    setSelectedDevice(dev);
+                    setSidebarOpen(false); // Close sidebar on mobile select
                   }}
-                />
-              ))}
-            </div>
-          </div>
+                  style={{
+                    padding: "16px",
+                    background: isSelected 
+                      ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
+                      : "#1c1c1c",
+                    border: `1.5px solid ${isSelected ? accent.value : "#262626"}`,
+                    borderLeft: isSelected ? `4px solid ${accent.value}` : `1.5px solid #262626`,
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    position: "relative",
+                    transition: "all 0.25s ease-out",
+                    boxShadow: isSelected ? `0 10px 25px rgba(${accent.rgb}, 0.05)` : "none"
+                  }}
+                >
+                  {/* Status Spot */}
+                  <div style={{
+                    position: "absolute",
+                    top: "16px",
+                    right: "16px",
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    backgroundColor: dev.status === "online" ? "#10b981" : "#ef4444",
+                    boxShadow: `0 0 10px ${dev.status === "online" ? "#10b981" : "#ef4444"}`
+                  }} />
 
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ textAlign: "right" }} className="user-info">
-              <div style={{ fontSize: "13px", color: "#ededed", fontFamily: "JetBrains Mono" }}>{username}</div>
-              <div style={{ fontSize: "9px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
-            </div>
-            <button
-              onClick={onLogout}
-              style={{
-                padding: "6px 12px",
-                backgroundColor: "rgba(239, 68, 68, 0.08)",
-                border: "1px solid rgba(239, 68, 68, 0.25)",
-                borderRadius: "8px",
-                color: "#ef4444",
-                cursor: "pointer",
-                fontFamily: "Oswald, sans-serif",
-                fontSize: "11px",
-                letterSpacing: "0.05em",
-                transition: "background-color 0.2s",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px"
-              }}
-            >
-              <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>logout</span>
-              ĐĂNG XUẤT
-            </button>
-          </div>
+                  <div style={{ fontSize: "13px", fontWeight: "bold", color: "#ededed", marginBottom: "6px", paddingRight: "15px" }}>
+                    {dev.name}
+                  </div>
+                  <div style={{ fontSize: "11px", color: "#9ca3af", fontFamily: "JetBrains Mono", marginBottom: "4px" }}>
+                    {dev.ip_address}
+                  </div>
+                  <div style={{ fontSize: "10px", color: "#64748b" }}>
+                    OS: {dev.os_name} {dev.os_version}
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
-      </header>
+      </aside>
 
-      {/* Main Layout */}
-      <div style={{ display: "flex", flex: 1, zIndex: 1, overflow: "visible" }} className="main-layout">
-        {/* Left Sidebar Glass */}
-        <aside 
-          style={{
-            width: "320px",
-            background: "rgba(18, 18, 18, 0.72)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            borderRight: "1px solid #262626",
-            padding: "24px 20px",
-            display: "flex",
-            flexDirection: "column",
-            overflowY: "auto",
-            position: "sticky",
-            top: "57px", /* Height of topbar to stick nicely */
-            height: "calc(100vh - 57px)",
-            zIndex: 10
-          }}
-          className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
-        >
-          {/* Close button inside sidebar for mobile view to prevent it from overlaying forever without a close button */}
-          <div style={{ display: "none", justifyContent: "flex-end", marginBottom: "15px" }} className="mobile-close-container">
-            <button 
-              onClick={() => setSidebarOpen(false)}
+      {/* Main Layout (Topbar + Content Area) */}
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, zIndex: 1, overflow: "hidden", height: "100vh" }} className="main-layout">
+        {/* Navbar Glass */}
+        <header style={{
+          padding: "14px 20px",
+          background: "rgba(18, 18, 18, 0.72)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid #262626",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          zIndex: 20,
+          height: "57px"
+        }} className="topbar-header">
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {/* Mobile hamburger menu toggle */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               style={{
+                display: "none",
                 background: "transparent",
                 border: "none",
-                color: "#9ca3af",
+                color: "#ededed",
                 cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                padding: "4px"
+                padding: "4px",
+                marginRight: "6px"
               }}
+              className="mobile-toggle"
             >
-              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
+                {sidebarOpen ? "close" : "menu"}
+              </span>
             </button>
           </div>
 
-          {/* Web Logo & Brand inside Sidebar (Mobile only) */}
-          <div className="sidebar-brand-mobile" style={{ display: "none", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #262626" }}>
-            <div style={{
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-              backgroundColor: accent.value,
-              boxShadow: `0 0 12px ${accent.value}`,
-              transition: "background-color 0.3s, box-shadow 0.3s"
-            }} />
-            <h1 style={{ fontSize: "16px", margin: 0, color: "#ededed", letterSpacing: "0.12em", fontFamily: "Oswald, sans-serif" }}>LIT-VPS</h1>
-            <span style={{
-              fontSize: "9px",
-              backgroundColor: "#1c1c1c",
-              border: "1px solid #262626",
-              padding: "2px 6px",
-              borderRadius: "6px",
-              color: "#9ca3af",
-              fontFamily: "JetBrains Mono",
-              marginLeft: "6px"
-            }}>v1.0.3</span>
-          </div>
-
-          <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>dns</span>
-            THIẾT BỊ ĐANG GIÁM SÁT
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {devices.length === 0 ? (
-              <div style={{ fontSize: "11px", color: "#9ca3af", fontStyle: "italic", textAlign: "center", marginTop: "40px" }}>
-                Đang quét tìm thiết bị...
-              </div>
-            ) : (
-              devices.map((dev) => {
-                const isSelected = selectedDevice?.id === dev.id;
-                return (
-                  <div
-                    key={dev.id}
-                    onClick={() => {
-                      setSelectedDevice(dev);
-                      setSidebarOpen(false); // Close sidebar on mobile select
-                    }}
+          {/* Dynamic Accent Color Selector */}
+          <div style={{ display: "flex", alignItems: "center", gap: "15px" }} className="nav-controls">
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }} className="accent-picker-container">
+              <span style={{ fontSize: "11px", color: "#9ca3af", textTransform: "uppercase" }}>Giao diện:</span>
+              <div style={{ display: "flex", gap: "6px" }}>
+                {accentColors.map((colorObj) => (
+                  <button
+                    key={colorObj.value}
+                    onClick={() => changeAccent(colorObj)}
+                    title={colorObj.name}
                     style={{
-                      padding: "16px",
-                      background: isSelected 
-                        ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
-                        : "#1c1c1c",
-                      border: `1.5px solid ${isSelected ? accent.value : "#262626"}`,
-                      borderLeft: isSelected ? `4px solid ${accent.value}` : `1.5px solid #262626`,
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      position: "relative",
-                      transition: "all 0.25s ease-out",
-                      boxShadow: isSelected ? `0 10px 25px rgba(${accent.rgb}, 0.05)` : "none"
-                    }}
-                  >
-                    {/* Status Spot */}
-                    <div style={{
-                      position: "absolute",
-                      top: "16px",
-                      right: "16px",
-                      width: "8px",
-                      height: "8px",
+                      width: "12px",
+                      height: "12px",
                       borderRadius: "50%",
-                      backgroundColor: dev.status === "online" ? "#10b981" : "#ef4444",
-                      boxShadow: `0 0 10px ${dev.status === "online" ? "#10b981" : "#ef4444"}`
-                    }} />
+                      backgroundColor: colorObj.value,
+                      border: accent.value === colorObj.value ? "2px solid #ffffff" : "1px solid rgba(0,0,0,0.5)",
+                      cursor: "pointer",
+                      padding: 0,
+                      boxShadow: accent.value === colorObj.value ? `0 0 8px ${colorObj.value}` : "none",
+                      transition: "transform 0.1s"
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
 
-                    <div style={{ fontSize: "13px", fontWeight: "bold", color: "#ededed", marginBottom: "6px", paddingRight: "15px" }}>
-                      {dev.name}
-                    </div>
-                    <div style={{ fontSize: "11px", color: "#9ca3af", fontFamily: "JetBrains Mono", marginBottom: "4px" }}>
-                      {dev.ip_address}
-                    </div>
-                    <div style={{ fontSize: "10px", color: "#64748b" }}>
-                      OS: {dev.os_name} {dev.os_version}
-                    </div>
-                  </div>
-                );
-              })
-            )}
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div style={{ textAlign: "right" }} className="user-info">
+                <div style={{ fontSize: "13px", color: "#ededed", fontFamily: "JetBrains Mono" }}>{username}</div>
+                <div style={{ fontSize: "9px", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.05em" }}>{role}</div>
+              </div>
+              <button
+                onClick={onLogout}
+                style={{
+                  padding: "6px 12px",
+                  backgroundColor: "rgba(239, 68, 68, 0.08)",
+                  border: "1px solid rgba(239, 68, 68, 0.25)",
+                  borderRadius: "8px",
+                  color: "#ef4444",
+                  cursor: "pointer",
+                  fontFamily: "Oswald, sans-serif",
+                  fontSize: "11px",
+                  letterSpacing: "0.05em",
+                  transition: "background-color 0.2s",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px"
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>logout</span>
+                ĐĂNG XUẤT
+              </button>
+            </div>
           </div>
-        </aside>
+        </header>
 
         {/* Main Details Area */}
-        <main style={{ flex: 1, padding: "30px", display: "flex", flexDirection: "column", gap: "24px", overflowY: "auto", height: "calc(100vh - 59px)" }} className="main-content">
+        <main style={{ flex: 1, padding: "30px", display: "flex", flexDirection: "column", gap: "24px", overflowY: "auto", height: "calc(100vh - 57px)" }} className="main-content">
           {selectedDevice ? (
             <>
               {/* Device Header Info Card */}
