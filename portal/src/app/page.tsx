@@ -52,8 +52,8 @@ export default function Page() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        backgroundColor: "#0b0b0f",
-        color: "#ffffff",
+        backgroundColor: "var(--color-bg)",
+        color: "var(--color-text-main)",
         fontFamily: "JetBrains Mono, monospace"
       }}>
         ĐANG KHỞI CHẠY HỆ THỐNG...

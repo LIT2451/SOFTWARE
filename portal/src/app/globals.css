@@ -81,39 +81,41 @@ body {
 
 /* 9Router Main Viewport */
 .main-viewport {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100vh;
-  min-width: 0;
-  position: relative;
-  z-index: 5;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  height: 100vh !important;
+  min-width: 0 !important;
+  position: relative !important;
+  z-index: 5 !important;
+  overflow: hidden !important; /* Khoa cung viewport ben phai */
 }
 
 /* 9Router Topbar Header */
 .topbar-header {
-  padding: 14px 20px;
-  background-color: transparent;
-  border-bottom: 1px solid var(--color-border-subtle);
-  display: flex;
-  justify-content: space-between;
-  alignItems: center;
-  z-index: 20;
-  height: 57px;
-  box-sizing: border-box;
+  padding: 14px 32px !important; /* Standard 9Router desktop padding */
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--color-border-subtle) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  z-index: 20 !important;
+  height: 73px !important; /* Chuan chieu cao 73px cua 9Router */
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important; /* Khong cho Topbar bi bop meo khi cuon */
 }
 
 /* 9Router Main Content Area */
 .main-content {
-  flex: 1;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  overflow-y: auto;
-  height: calc(100vh - 57px);
-  box-sizing: border-box;
-  z-index: 5;
+  flex: 1 !important;
+  padding: 30px 40px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  overflow-y: auto !important; /* Chi duy nhat phan content nay duoc cuon */
+  height: calc(100vh - 73px) !important; /* Tu dong tinh toan chieu cao con lai */
+  box-sizing: border-box !important;
+  z-index: 5 !important;
 }
 
 /* Card classes */
@@ -231,6 +233,14 @@ h1, h2, h3, h4, h5, h6 {
   
   .main-viewport {
     height: auto !important;
+  }
+  
+  .topbar-header {
+    height: 57px !important;
+    padding: 14px 20px !important;
+    background-color: rgba(38, 38, 38, 0.6) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
   }
   
   .main-content {
