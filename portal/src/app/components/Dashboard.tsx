@@ -217,10 +217,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
       <aside 
         style={{
           width: "320px",
-          background: "rgba(18, 18, 18, 0.72)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderRight: "1px solid #262626",
+          background: "rgba(38, 38, 38, 0.72)", /* 9Router Original Sidebar bg: rgb(38,38,38) 72% */
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          borderRight: "1px solid #2a2a2a", /* 9Router Subtle border */
           padding: "24px 20px",
           display: "flex",
           flexDirection: "column",
@@ -249,7 +249,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         </div>
 
         {/* Web Logo & Brand inside Sidebar */}
-        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #262626" }}>
+        <div className="sidebar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px", paddingBottom: "15px", borderBottom: "1px solid #2a2a2a" }}>
           <div style={{
             width: "10px",
             height: "10px",
@@ -262,7 +262,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           <span style={{
             fontSize: "9px",
             backgroundColor: "#262626",
-            border: "1px solid #262626",
+            border: "1px solid #2a2a2a",
             padding: "2px 6px",
             borderRadius: "6px",
             color: "#9ca3af",
@@ -295,8 +295,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     background: isSelected 
                       ? `linear-gradient(135deg, rgba(${accent.rgb}, 0.08), rgba(${accent.rgb}, 0.02))` 
                       : "#262626",
-                    border: `1.5px solid ${isSelected ? accent.value : "#262626"}`,
-                    borderLeft: isSelected ? `4px solid ${accent.value}` : `1.5px solid #262626`,
+                    border: `1.5px solid ${isSelected ? accent.value : "#2a2a2a"}`,
+                    borderLeft: isSelected ? `4px solid ${accent.value}` : `1.5px solid #2a2a2a`,
                     borderRadius: "10px",
                     cursor: "pointer",
                     position: "relative",
@@ -337,10 +337,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         {/* Navbar Glass */}
         <header style={{
           padding: "14px 20px",
-          background: "rgba(18, 18, 18, 0.72)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          borderBottom: "1px solid #262626",
+          background: "transparent", /* 9Router Desktop: completely transparent */
+          borderBottom: "1px solid #2a2a2a", /* 9Router border-subtle */
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -432,7 +430,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
               <div 
                 style={{
                   background: "#262626", /* Reset: Card tren body trong suot nay la mau xam card 9Router */
-                  border: "1.5px solid #262626",
+                  border: "1px solid #2a2a2a", /* 9Router border-subtle */
                   borderRadius: "14px",
                   padding: "24px",
                   display: "flex",
@@ -458,7 +456,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     background: "#262626",
                     padding: "4px",
                     borderRadius: "10px",
-                    border: "1px solid #262626"
+                    border: "1px solid #2a2a2a"
                   }}
                   className="tabs-container"
                 >
@@ -501,7 +499,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* Specs block 1 */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
@@ -532,7 +530,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* Specs block 2 */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
@@ -559,7 +557,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* Specs block 3 */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px"
                     }}>
@@ -596,7 +594,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             {/* CPU Widget */}
                             <div style={{
                               background: "#262626", /* Reset ve dung goc 9Router */
-                              border: "1.5px solid #262626",
+                              border: "1px solid #2a2a2a", /* 9Router border-subtle */
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -621,7 +619,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             {/* RAM Widget */}
                             <div style={{
                               background: "#262626", /* Reset ve dung goc 9Router */
-                              border: "1.5px solid #262626",
+                              border: "1px solid #2a2a2a", /* 9Router border-subtle */
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -646,7 +644,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             {/* Disk Widget */}
                             <div style={{
                               background: "#262626", /* Reset ve dung goc 9Router */
-                              border: "1.5px solid #262626",
+                              border: "1px solid #2a2a2a", /* 9Router border-subtle */
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -671,7 +669,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             {/* Network Widget */}
                             <div style={{
                               background: "#262626", /* Reset ve dung goc 9Router */
-                              border: "1.5px solid #262626",
+                              border: "1px solid #2a2a2a", /* 9Router border-subtle */
                               borderRadius: "14px",
                               padding: "20px",
                               display: "flex",
@@ -708,7 +706,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* Docker controller */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
@@ -728,7 +726,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             boxSizing: "border-box",
                             padding: "10px",
                             backgroundColor: "#262626",
-                            border: "1px solid #262626",
+                            border: "1px solid #2a2a2a",
                             borderRadius: "10px",
                             color: "#ededed",
                             fontSize: "13px",
@@ -746,7 +744,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             width: "100%",
                             padding: "10px",
                             backgroundColor: "#262626",
-                            border: "1px solid #262626",
+                            border: "1px solid #2a2a2a",
                             borderRadius: "10px",
                             color: "#ededed",
                             fontSize: "13px",
@@ -789,7 +787,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* Database controller */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
@@ -807,7 +805,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               width: "100%",
                               padding: "10px",
                               backgroundColor: "#262626",
-                              border: "1px solid #262626",
+                              border: "1px solid #2a2a2a",
                               borderRadius: "10px",
                               color: "#ededed",
                               fontSize: "13px",
@@ -828,7 +826,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               boxSizing: "border-box",
                               padding: "10px",
                               backgroundColor: "#262626",
-                              border: "1px solid #262626",
+                              border: "1px solid #2a2a2a",
                               borderRadius: "10px",
                               color: "#ededed",
                               fontSize: "11px",
@@ -849,7 +847,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             boxSizing: "border-box",
                             padding: "10px",
                             backgroundColor: "#262626",
-                            border: "1px solid #262626",
+                            border: "1px solid #2a2a2a",
                             borderRadius: "10px",
                             color: "#ededed",
                             fontSize: "12px",
@@ -890,7 +888,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     {/* System controller */}
                     <div style={{
                       background: "#262626", /* Reset ve dung goc 9Router */
-                      border: "1.5px solid #262626",
+                      border: "1px solid #2a2a2a", /* 9Router border-subtle */
                       borderRadius: "14px",
                       padding: "20px",
                       display: "flex",
@@ -954,7 +952,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 {activeTab === "tasks" && (
                   <div style={{ 
                     background: "#262626", /* Reset ve dung goc 9Router */ 
-                    border: "1.5px solid #262626", 
+                    border: "1px solid #2a2a2a", /* 9Router border-subtle */ 
                     borderRadius: "14px",
                     padding: "20px",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
@@ -963,7 +961,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                     <div style={{ overflowX: "auto" }}>
                       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
                         <thead>
-                          <tr style={{ borderBottom: "1px solid #262626", textAlign: "left" }}>
+                          <tr style={{ borderBottom: "1px solid #2a2a2a", textAlign: "left" }}>
                             <th style={{ padding: "10px", color: "#9ca3af" }}>MÃ TASK</th>
                             <th style={{ padding: "10px", color: "#9ca3af" }}>LOẠI LỆNH</th>
                             <th style={{ padding: "10px", color: "#9ca3af" }}>TRẠNG THÁI</th>
@@ -980,13 +978,13 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                             </tr>
                           ) : (
                             tasks.map((task) => (
-                              <tr key={task.id} style={{ borderBottom: "1px solid #262626" }}>
+                              <tr key={task.id} style={{ borderBottom: "1px solid #2a2a2a" }}>
                                 <td style={{ padding: "10px", fontFamily: "JetBrains Mono, monospace", fontSize: "11px" }}>{task.id.substring(0, 8)}...</td>
                                 <td style={{ padding: "10px" }}>
                                   <span style={{
                                     padding: "4px 8px",
                                     backgroundColor: "#262626",
-                                    border: "1px solid #262626",
+                                    border: "1px solid #2a2a2a",
                                     borderRadius: "6px",
                                     fontSize: "10px"
                                   }}>{task.command_type}</span>
