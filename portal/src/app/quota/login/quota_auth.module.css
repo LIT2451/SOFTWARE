@@ -1,0 +1,206 @@
+/* ==========================================================================
+   CSS Stylesheet for LIT AI Gateway Login Page
+   JetBrains Mono & Oswald fonts, Glassmorphism design with rounded borders
+   Matches exactly the 9Router style
+   ========================================================================== */
+
+/* Lớp nền ô vuông Grid cam tĩnh và thấu kính phát sáng của 9Router */
+.authPage::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #1a1a1a; /* Màu tối ấm 9Router */
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(229, 106, 74, 0.18) 0px, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(229, 106, 74, 0.1) 0px, transparent 40%),
+    linear-gradient(to right, rgba(229, 106, 74, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 106, 74, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+}
+
+.authPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  color: #ededed;
+  font-family: 'JetBrains Mono', monospace;
+  position: relative;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 40px 20px;
+}
+
+.glassCard {
+  width: 100%;
+  max-width: 440px;
+  background: #262626; /* Màu surface tối của 9Router */
+  border: 1px solid #333; /* Đường viền xám mờ của 9Router */
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45);
+  border-radius: 14px; /* Bo góc brand-lg của 9Router */
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glassCard:hover {
+  border-color: rgba(229, 106, 74, 0.3);
+  box-shadow: 0 12px 36px -8px rgba(229, 106, 74, 0.1);
+}
+
+.cardHeader {
+  padding: 32px 32px 20px 32px;
+  text-align: center;
+  border-bottom: 1px solid #2a2a2a;
+  background: rgba(30, 30, 30, 0.4);
+}
+
+.logoTitle {
+  font-family: 'Oswald', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.logoDesc {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  color: #e56a4a; /* Cam đất 9Router */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.cardBody {
+  padding: 32px;
+}
+
+.formTitle {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin: 0 0 24px 0;
+  text-transform: uppercase;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.formLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.formInput {
+  width: 100%;
+  background: #303030; /* surface-2 của 9Router */
+  border: 1px solid transparent;
+  color: #ededed;
+  padding: 12px 14px 12px 42px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.15s ease-out;
+  border-radius: 10px; /* radius-brand 10px của 9Router */
+  box-sizing: border-box;
+}
+
+.formInput:focus {
+  border-color: rgba(229, 106, 74, 0.4);
+  box-shadow: 0 0 0 3px rgba(229, 106, 74, 0.18);
+  background: #262626;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: #9ca3af;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorBlock {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  padding: 12px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #e56a4a; /* Cam đất 9Router */
+  border: none;
+  color: #ffffff;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out, transform 0.1s ease;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #cc5236;
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.backLinkWrapper {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.backLink {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.15s ease-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.backLink:hover {
+  color: #e56a4a;
+}
