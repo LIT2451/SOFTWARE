@@ -1,0 +1,14 @@
+[Unit]
+Description=LIT Agent Service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/SOFTWARE/services/agent
+ExecStart=/root/SOFTWARE/services/agent/lit-agent
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

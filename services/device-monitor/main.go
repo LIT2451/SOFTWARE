@@ -49,6 +49,7 @@ func main() {
 		{
 			auth.POST("/register", handlers.Register)
 			auth.POST("/login", handlers.Login)
+			auth.POST("/oauth", handlers.OAuthLogin)
 		}
 
 		// API endpoint nhan thong tin tu Agent

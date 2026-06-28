@@ -1,0 +1,16 @@
+[Unit]
+Description=LIT Software Device Monitor Service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/SOFTWARE/services/device-monitor
+ExecStart=/root/SOFTWARE/services/device-monitor/device-monitor
+Restart=always
+RestartSec=5
+Environment=PORT=28080
+Environment=GIN_MODE=release
+
+[Install]
+WantedBy=multi-user.target

@@ -13,7 +13,39 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Toggle show/hide password
   const { showToast } = useToast();
+
+  const handleOAuthLogin = async (provider: string) => {
+    showToast(`Đang kết nối để xác thực bằng tài khoản ${provider === "google" ? "Google" : "GitHub"}...`, "info");
+    
+    // Giả lập nhận mã OAuth Token từ cửa sổ xác thực của nhà cung cấp
+    // Ở môi trường triển khai thực tế, đoạn này sẽ mở Popup OAuth URL
+    const mockToken = "mock_" + provider + "_oauth_token_2026";
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/v1/auth/oauth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider, token: mockToken }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.error?.message || `Xác thực qua ${provider} thất bại`, "error");
+        setLoading(false);
+        return;
+      }
+
+      showToast(`Đăng nhập thành công bằng ${provider === "google" ? "Google" : "GitHub"}`, "success");
+      onLoginSuccess(data.token, data.user.username, data.user.role);
+    } catch (err) {
+      showToast(`Lỗi kết nối dịch vụ xác thực ${provider}`, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,14 +159,14 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
           fontSize: "11px",
           textAlign: "center",
           color: "#94a3b8",
-          marginBottom: "35px",
+          marginBottom: "30px",
           textTransform: "uppercase",
           letterSpacing: "0.15em"
         }}>
           {isRegister ? "Đăng ký tài khoản" : "Cổng xác thực dịch vụ"}
         </p>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div>
             <label style={{
               display: "block",
@@ -202,23 +234,44 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               textTransform: "uppercase",
               letterSpacing: "0.05em"
             }}>Mật khẩu</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "8px",
-                color: "#ffffff",
-                fontSize: "14px",
-                fontFamily: "JetBrains Mono, monospace",
-                outline: "none"
-              }}
-              required
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "12px 46px 12px 16px",
+                  backgroundColor: "rgba(0, 0, 0, 0.4)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "8px",
+                  color: "#ffffff",
+                  fontSize: "14px",
+                  fontFamily: "JetBrains Mono, monospace",
+                  outline: "none"
+                }}
+                required
+              />
+              {/* Show/Hide password switch */}
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "14px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer",
+                  color: "#94a3b8",
+                  fontSize: "11px",
+                  userSelect: "none",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                  letterSpacing: "0.05em"
+                }}
+              >
+                {showPassword ? "Ẩn" : "Xem"}
+              </span>
+            </div>
           </div>
 
           <button
@@ -244,8 +297,65 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
           </button>
         </form>
 
+        {/* Divider line for OAuth */}
         <div style={{
-          marginTop: "30px",
+          display: "flex",
+          alignItems: "center",
+          margin: "24px 0 16px 0",
+          color: "#475569",
+          fontSize: "10px",
+          textTransform: "uppercase",
+          letterSpacing: "0.05em"
+        }}>
+          <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} />
+          <span style={{ padding: "0 10px" }}>Hoặc đăng nhập bằng</span>
+          <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.06)" }} />
+        </div>
+
+        {/* Google & GitHub OAuth Buttons */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "10px" }}>
+          <button
+            onClick={() => handleOAuthLogin("google")}
+            disabled={loading}
+            style={{
+              padding: "10px",
+              backgroundColor: "rgba(255, 255, 255, 0.02)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "8px",
+              color: "#f8fafc",
+              fontSize: "11px",
+              fontFamily: "Oswald, sans-serif",
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "background-color 0.2s"
+            }}
+          >
+            Google
+          </button>
+          <button
+            onClick={() => handleOAuthLogin("github")}
+            disabled={loading}
+            style={{
+              padding: "10px",
+              backgroundColor: "rgba(255, 255, 255, 0.02)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "8px",
+              color: "#f8fafc",
+              fontSize: "11px",
+              fontFamily: "Oswald, sans-serif",
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              transition: "background-color 0.2s"
+            }}
+          >
+            GitHub
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: "24px",
           textAlign: "center",
           fontSize: "12px",
           color: "#94a3b8"

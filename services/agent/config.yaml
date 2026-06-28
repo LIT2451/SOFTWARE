@@ -1,0 +1,4 @@
+server_url: http://127.0.0.1:28080
+workspace_id: 00000000-0000-0000-0000-000000000000
+secret_key: default_agent_secret_key_2026
+heartbeat_interval: 5
