@@ -122,6 +122,7 @@ html.light .input-field:focus {
   position: relative !important;
   z-index: 5 !important;
   overflow: hidden !important; /* Khoa cung viewport ben phai */
+  isolate: isolate !important; /* Them isolate giong 9Router de cach ly phan z-index am */
 }
 
 /* 9Router Topbar Header */

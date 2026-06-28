@@ -245,9 +245,6 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
   return (
     <div className="root-layout">
-      {/* 9Router Static Grid Background */}
-      <div className="landing-grid" />
-      
       {/* 9Router Radial Glow Orbs */}
       <div className="radial-glows" />
 
@@ -395,6 +392,8 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
 
       {/* Main Layout (Topbar + Content Area) */}
       <div className="main-viewport">
+        {/* 9Router Static Grid Background inside main viewport */}
+        <div className="landing-grid" />
         {/* Navbar Glass */}
         <header className="topbar-header">
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
