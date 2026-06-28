@@ -44,6 +44,18 @@ Bề mặt kính không phải là một màu xám mờ đơn thuần, mà là s
   ```
 - **Kích hoạt chuyển động**: Khi người dùng click chuyển trang hoặc tương tác, giá trị `scale` của `feDisplacementMap` sẽ được đẩy từ `0` lên `30` (tạo độ méo vặn lớn như nước sóng sánh) bằng thư viện Motion, sau đó trả dần về `0` theo đồ thị spring physics để giao diện ổn định trở lại tại trang mới.
 
+### 2.4 Cơ chế chuyển đổi màu sắc chủ đạo (Dynamic Accent Color Theme)
+Để cá nhân hóa trải nghiệm sử dụng các hệ thống riêng biệt một cách trực quan, cổng dịch vụ cung cấp bộ cấu hình đổi màu nhấn linh hoạt (Accent Color Picker):
+- **Cấu trúc bảng màu (Color Palette Options)**: Thiết lập danh sách các mã màu nhấn neon có độ tương phản cao, hiển thị hoàn hảo trên nền tối:
+  - Tím Neon (Default - Orchid): `rgba(168, 85, 247, 1)` / `--color-accent: #a855f7`
+  - Cam Đất (9Router - Clay): `rgba(229, 106, 74, 1)` / `--color-accent: #e56a4a`
+  - Xanh Ngọc (Emerald): `rgba(16, 185, 129, 1)` / `--color-accent: #10b981`
+  - Xanh Dương Điện (Electric Blue): `rgba(59, 130, 246, 1)` / `--color-accent: #3bf6`
+- **Phương thức lưu trữ trạng thái**: Lựa chọn màu nhấn của người dùng được lưu trữ trực tiếp trong `localStorage` dưới khóa `lit-portal-accent` và được đồng bộ thông qua CSS Variable (`--color-accent`). Khi tải trang, một script inline nhỏ ở thẻ `<head>` sẽ đọc giá trị này và ghi trực tiếp thuộc tính CSS variable lên thẻ `<html>` để tránh hiện tượng nháy màu (color flickering).
+- **Phản chiếu màu nhấn lên chất liệu kính**: Màu nhấn được cấu hình làm nguồn sáng của hiệu ứng spotlight dưới lớp kính:
+  `background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(var(--color-accent-rgb), 0.15) 0%, transparent 80%)`
+  Điều này giúp toàn bộ các phần tử tương tác (nút bấm, quầng sáng, đường viền thấu kính) tự động đổi màu mượt mà theo màu nhấn đã chọn.
+
 ---
 
 ## 3. KIẾN TRÚC HỆ THỐNG VÀ PHÂN LUỒNG CÔNG NGHỆ
