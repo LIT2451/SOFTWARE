@@ -281,7 +281,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
         right: "-100px",
         filter: "blur(80px)",
         pointerEvents: "none",
-        zIndex: 3
+        zIndex: -8
       }} />
 
       {/* Left Sidebar Glass (Desktop Sidebar) */}
