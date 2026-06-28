@@ -11,14 +11,36 @@ import (
 // DispatchTask (Admin hoac owner tao task)
 func DispatchTask(c *gin.Context) {
 	var input struct {
-		DeviceID    string `json:"device_id" binding:"required"`
 		CommandType string `json:"command_type" binding:"required"`
 		Payload     string `json:"payload"` // Noi dung cau lenh
+	}
+
+	deviceID := c.Param("id")
+	userID, exists1 := c.Get("userID")
+	role, exists2 := c.Get("role")
+
+	if !exists1 || !exists2 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": gin.H{"code": "UNAUTHORIZED", "message": "Yeu cau xac thuc nguoi dung"}})
+		return
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": gin.H{"code": "INVALID_INPUT", "message": "Du lieu task khong hop le"}})
 		return
+	}
+
+	// Kiem tra quyen so huu thiet bi truoc khi cho phep gui lenh
+	if role != "admin" {
+		var ownerID string
+		err := db.DB.QueryRow(`SELECT owner_id FROM devices WHERE id = $1`, deviceID).Scan(&ownerID)
+		if err != nil {
+			c.JSON(http.StatusForbidden, gin.H{"error": gin.H{"code": "FORBIDDEN", "message": "Thiet bi khong ton tai"}})
+			return
+		}
+		if ownerID != userID {
+			c.JSON(http.StatusForbidden, gin.H{"error": gin.H{"code": "FORBIDDEN", "message": "Ban khong co quyen dieu khien thiet bi nay"}})
+			return
+		}
 	}
 
 	// 1. Ky so du lieu payload de bao ve an toan
@@ -35,13 +57,19 @@ func DispatchTask(c *gin.Context) {
 		RETURNING id, device_id, command_type, payload, signature, status, created_at, updated_at
 	`
 	var task models.Task
-	err = db.DB.QueryRow(query, input.DeviceID, input.CommandType, input.Payload, signature).
+	err = db.DB.QueryRow(query, deviceID, input.CommandType, input.Payload, signature).
 		Scan(&task.ID, &task.DeviceID, &task.CommandType, &task.Payload, &task.Signature, &task.Status, &task.CreatedAt, &task.UpdatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": gin.H{"code": "SERVER_ERROR", "message": "Loi tao task moi: " + err.Error()}})
 		return
 	}
+
+	// Ghi nhan vao audit_logs de luu vet cac hanh dong dieu khien tu nguoi dung/admin
+	_, _ = db.DB.Exec(
+		`INSERT INTO audit_logs (user_id, device_id, action_type, target_name, ip_address) VALUES ($1, $2, $3, $4, $5)`,
+		userID, deviceID, "PORTAL_TASK_DISPATCH", task.ID, c.ClientIP(),
+	)
 
 	c.JSON(http.StatusCreated, gin.H{"task": task})
 }

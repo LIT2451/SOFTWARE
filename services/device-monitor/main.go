@@ -58,10 +58,19 @@ func main() {
 			agent.POST("/report", handlers.ReportMetrics)
 			agent.POST("/status", handlers.UpdateStatus)
 			
-			// Tasks endpoints danh cho Agent va Portal
-			agent.POST("/tasks/dispatch", handlers.DispatchTask)
+			// Tasks endpoints danh cho Agent
 			agent.GET("/tasks/fetch", handlers.FetchTasks)
 			agent.POST("/tasks/report", handlers.ReportTaskResult)
+		}
+
+		// Nhóm API danh cho Portal (Yêu cầu xác thực JWT)
+		portal := v1.Group("/portal")
+		portal.Use(handlers.AuthMiddleware())
+		{
+			portal.GET("/devices", handlers.GetDevices)
+			portal.GET("/devices/:id/metrics", handlers.GetDeviceMetrics)
+			portal.GET("/devices/:id/tasks", handlers.GetTasksHistory)
+			portal.POST("/devices/:id/tasks/dispatch", handlers.DispatchTask)
 		}
 		
 		// Endpoint kiem tra trang thai he thong
