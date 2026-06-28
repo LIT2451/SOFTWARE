@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useToast } from "./Toast";
-import { Server, Cpu, HardDrive, Network, Settings, Terminal, Shield, LogOut, Menu, X, Check } from "lucide-react";
 
 interface Device {
   id: string;
@@ -241,7 +240,9 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
             }}
             className="mobile-toggle"
           >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>
+              {sidebarOpen ? "close" : "menu"}
+            </span>
           </button>
           
           <div style={{
@@ -314,7 +315,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                 gap: "4px"
               }}
             >
-              <LogOut size={12} />
+              <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>logout</span>
               ĐĂNG XUẤT
             </button>
           </div>
@@ -338,7 +339,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
           className={`sidebar-container ${sidebarOpen ? "open" : ""}`}
         >
           <h2 style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "16px", letterSpacing: "0.05em", display: "flex", alignItems: "center", gap: "6px" }}>
-            <Server size={12} />
+            <span className="material-symbols-outlined" style={{ fontSize: "14px" }}>dns</span>
             THIẾT BỊ ĐANG GIÁM SÁT
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -433,10 +434,10 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                   className="tabs-container"
                 >
                   {[
-                    { id: "specs", name: "CẤU HÌNH VẬT LÝ", icon: <Server size={11} /> },
-                    { id: "metrics", name: "HIỆU NĂNG", icon: <Cpu size={11} /> },
-                    { id: "control", name: "ĐIỀU KHIỂN", icon: <Terminal size={11} /> },
-                    { id: "tasks", name: "LỊCH SỬ", icon: <Shield size={11} /> }
+                    { id: "specs", name: "CẤU HÌNH VẬT LÝ", icon: <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>dns</span> },
+                    { id: "metrics", name: "HIỆU NĂNG", icon: <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>monitoring</span> },
+                    { id: "control", name: "ĐIỀU KHIỂN", icon: <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>terminal</span> },
+                    { id: "tasks", name: "LỊCH SỬ", icon: <span className="material-symbols-outlined" style={{ fontSize: "12px" }}>history</span> }
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -476,7 +477,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                       padding: "20px"
                     }}>
                       <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <Server size={14} className="accent-icon" style={{ color: accent.value }} />
+                        <span className="material-symbols-outlined" style={{ fontSize: "16px", color: accent.value }}>computer</span>
                         THÔNG TIN HỆ THỐNG
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
@@ -507,7 +508,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                       padding: "20px"
                     }}>
                       <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <Cpu size={14} className="accent-icon" style={{ color: accent.value }} />
+                        <span className="material-symbols-outlined" style={{ fontSize: "16px", color: accent.value }}>memory</span>
                         VI XỬ LÝ (CPU)
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
@@ -534,7 +535,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                       padding: "20px"
                     }}>
                       <h3 style={{ fontSize: "13px", color: "#ededed", marginBottom: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <HardDrive size={14} className="accent-icon" style={{ color: accent.value }} />
+                        <span className="material-symbols-outlined" style={{ fontSize: "16px", color: accent.value }}>hard_drive</span>
                         BỘ NHỚ & LƯU TRỮ
                       </h3>
                       <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "12px" }}>
@@ -650,7 +651,7 @@ export default function Dashboard({ token, username, role, onLogout }: Dashboard
                               fontSize: "12px"
                             }}>
                               <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#ededed", marginBottom: "4px" }}>
-                                <Network size={14} style={{ color: accent.value }} />
+                                <span className="material-symbols-outlined" style={{ fontSize: "16px", color: accent.value }}>hub</span>
                                 BĂNG THÔNG MẠNG (TỨC THỜI)
                               </div>
                               <div style={{ display: "flex", justifyContent: "space-between" }}>
