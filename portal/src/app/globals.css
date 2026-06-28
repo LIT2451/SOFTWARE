@@ -52,6 +52,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.auth-card {
+  padding: 40px 30px;
+}
+
 /* Responsive CSS rules for mobile screens */
 @media (max-width: 1024px) {
   .main-layout {
@@ -120,5 +124,10 @@ h1, h2, h3, h4, h5, h6 {
     align-items: flex-start !important;
     gap: 16px !important;
     padding: 16px !important;
+  }
+
+  /* Optimize Auth Card on Mobile screens to avoid overflowing */
+  .auth-card {
+    padding: 24px 16px !important;
   }
 }

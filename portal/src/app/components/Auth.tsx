@@ -122,18 +122,20 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       }} />
 
       {/* Glassmorphic Login Card */}
-      <div style={{
-        width: "100%",
-        maxWidth: "420px",
-        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
-        backdropFilter: "blur(24px) saturate(180%) contrast(1.05)",
-        border: "1px solid rgba(255, 255, 255, 0.08)",
-        borderRadius: "16px",
-        padding: "40px 30px",
-        position: "relative",
-        boxShadow: "0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
-        zIndex: 1
-      }}>
+      <div 
+        style={{
+          width: "100%",
+          maxWidth: "420px",
+          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01))",
+          backdropFilter: "blur(24px) saturate(180%) contrast(1.05)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRadius: "16px",
+          position: "relative",
+          boxShadow: "0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+          zIndex: 1
+        }}
+        className="auth-card"
+      >
         {/* Glow indicator line at top of card */}
         <div style={{
           position: "absolute",
@@ -185,6 +187,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               onChange={(e) => setUsername(e.target.value)}
               style={{
                 width: "100%",
+                boxSizing: "border-box",
                 padding: "12px 16px",
                 backgroundColor: "rgba(0, 0, 0, 0.4)",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -219,6 +222,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   width: "100%",
+                  boxSizing: "border-box",
                   padding: "12px 16px",
                   backgroundColor: "rgba(0, 0, 0, 0.4)",
                   border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -247,13 +251,14 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
               <Lock size={12} />
               Mật khẩu
             </label>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
                   width: "100%",
+                  boxSizing: "border-box",
                   padding: "12px 46px 12px 16px",
                   backgroundColor: "rgba(0, 0, 0, 0.4)",
                   border: "1px solid rgba(255, 255, 255, 0.08)",
