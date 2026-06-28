@@ -19,6 +19,9 @@ func main() {
 	// Khoi tao ket noi Database
 	db.InitDB()
 
+	// Khoi tao engine ky so RSA
+	handlers.InitRSA()
+
 	// Khoi chay trinh quet thiet bi offline chay ngam
 	worker.StartOfflineScanner()
 
@@ -54,6 +57,11 @@ func main() {
 			agent.POST("/enroll", handlers.EnrollDevice)
 			agent.POST("/report", handlers.ReportMetrics)
 			agent.POST("/status", handlers.UpdateStatus)
+			
+			// Tasks endpoints danh cho Agent va Portal
+			agent.POST("/tasks/dispatch", handlers.DispatchTask)
+			agent.GET("/tasks/fetch", handlers.FetchTasks)
+			agent.POST("/tasks/report", handlers.ReportTaskResult)
 		}
 		
 		// Endpoint kiem tra trang thai he thong
